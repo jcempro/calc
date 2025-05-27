@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"jsx": "react-jsx",
+		"jsxImportSource": "preact",
+		"strict": true,
+		"moduleResolution": "Node",
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["assets/tsx/*"],
+			"@tsx/*": ["assets/tsx/*"],
+			"@ts/*": ["assets/ts/*"],
+			"@scss/*": ["assets/scss/*"],
+			"@css/*": ["assets/css/*"]
+		}
+	},
+	"include": ["assets/tsx"]
+}

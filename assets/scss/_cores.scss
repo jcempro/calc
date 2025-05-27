@@ -1,0 +1,22 @@
+// Paletas de cores
+$palettes: (
+  light: (
+    background: #ffffff,
+    text: #111827,
+    primary: #3b82f6,
+    secondary: #6b7280,
+    accent: #10b981
+  ),
+  dark: (
+    background: #1f2937,
+    text: #f9fafb,
+    primary: #60a5fa,
+    secondary: #9ca3af,
+    accent: #34d399
+  )
+);
+
+// Função para acessar cor dentro de um map
+@function get-color($palette, $key) {
+  @return map-get(map-get($palettes, $palette), $key);
+}
