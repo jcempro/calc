@@ -1,9 +1,6 @@
 import { render } from 'preact';
-import HeaderMain from './main/HeaderMain'
-import HeaderUpper from './main/HeaderUpper'
-import HeaderSec from './main/HeaderSec'
-import Footer from './main/Footer'
-import MainContent from './main/MainContent'
+import HeaderSectionTop from './main/HeaderSectionTop'
+import SectionApp from './main/SectionApp'
 
 export default function Master() {
 	return (
@@ -55,19 +52,9 @@ export default function Master() {
 				</ul>
 			</nav>
 
-			{/* Header Upper */}
-			<HeaderUpper />
+			<HeaderSectionTop />
 
-			{/* Cabeçalho principal */}
-			<HeaderMain />
-
-			{/* Cabeçalho secundário */}
-			<HeaderSec />			
-
-			{/* Conteúdo principal */}
-			<MainContent />
-
-			<Footer />
+			<SectionApp />
 		</>
 	);
 }

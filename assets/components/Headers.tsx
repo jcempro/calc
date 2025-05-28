@@ -22,7 +22,7 @@ export default function Headers({
     <header {...props}>
       <div className="header-left">
         {LeftBtbs && LeftBtbs.length > 0 &&
-          LeftBtbs.map((props, idx) => <Button key={`left-${idx}`} {...props} />)}
+          LeftBtbs.map((pp, idx) => <Button key={`left-${idx}`} {...pp} />)}
 
         <div className="middle">
           {Middle}
@@ -31,7 +31,7 @@ export default function Headers({
 
       <div className="header-right">
         {RightBtbs && RightBtbs?.length > 0 &&
-          RightBtbs.map((props, idx) => <Button key={`right-${idx}`} {...props} />)}
+          RightBtbs.map((pp, idx) => <Button key={`right-${idx}`} {...pp} />)}
       </div>
     </header>
   );

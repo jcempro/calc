@@ -1,9 +1,7 @@
 @use '@scss/_variables' as *;
 
 // Cabeçalho principal
-.header-primary {
-  position: fixed;
-  top: $header-upper;
+header.header-primary {    
   z-index: 1000;
   background-color: var(--color-header-primary);
   height: $header-height;

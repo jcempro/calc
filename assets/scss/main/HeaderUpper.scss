@@ -1,10 +1,7 @@
 @use '@scss/_variables' as *;
 
 // Cabeçalho superior
-.header-upper {
-  position: fixed;
-  top: 0;
-  left: 0;
+header.header-upper {      
   height: $header-upper;
   line-height: $header-upper * 0.85;
   width: 100%;

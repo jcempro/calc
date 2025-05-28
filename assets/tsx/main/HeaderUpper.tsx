@@ -1,4 +1,4 @@
-import '@scss/main/HeaderMain.scss';
+import '@scss/main/HeaderUpper.scss';
 
 export default function HeaderUpper() {
   return (

@@ -1,8 +1,7 @@
 @use '@scss/_variables' as *;
 
 // Cabeçalho secundário
-.header-secondary {
-  position: fixed;
+header.header-secondary {  
   top: calc($header-upper + $header-height);
   left: 0;
   right: 0;

@@ -1,18 +1,25 @@
 import '@scss/main/HeaderTer.scss';
+import Headers from '@ext/Headers';
 
 export default function HeaderTer() {
   return (
     <>
-      <header className="header-tertiary">
-        <div className="header-icons">
-          <label className="icon-button">
-            <i className="fas fa-user"></i>
-          </label>
-          <label className="icon-button">
-            <i className="fas fa-cog"></i>
-          </label>
-        </div>
-      </header>
+      <Headers
+        classPart="tertiary"
+
+        RightBtbs={[
+          {
+            className: "menu-button",
+            ariaLabel: "Menu direito secundário",
+            icone: "fas fa-user"
+          },
+          {
+            className: "menu-button",
+            ariaLabel: "Menu direito secundário",
+            icone: "fas fa-cog"
+          },
+        ]}
+      />
     </>
   );
 }

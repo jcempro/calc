@@ -2,8 +2,7 @@
 
 // Cabeçalho principal
 header[class^='header-'],
-header[class*=' header-'] {
-  position:absolute;
+header[class*=' header-'] {  
   left: 0;
   right: 0;  
   color: var(--color-header-primary-text);
