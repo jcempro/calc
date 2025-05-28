@@ -10,7 +10,7 @@ export default defineConfig({
 	plugins: [preact()],
 	root: '.',
 	build: {
-		outDir: 'dist',
+		outDir: 'dist/www',
 		rollupOptions: {
 			input: 'index.html',
 		},
