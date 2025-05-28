@@ -1,7 +1,11 @@
 import { render } from 'preact';
-import '@scss/main.scss';
+import HeaderMain from './main/HeaderMain'
+import HeaderUpper from './main/HeaderUpper'
+import HeaderSec from './main/HeaderSec'
+import Footer from './main/Footer'
+import MainContent from './main/MainContent'
 
-export function Master() {
+export default function Master() {
 	return (
 		<>
 			{/* Inputs invisíveis para controle por CSS */}
@@ -10,7 +14,7 @@ export function Master() {
 			<input type="checkbox" id="right-sub-toggle" hidden />
 
 			{/* Menu lateral principal (esquerda) */}
-			<nav class="side-nav left">
+			<nav className="side-nav left">
 				<ul>
 					<li>
 						<a href="#">Início</a>
@@ -28,7 +32,7 @@ export function Master() {
 			</nav>
 
 			{/* Menu lateral principal (direita) */}
-			<nav class="side-nav right main">
+			<nav className="side-nav right main">
 				<ul>
 					<li>
 						<a href="#">Perfil</a>
@@ -40,7 +44,7 @@ export function Master() {
 			</nav>
 
 			{/* Menu lateral secundário (direita inferior) */}
-			<nav class="side-nav right sub">
+			<nav className="side-nav right sub">
 				<ul>
 					<li>
 						<a href="#">Exportar</a>
@@ -52,72 +56,18 @@ export function Master() {
 			</nav>
 
 			{/* Header Upper */}
-			<header class="header-upper">
-				<nav>
-					<a href="#">Link 1</a>
-					<a href="#">Link 2</a>
-					<a href="#">Link 3</a>
-				</nav>
-			</header>
+			<HeaderUpper />
 
 			{/* Cabeçalho principal */}
-			<header class="header-primary">
-				<div class="header-left">
-					<label
-						htmlFor="menu-toggle"
-						class="menu-button"
-						aria-label="Abrir menu"
-					>
-						<i class="fas fa-bars"></i>
-					</label>
-					<div class="title">Minha Página</div>
-				</div>
-
-				<div class="header-icons">
-					<label
-						htmlFor="right-main-toggle"
-						class="menu-button"
-						aria-label="Menu direito principal"
-					>
-						<i class="fas fa-ellipsis-v"></i>
-					</label>
-				</div>
-			</header>
+			<HeaderMain />
 
 			{/* Cabeçalho secundário */}
-			<header class="header-secondary">
-				<label
-					htmlFor="right-sub-toggle"
-					class="menu-button"
-					aria-label="Menu direito secundário"
-				>
-					<i class="fas fa-cog"></i>
-				</label>
-			</header>
-
-			{/* Header Terciário */}
-			<header class="header-tertiary">
-				<div class="header-icons">
-					<label class="icon-button">
-						<i class="fas fa-user"></i>
-					</label>
-					<label class="icon-button">
-						<i class="fas fa-cog"></i>
-					</label>
-				</div>
-			</header>
+			<HeaderSec />			
 
 			{/* Conteúdo principal */}
-			<main class="main-content">
-				<p>Conteúdo principal da página.</p>
-				{[...Array(60)].map((_, i) => (
-					<p key={i}>Linha de conteúdo {i + 1}</p>
-				))}
-			</main>
+			<MainContent />
 
-			<footer>
-				<p>Rodapé simples, não fixo.</p>
-			</footer>
+			<Footer />
 		</>
 	);
 }

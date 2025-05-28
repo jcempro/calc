@@ -8,6 +8,7 @@
 		"moduleResolution": "Node",
 		"baseUrl": ".",
 		"paths": {
+			"@ext/*": ["assets/components/*"],
 			"@/*": ["assets/tsx/*"],
 			"@tsx/*": ["assets/tsx/*"],
 			"@ts/*": ["assets/ts/*"],
@@ -15,5 +16,5 @@
 			"@css/*": ["assets/css/*"]
 		}
 	},
-	"include": ["assets/tsx"]
+	"include": ["assets/tsx", "assets/components"]
 }

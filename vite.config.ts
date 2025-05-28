@@ -17,6 +17,7 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
+			'@ext': path.resolve(__dirname, 'assets/components'),
 			'@scss': path.resolve(__dirname, 'assets/scss'),
 			'@css': path.resolve(__dirname, 'assets/css'),
 			'@tsx': path.resolve(__dirname, 'assets/tsx'),

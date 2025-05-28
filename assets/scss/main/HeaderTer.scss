@@ -1,0 +1,26 @@
+@use '@scss/_variables' as *;
+
+// Cabeçalho terciário
+.header-tertiary {
+	position: relative;
+	background: var(--color-header-tertiary);
+	font-size: 0.875rem;
+	height: $header3-height;
+	padding: 0 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 1rem;
+	border-bottom: 1px solid var(--color-border);
+
+	.header-icons {
+		display: flex;
+		gap: 1rem;
+	}
+
+	.icon-button {
+		font-size: 1.25rem;
+		cursor: pointer;
+		color: var(--color-icon);
+	}
+}
