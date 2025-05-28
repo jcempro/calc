@@ -1,0 +1,31 @@
+@use '../scss/variables' as *;
+
+// Cabeçalho principal
+header[class^='header-'],
+header[class*=' header-'] {
+  position:absolute;
+  left: 0;
+  right: 0;  
+  color: var(--color-header-primary-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  font-weight: 600;  
+  user-select: none;  
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+
+  .header-right {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .middle {
+    
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+  }  
+}

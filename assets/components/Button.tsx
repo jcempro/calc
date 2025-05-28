@@ -1,13 +1,18 @@
 import { JSX } from 'preact';
 import './Button.scss';
 
-interface Button extends JSX.HTMLAttributes<HTMLLabelElement> {
+export interface IButton extends JSX.HTMLAttributes<HTMLLabelElement> {
   htmlFor?: string;
   caption?: string;
+  ariaLabel?:string;
   icone: string;
 }
 
-export default function Button({ icone, caption, ...props }: Button) {
+export function Button({
+  icone,
+  caption,
+  ...props
+}: IButton) {
   props.className = `btb${props.className ? ' ' + props.className : ''}`;
   return (
     <label {...props}>

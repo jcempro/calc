@@ -1,5 +1,5 @@
 import { render } from 'preact';
-import '@scss/main.scss';
+import '@scss/main/Footer.scss';
 
 export default function HeaderSec() {
   return (

@@ -4,37 +4,18 @@
 .header-primary {
   position: fixed;
   top: $header-upper;
-  left: 0;
-  right: 0;
-  height: $header-height;
-  background-color: var(--color-header-primary);
-  color: var(--color-header-primary-text);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1rem;
-  font-weight: 600;
-  font-size: 1.125rem;
-  user-select: none;
   z-index: 1000;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
-
-  .right-icons {
-    display: flex;
-    gap: 0.75rem;
-  }
-
-  .title {
-    user-select: text;
-  }
+  background-color: var(--color-header-primary);
+  height: $header-height;
+  font-size: 1.125rem;
 
   .btb {
     width: 2.25rem;
     height: 2.25rem;
     font-size: 1.125rem;
-  }
 
-  span{
-    display: none;
+    span {
+      display: none;
+    }
   }
 }

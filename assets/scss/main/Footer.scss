@@ -1,0 +1,10 @@
+@use '@scss/_variables' as *;
+
+footer {
+	padding: 1rem;
+	background-color: var(--color-footer);
+	color: var(--color-footer-text);
+	font-size: 0.875rem;
+	text-align: center;
+	user-select: text;
+}

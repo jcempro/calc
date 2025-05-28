@@ -1,17 +1,21 @@
 import '@scss/main/HeaderSec.scss';
+import Headers from '@ext/Headers';
 
 export default function HeaderSec() {
   return (
     <>
-      <header className="header-secondary">
-        <label
-          htmlFor="right-sub-toggle"
-          className="menu-button"
-          aria-label="Menu direito secundário"
-        >
-          <i className="fas fa-cog"></i>
-        </label>
-      </header>
+      <Headers
+        classPart="secondary"
+
+        RightBtbs={[
+          {
+            htmlFor: "right-sub-toggle",
+            className: "menu-button",
+            ariaLabel: "Menu direito secundário",
+            icone: "fas fa-cog"
+          }
+        ]}
+      />
     </>
   );
 }

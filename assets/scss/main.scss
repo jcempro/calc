@@ -20,15 +20,6 @@ html,
 	line-height: 1.5;
 }
 
-footer {
-	padding: 1rem;
-	background-color: var(--color-footer);
-	color: var(--color-footer-text);
-	font-size: 0.875rem;
-	text-align: center;
-	user-select: text;
-}
-
 .main-content {
 	padding: 1.5rem;
 	padding-top: calc(#{$header-height} + #{$header2-height} + 1.5rem);
@@ -59,16 +50,6 @@ footer {
 		padding: 1rem;
 		padding-top: calc(#{$header-height} + #{$header2-height} + 1rem);
 	}
-}
-
-// Botão de menu
-.menu-button {
-	margin-right: 0.75rem;
-}
-
-.header-left {
-	display: flex;
-	align-items: center;
 }
 
 // Menu lateral
