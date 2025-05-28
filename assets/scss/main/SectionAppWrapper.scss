@@ -1,0 +1,33 @@
+@use '@scss/_variables' as *;
+
+section.app-wrapper {
+  position: relative;
+
+  >.app-main {
+    display: flex;
+
+
+    >section {
+      flex: 1;
+      box-sizing: border-box;
+    }
+
+    >nav[class^='inav-'],
+    >nav[class*=' inav-'] {
+      width: 2.5rem;
+      min-height: 50vh;
+      box-sizing: border-box;
+      background-color: red;
+    }
+
+    >nav[class^='inav-left'],
+    >nav[class*=' inav-left'] {
+      left: 0;
+    }
+
+    >nav[class^='inav-right'],
+    >nav[class*=' inav-right'] {
+      right: 0;
+    }
+  }
+}
