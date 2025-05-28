@@ -1,3 +1,4 @@
+// WARNING: Não use com valores > 100 para evitar erros de recursão no TS
 export type Enumerate<
 	N extends number,
 	Acc extends number[] = [],
@@ -48,11 +49,19 @@ export function proximaDataBase(
 	return new Date(year, month + 2, 0);
 }
 
+export function isDataValida(d: any): d is Date {
+	return d instanceof Date && !isNaN(d.getTime());
+}
+
 /*
  */
 export function diasCorridos(ini: Date | string, fim: Date | string): number {
 	const dataIni = new Date(ini);
 	const dataFim = new Date(fim);
+
+	if (!isDataValida(dataIni) || !isDataValida(dataFim)) {
+		throw new Error("Data inválida fornecida.");
+	}
 
 	// Ignora a hora (zera horas/minutos/segundos/milisegundos)
 	dataIni.setHours(0, 0, 0, 0);
@@ -181,12 +190,19 @@ export function diaBaseUtilOuProx(
 	max: number = 28,
 ): Date {
 	let n: number;
+	let tentativas = 0;
+	const MAX_TENTATIVAS = 100;
 	do {
 		data = diaUtilOuProx(data);
 		n = teto(data.getDate(), max, 1);
 
 		if (n != data.getDate()) {
 			data = proximaDataBase(data, n, false);
+		}
+
+		// lógica atual
+		if (++tentativas > MAX_TENTATIVAS) {
+			throw new Error("Loop infinito detectado em diaBaseUtilOuProx");
 		}
 	} while (!isDiaUtil(data));
 
@@ -198,7 +214,7 @@ export function teto(
 	max: number,
 	def: undefined | number = undefined,
 ): number {
-	return valor > max ? (typeof def === undefined ? max : <number>def) : valor;
+	return valor > max ? (def === undefined ? max : def) : valor;
 }
 
 export function piso(valor: number, min: number): number {
