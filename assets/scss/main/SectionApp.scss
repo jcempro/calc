@@ -1,8 +1,7 @@
 @use '@scss/_variables' as *;
 
 section.app {
-  position: relative;
-  display: flex;
+  position: relative;  
 
   > nav[class^='inav-'],
   > nav[class*=' inav-'] {
