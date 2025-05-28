@@ -1,8 +1,7 @@
 {
 	"name": "preact-tsx-scss-template",
 	"version": "1.0.0",
-	"scripts": {
-		"run": "./run.sh",
+	"scripts": {		
 		"dev": "vite",
 		"scss": "sass assets/scss:assets/css --no-source-map --style=compressed --watch",
 		"build": "vite build",
