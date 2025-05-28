@@ -1,6 +1,7 @@
 import { render } from 'preact';
 import HeaderSectionTop from './main/HeaderSectionTop'
-import SectionApp from './main/SectionApp'
+import SectionWrapper from './main/SectionWrapper'
+import Footer from './main/Footer'
 
 export default function Master() {
 	return (
@@ -54,7 +55,9 @@ export default function Master() {
 
 			<HeaderSectionTop />
 
-			<SectionApp />
+			<SectionWrapper />
+
+			<Footer />
 		</>
 	);
 }
