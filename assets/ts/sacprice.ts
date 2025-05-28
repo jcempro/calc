@@ -15,7 +15,7 @@ export enum TSacPrice {
 }
 
 export type TParcelaDemo = {
-	capital: number;
+	amortizacao: number;
 	juros: number;
 	pagamento: number;
 	saldoDevedor: number;
@@ -112,7 +112,7 @@ export abstract class credito {
 
 			/* inicializa com os valores no padrão 0 meses */
 			let p: TParcelaDemo = <TParcelaDemo>{
-				capital: 0,
+				amortizacao: 0,
 				juros: 0,
 				pagamento: 0,
 				saldoDevedor: (<TFinanciado>r).financiado,
@@ -144,9 +144,9 @@ export abstract class credito {
 
 			/* calcula parcela */
 			if (i > 0) {
-				p.capital = car ? 0 : 1;
+				p.amortizacao = car ? 0 : 1;
 				p.juros = !jrs ? 0 : 1;
-				p.pagamento = p.capital + p.juros;
+				p.pagamento = p.amortizacao + p.juros;
 				p.saldoDevedor =
 					(i > 1
 						? (<TFinanciado>r).financiado
