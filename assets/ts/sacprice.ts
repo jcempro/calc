@@ -90,8 +90,6 @@ export abstract class credito {
 			this.validKey(args, 'data_operacao') ? args.data_operacao : new Date(),
 		);
 
-		args.data_operacao = diaUtilOuProx(args.data_operacao);
-
 		args.diabase = this.validKey(args, 'diabase')
 			? args.diabase
 			: <numberRange<1, 28>>diaBaseUtilOuProx(args.data_operacao).getDate();
@@ -121,7 +119,7 @@ export abstract class credito {
 			};
 
 			/* calcula a data desta parcela */
-			p.data =
+			p.data = diaUtilOuProx(
 				i === 0
 					? r.data_operacao
 					: proximaDataBase(
@@ -130,7 +128,8 @@ export abstract class credito {
 								: r.repo.extrato[r.repo.extrato.length - 1].data,
 							r.diabase,
 							false,
-					  );
+					  ),
+			);
 
 			/* calculas os dias decorridos */
 			p.dias =
