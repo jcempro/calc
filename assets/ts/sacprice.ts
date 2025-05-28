@@ -40,7 +40,7 @@ export type TDemandaCredito = TCreditoAlvo & {
 	diabase: numberRange<1, 28>;
 	juros: numberRange<0.0, 1.0>;
 	prazo: numberRange<1, 460>;
-	carencia: numberRange<0, 24>;
+	carencia: numberRange<0, 360>;
 	tac: number;
 	flat: number;
 	tipo: TSacPrice;
@@ -77,7 +77,7 @@ export abstract class credito {
 		this.args = this._sacInicializaValores(args);
 	}
 
-	protected validKey(obj: any, key: string): Boolean {
+	protected validKey(obj: any, key: string): boolean {
 		return !(key in obj) || typeof obj.data_operacao != undefined;
 	}
 
@@ -99,7 +99,7 @@ export abstract class credito {
 
 	/*
 	 **/
-	protected _sac = (): Boolean | TRCredito => {
+	protected _sac = (): boolean | TRCredito => {
 		if (this.args === null || !('financiado' in this.args)) {
 			return false;
 		}
@@ -107,8 +107,8 @@ export abstract class credito {
 		let r: TRCredito = this.args as TRCredito;
 
 		for (let i = 0; i <= r.prazo; i++) {
-			let car: Boolean = i <= r.carencia;
-			let jrs: Boolean = !car || r.jurosNaCarencia;
+			let car: boolean = i <= r.carencia;
+			let jrs: boolean = !car || r.jurosNaCarencia;
 
 			/* inicializa com os valores no padrão 0 meses */
 			let p: TParcelaDemo = <TParcelaDemo>{
