@@ -3,9 +3,16 @@
 		"target": "ESNext",
 		"module": "ESNext",
 		"jsx": "react-jsx",
+		"moduleDetection": "force",
 		"jsxImportSource": "preact",
 		"strict": true,
+		"noEmit": true,
+		"skipLibCheck": true,
 		"moduleResolution": "Node",
+		"esModuleInterop": true,
+		"allowImportingTsExtensions": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
 		"baseUrl": ".",
 		"paths": {
 			"@ext/*": ["assets/components/*"],
@@ -16,5 +23,8 @@
 			"@css/*": ["assets/css/*"]
 		}
 	},
+  "ts-node": {
+    "esm": true
+  },	
 	"include": ["assets/tsx", "assets/components"]
 }

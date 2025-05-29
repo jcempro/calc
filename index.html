@@ -1,236 +1,302 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name='viewport' content='width=device-width, initial-scale=1'>
+		<title>Preact App</title>
 
-  <title>Preact App</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+		/>
+		<style>
+			noscript,
+			.lds {
+				width: calc(3 * 1.25rem);
+				height: calc(3 * 1.25rem);
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <style>
-    /* Seu estilo original */
-    noscript,
-    .lds {
-      width: calc(3 * 1.25rem);
-      height: calc(3 * 1.25rem);
-      position: fixed;
-      top: 50vh;
-      left: 50vw;
-      margin-left: calc(-1.5 * 1.25rem);
-      margin-top: calc(-1.5 * 1.25rem);
-    }
+				position: fixed;
+				top: 50vh;
+				left: 50vw;
+				margin-left: calc(-1.5 * 1.25rem);
+				margin-top: calc(-1.5 * 1.25rem);
+			}
 
-    .lds div {
-      box-sizing: border-box;
-      display: block;
-      position: absolute;
-      width: 3rem;
-      height: 3rem;
-      margin: 8px;
-      border: 8px solid #ccc;
-      border-radius: 50%;
-      animation: lds 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      border-color: #ccc transparent transparent transparent;
-    }
+			.lds div {
+				box-sizing: border-box;
+				display: block;
+				position: absolute;
+				width: 3rem;
+				height: 3rem;
+				margin: 8px;
+				border: 8px solid #ccc;
+				border-radius: 50%;
+				animation: lds 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+				border-color: #ccc transparent transparent transparent;
+			}
 
-    .lds div:nth-child(1) {
-      animation-delay: -0.45s;
-    }
+			.lds div:nth-child(1) {
+				animation-delay: -0.45s;
+			}
 
-    .lds div:nth-child(2) {
-      animation-delay: -0.3s;
-    }
+			.lds div:nth-child(2) {
+				animation-delay: -0.3s;
+			}
 
-    .lds div:nth-child(3) {
-      animation-delay: -0.15s;
-    }
+			.lds div:nth-child(3) {
+				animation-delay: -0.15s;
+			}
 
-    @keyframes lds {
-      0% {
-        transform: rotate(0deg);
-      }
+			@keyframes lds {
+				0% {
+					transform: rotate(0deg);
+				}
 
-      100% {
-        transform: rotate(360deg);
-      }
-    }
+				100% {
+					transform: rotate(360deg);
+				}
+			}
 
-    #progress-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 5px;
-      width: 100%;
-      background: #eee;
-      z-index: 10000;
-      display: none;
-    }
+			#progress-container {
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 5px;
+				width: 100%;
+				background: #eee;
+				z-index: 10000;
+				display: none;
+			}
 
-    #progress-bar {
-      height: 100%;
-      width: 0%;
-      background: #0078d7;
-      transition: width 0.3s ease;
-    }
+			#progress-bar {
+				height: 100%;
+				width: 0%;
+				background: #0078d7;
+				transition: width 0.3s ease;
+			}
 
-    * {
-      font-family: "Noto Sans", "Tahoma", "Arial", "Sans-serif" !important;
-      line-height: 1.5rem;
-      margin: 0;
-      padding: 0;
-      color: #222;
-    }
+			* {
+				font-family: 'Noto Sans', 'Tahoma', 'Arial', 'Sans-serif' !important;
+				line-height: 1.5rem;
+				margin: 0;
+				padding: 0;
+				color: #222;
+			}
 
-    noscript {
-      display: block;
-      width: 280px;
-      max-width: 280px;
-      height: 160px;
-      margin-left: calc(-140px - 1rem);
-      margin-top: calc(-80px - .5rem);
-      background: rgba(255, 255, 255, .9);
-      padding: .5rem 1rem;
-      border-left: .5rem solid #eee;
-    }
+			noscript {
+				display: block;
+				width: 280px;
+				max-width: 280px;
+				height: 160px;
+				margin-left: calc(-140px - 1rem);
+				margin-top: calc(-80px - 0.5rem);
+				background: rgba(255, 255, 255, 0.9);
+				padding: 0.5rem 1rem;
+				border-left: 0.5rem solid #eee;
+			}
 
-    noscript span {
-      opacity: .6;
-      font-size: .9rem;
-    }
+			noscript span {
+				opacity: 0.6;
+				font-size: 0.9rem;
+			}
 
-    noscript p {
-      margin-top: .5rem;
-      font-weight: 600;
-    }
+			noscript p {
+				margin-top: 0.5rem;
+				font-weight: 600;
+			}
 
-    noscript p span {
-      font-size: 1.1rem;
-    }
-  </style>
-</head>
+			noscript p span {
+				font-size: 1.1rem;
+			}
+		</style>
+	</head>
 
-<body class="theme-light">
+	<body class="theme-light">
+		<div id="progress-container">
+			<div id="progress-bar"></div>
+		</div>
 
-  <div id="progress-container">
-    <div id="progress-bar"></div>
-  </div>
+		<div class="lds" id="loader">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+		<noscript
+			><span>There is something <strong>wrong</strong> here!</span>
+			<p>
+				<span>#noScript</span> <u>Javascript is <strong>disabled</strong></u
+				>, preventing us from directing you to the address.
+			</p>
+		</noscript>
+		<div id="Master"></div>
 
-  <div class="lds" id="loader">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-  <noscript><span>There is something <strong>wrong</strong> here!</span>
-    <p><span>#noScript</span> <u>Javascript is <strong>disabled</strong></u>, preventing us from directing you to the
-      address.</p>
-  </noscript>
-  <div id="Master"></div>
+		<script type="module">
+			const progressContainer = document.getElementById('progress-container');
+			const progressBar = document.getElementById('progress-bar');
+			const loader = document.getElementById('loader');
 
-  <script type="module">
-    const progressContainer = document.getElementById('progress-container');
-    const progressBar = document.getElementById('progress-bar');
-    const loader = document.getElementById('loader');
+			function setProgress(ratio) {
+				progressBar.style.width = `${Math.round(ratio * 100)}%`;
+			}
 
-    function setProgress(ratio) {
-      progressBar.style.width = `${Math.round(ratio * 100)}%`;
-    }
+			function loadScript(url, isModule = false) {
+				return new Promise((resolve, reject) => {
+					if (document.querySelector(`script[src="${url}"]`)) {
+						resolve();
+						return;
+					}
+					const script = document.createElement('script');
+					script.src = url;
+					if (isModule) script.type = 'module';
+					script.async = true;
+					script.onload = () => resolve();
+					script.onerror = () =>
+						reject(new Error(`Falha ao carregar script: ${url}`));
+					document.head.appendChild(script);
+				});
+			}
 
-    function loadScript(url, isModule = false) {
-      return new Promise((resolve, reject) => {
-        if (document.querySelector(`script[src="${url}"]`)) {
-          resolve();
-          return;
-        }
-        const script = document.createElement('script');
-        script.src = url;
-        if (isModule) script.type = 'module';
-        script.async = true;
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error(`Falha ao carregar script: ${url}`));
-        document.head.appendChild(script);
-      });
-    }
+			async function loadImportMap(url) {
+				const response = await fetch(url);
+				if (!response.ok)
+					throw new Error(`Falha ao carregar import map: ${url}`);
+				const importMapText = await response.text();
 
-    function injectImportMap() {
-      const importMap = {
-        imports: {
-          "preact": "https://unpkg.com/preact@10.13.2/dist/preact.module.js",
-          "preact/hooks": "https://unpkg.com/preact@10.13.2/hooks/dist/hooks.module.js"
-        }
-      };
-      const script = document.createElement('script');
-      script.type = 'importmap';
-      script.textContent = JSON.stringify(importMap);
-      document.head.appendChild(script);
-    }
+				// Remove importmap anterior, se existir
+				const existing = document.querySelector('script[type="importmap"]');
+				if (existing) existing.remove();
 
-    async function tryLoadBundle() {
-      const bundleUrl = 'assets/js/bundle.js'; // ajuste aqui conforme seu bundle
-      try {
-        await loadScript(bundleUrl, true);
-        console.log('Bundle compilado carregado com sucesso!');
-        return true;
-      } catch (e) {
-        console.warn('Bundle não encontrado, carregando módulos individuais...');
-        return false;
-      }
-    }
+				const script = document.createElement('script');
+				script.type = 'importmap';
+				script.textContent = importMapText;
+				document.head.appendChild(script);
+			}
 
-    async function loadRuntimeModules() {
-      progressContainer.style.display = 'block';
-      setProgress(0);
+			async function tryLoadBundle() {
+				const bundleUrl = 'assets/js/bundle.js'; // ajuste seu bundle aqui
+				try {
+					await loadScript(bundleUrl, true);
+					console.log('Bundle compilado carregado com sucesso!');
+					return true;
+				} catch (e) {
+					console.warn(
+						'Bundle não encontrado, carregando módulos individuais...',
+					);
+					return false;
+				}
+			}
 
-      // 1. Carrega es-module-shims
-      await loadScript('https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js');
-      setProgress(0.2);
+			async function loadSass() {
+				if (window.sassInstance) return window.sassInstance; // cache
+				await loadScript(
+					'https://cdn.jsdelivr.net/npm/sass.js@latest/dist/sass.sync.js',
+				);
+				window.sassInstance = new Sass();
+				return window.sassInstance;
+			}
 
-      // 2. Injeta import map
-      injectImportMap();
-      setProgress(0.3);
+			async function loadESModuleShims() {
+				return new Promise((resolve, reject) => {
+					if (window.esmsInit) {
+						resolve();
+						return;
+					}
+					const s = document.createElement('script');
+					s.src =
+						'https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js';
+					s.async = true;
+					s.onload = async () => {
+						try {
+							window.esmsInit = true;
 
-      // 3. Carrega módulos Preact e seus hooks via module-shim (import map resolve)
-      // Usamos module-shim para que es-module-shims processe os módulos e import map
-      const moduleShimScripts = [
-        'https://unpkg.com/preact@10.13.2/dist/preact.module.js',
-        'https://unpkg.com/preact@10.13.2/hooks/dist/hooks.module.js'
-      ];
-      // Não precisamos carregar manualmente, porque vamos carregar o main.tsx que importa esses módulos
+							// Configura hooks para .scss
+							window.importShim.configure({
+								resolveHook: async (specifier, parentUrl) => {
+									if (specifier.endsWith('.scss')) {
+										return new URL(specifier, parentUrl).href;
+									}
+									return null;
+								},
+								fetchHook: async (url, context, importShim) => {
+									if (url.endsWith('.scss')) {
+										const sass = await loadSass();
+										const res = await fetch(url);
+										if (!res.ok)
+											throw new Error(`Falha ao carregar SCSS: ${url}`);
+										const scssText = await res.text();
+										return new Promise((resolve, reject) => {
+											sass.compile(scssText, function (result) {
+												if (result.status !== 0) {
+													reject(
+														new Error(
+															`Erro compilando SCSS: ${result.formatted}`,
+														),
+													);
+													return;
+												}
+												const jsModule = `
+                        const style = document.createElement('style');
+                        style.textContent = ${JSON.stringify(result.text)};
+                        document.head.appendChild(style);
+                        export default {};
+                      `;
+												resolve(jsModule);
+											});
+										});
+									}
+									return null;
+								},
+							});
 
-      setProgress(0.4);
+							resolve();
+						} catch (e) {
+							reject(e);
+						}
+					};
+					s.onerror = reject;
+					document.head.appendChild(s);
+				});
+			}
 
-      // 4. Carrega main.tsx via module-shim para rodar no browser
-      // IMPORTANTE: você precisa que seu servidor sirva o arquivo .tsx com Content-Type correto, e o navegador entenda
-      // para isso, é melhor que seu main.tsx esteja em JS ou que você use um transpiler runtime (não abordado aqui)
+			async function loadRuntimeModules() {
+				progressContainer.style.display = 'block';
+				setProgress(0);
 
-      // Cria o script module-shim para main.tsx
-      const mainScript = document.createElement('script');
-      mainScript.type = 'module-shim';
-      mainScript.src = 'assets/tsx/main.tsx'; // ajuste o caminho do seu main.tsx
-      mainScript.onload = () => {
-        setProgress(1);
-        progressContainer.style.display = 'none';
-        loader.style.display = 'none';
-      };
-      mainScript.onerror = () => {
-        console.error('Falha ao carregar main.tsx');
-        progressContainer.style.display = 'none';
-        loader.style.display = 'none';
-      };
-      document.body.appendChild(mainScript);
-    }
+				await loadESModuleShims();
+				setProgress(0.7);
 
-    (async () => {
-      const bundleLoaded = await tryLoadBundle();
-      if (!bundleLoaded) {
-        await loadRuntimeModules();
-      } else {
-        loader.style.display = 'none';
-      }
-    })();
-  </script>
+				const mainScript = document.createElement('script');
+				mainScript.type = 'module-shim';
+				mainScript.src = 'assets/tsx/main.tsx'; // ajuste seu caminho
+				mainScript.onload = () => {
+					setProgress(1);
+					progressContainer.style.display = 'none';
+					loader.style.display = 'none';
+				};
+				mainScript.onerror = () => {
+					console.error('Falha ao carregar main.tsx');
+					progressContainer.style.display = 'none';
+					loader.style.display = 'none';
+				};
+				document.body.appendChild(mainScript);
+			}
 
-</body>
-
+			(async () => {
+				try {
+					const bundleLoaded = await tryLoadBundle();
+					if (!bundleLoaded) {
+						await loadImportMap('https://seu-cdn.com/importmap.json'); // ajuste sua URL
+						await loadRuntimeModules();
+					} else {
+						loader.style.display = 'none';
+					}
+				} catch (e) {
+					console.error('Erro no carregamento:', e);
+					loader.style.display = 'none';
+				}
+			})();
+		</script>
+	</body>
 </html>

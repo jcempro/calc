@@ -1,0 +1,19 @@
+{
+  "imports": {
+    "./ResourceLoader.": "assets/ts/ResourceLoader..js",
+    "./ResourceLoader.types": "assets/ts/ResourceLoader.types.js",
+    "./common": "assets/ts/common.js",
+    "./credito/pj/SAC": "assets/ts/credito/pj/SAC.js",
+    "./credito/pj/credito": "assets/ts/credito/pj/credito.js",
+    "./main": "assets/tsx/main.js",
+    "./main/Footer": "assets/tsx/main/Footer.js",
+    "./main/HeaderMain": "assets/tsx/main/HeaderMain.js",
+    "./main/HeaderSec": "assets/tsx/main/HeaderSec.js",
+    "./main/HeaderSectionTop": "assets/tsx/main/HeaderSectionTop.js",
+    "./main/HeaderTer": "assets/tsx/main/HeaderTer.js",
+    "./main/HeaderUpper": "assets/tsx/main/HeaderUpper.js",
+    "./main/MainContent": "assets/tsx/main/MainContent.js",
+    "./main/SectionAppWrapper": "assets/tsx/main/SectionAppWrapper.js",
+    "./main/SectionWrapper": "assets/tsx/main/SectionWrapper.js"
+  }
+}

@@ -1,21 +1,26 @@
 {
 	"name": "preact-tsx-scss-template",
 	"version": "1.0.0",
+	"type": "module",
 	"scripts": {
 		"dev": "vite",
 		"scss": "sass assets/scss:assets/css --no-source-map --style=compressed --watch",
-		"build": "npm run build:bundle && vite build",
+		"build": "npm run build:bundle && vite build && vite build:importmap",
 		"build:bundle": "vite build --config vite.merged.config.ts && shx mv dist/merged/index.html dist/merged/calc.bundle.html",
+		"build:importmap": "ts-node --esm ./scripts/genImportMap.ts",
 		"format": "prettier --write .",
 		"lint": "eslint assets/tsx --ext .ts,.tsx"
 	},
 	"devDependencies": {
 		"@preact/preset-vite": "^2.10.1",
 		"@types/node": "^22.15.21",
+		"fast-glob": "^3.3.3",
 		"preact": "^10.26.7",
 		"sass": "^1.89.0",
 		"sass-embedded": "^1.89.0",
 		"shx": "^0.4.0",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.8.3",
 		"vite": "^6.3.5",
 		"vite-plugin-singlefile": "^2.2.0"
 	},
