@@ -287,7 +287,7 @@
 				try {
 					const bundleLoaded = await tryLoadBundle();
 					if (!bundleLoaded) {
-						await loadImportMap('https://seu-cdn.com/importmap.json'); // ajuste sua URL
+						await loadImportMap('dist/importmap.json'); // ajuste sua URL
 						await loadRuntimeModules();
 					} else {
 						loader.style.display = 'none';
