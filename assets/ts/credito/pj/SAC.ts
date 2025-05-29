@@ -7,68 +7,19 @@ import {
 	diasCorridos,
 	proximaDataBase,
 	numberRange,
-} from './common.ts';
+} from '../../common.ts';
 
-export enum TSacPrice {
-	SAC = 1,
-	PRICE = 2,
-}
-
-export type TParcelaDemo = {
-	amortizacao: number;
-	juros: number;
-	pagamento: number;
-	saldoDevedor: number;
-	data: Date;
-	dias: number;
-};
-
-export type TExtratoCredito = TParcelaDemo[];
-
-export type TLiberado = {
-	liquido: number;
-};
-
-export type TFinanciado = {
-	financiado: number;
-};
-
-export type TCreditoAlvo = TFinanciado | TLiberado | (TFinanciado & TLiberado);
-
-export type TDemandaCredito = TCreditoAlvo & {
-	data_operacao: Date;
-	diabase: numberRange<1, 28>;
-	juros: numberRange<0.0, 1.0>;
-	prazo: numberRange<1, 460>;
-	carencia: numberRange<0, 360>;
-	tac: number;
-	flat: number;
-	tipo: TSacPrice;
-	jurosNaCarencia: boolean;
-};
-
-export type TRCredito = TDemandaCredito & {
-	info: {
-		datas: {
-			primeira: Date;
-			ultima: Date;
-		};
-		diasUteis: number;
-		iofFixo: number;
-		iofDiario: number;
-	};
-	repo: {
-		pgtoTotal: number;
-		pgtoAMais: number;
-		maiorParcela: number;
-		menorParcela: number;
-		extrato: TExtratoCredito;
-	};
-};
+import {
+	TRCredito,
+	TLiberado,
+	TFinanciado,
+	TParcelaDemo,
+	TDemandaCredito,
+} from './credito.ts';
 
 /*
  */
-export abstract class credito {
+export abstract class SAC {
 	private args: null | TDemandaCredito;
 
 	/*
@@ -123,12 +74,12 @@ export abstract class credito {
 				i === 0
 					? r.data_operacao
 					: proximaDataBase(
-						i > 1
-							? r.data_operacao
-							: r.repo.extrato[r.repo.extrato.length - 1].data,
-						r.diabase,
-						false,
-					),
+							i > 1
+								? r.data_operacao
+								: r.repo.extrato[r.repo.extrato.length - 1].data,
+							r.diabase,
+							false,
+					  ),
 			);
 
 			/* calculas os dias decorridos */
@@ -136,11 +87,11 @@ export abstract class credito {
 				i === 0
 					? 0
 					: diasCorridos(
-						i > 1
-							? r.data_operacao
-							: r.repo.extrato[r.repo.extrato.length - 1].data,
-						p.data,
-					);
+							i > 1
+								? r.data_operacao
+								: r.repo.extrato[r.repo.extrato.length - 1].data,
+							p.data,
+					  );
 
 			/* calcula parcela */
 			if (i > 0) {
@@ -170,20 +121,35 @@ export abstract class credito {
 		const dias: number[] = [];
 
 		const dataPrimeiroVenc = diaUtilOuProx(
-			new Date((<TDemandaCredito>this.args).data_operacao.getFullYear(), (<TDemandaCredito>this.args).data_operacao.getMonth(), (<TDemandaCredito>this.args).diabase)
+			new Date(
+				(<TDemandaCredito>this.args).data_operacao.getFullYear(),
+				(<TDemandaCredito>this.args).data_operacao.getMonth(),
+				(<TDemandaCredito>this.args).diabase,
+			),
 		);
 
 		let vencimentoBase = new Date(dataPrimeiroVenc);
-		while (diasCorridos((<TDemandaCredito>this.args).data_operacao, vencimentoBase) < (<TDemandaCredito>this.args).carencia) {
+		while (
+			diasCorridos((<TDemandaCredito>this.args).data_operacao, vencimentoBase) <
+			(<TDemandaCredito>this.args).carencia
+		) {
 			vencimentoBase.setMonth(vencimentoBase.getMonth() + 1);
 			vencimentoBase = diaUtilOuProx(
-				new Date(vencimentoBase.getFullYear(), vencimentoBase.getMonth(), (<TDemandaCredito>this.args).diabase)
+				new Date(
+					vencimentoBase.getFullYear(),
+					vencimentoBase.getMonth(),
+					(<TDemandaCredito>this.args).diabase,
+				),
 			);
 		}
 
 		for (let i = 0; i < (<TDemandaCredito>this.args).prazo; i++) {
 			const venc = diaUtilOuProx(
-				new Date(vencimentoBase.getFullYear(), vencimentoBase.getMonth() + i, (<TDemandaCredito>this.args).diabase)
+				new Date(
+					vencimentoBase.getFullYear(),
+					vencimentoBase.getMonth() + i,
+					(<TDemandaCredito>this.args).diabase,
+				),
 			);
 			dias.push(diasCorridos((<TDemandaCredito>this.args).data_operacao, venc));
 		}
@@ -197,23 +163,31 @@ export abstract class credito {
 		iofFixo: number,
 		alqDiaria: number,
 		tolerancia = 0.01,
-		maxIter = 100
+		maxIter = 100,
 	): number {
 		let diasPorParcela: number[] = this.gerarDiasPorParcela();
 
-		if ((<TDemandaCredito>this.args).prazo <= 0 || diasPorParcela.length !== (<TDemandaCredito>this.args).prazo) {
-			throw new Error("Parâmetros inválidos: número de parcelas e dias por parcela devem ser consistentes.");
+		if (
+			(<TDemandaCredito>this.args).prazo <= 0 ||
+			diasPorParcela.length !== (<TDemandaCredito>this.args).prazo
+		) {
+			throw new Error(
+				'Parâmetros inválidos: número de parcelas e dias por parcela devem ser consistentes.',
+			);
 		}
 
 		// Soma ponderada de dias para o cálculo do IOF diário
 		const somaFatorIOFdiario = diasPorParcela.reduce(
 			(soma, dias) => soma + dias * alqDiaria,
-			0
+			0,
 		);
 
 		// Estimativa inicial baseada nos principais encargos (máximo legal de IOF: 3%)
 		const estimativaInicial =
-			(<TLiberado>this.args).liquido * (1 + (<TDemandaCredito>this.args).flat + 0.03) + (<TDemandaCredito>this.args).tac + iofFixo;
+			(<TLiberado>this.args).liquido *
+				(1 + (<TDemandaCredito>this.args).flat + 0.03) +
+			(<TDemandaCredito>this.args).tac +
+			iofFixo;
 
 		// Define o intervalo inicial da busca com ±10% de margem sobre a estimativa
 		let brutoMin = estimativaInicial * 0.9;
@@ -229,7 +203,11 @@ export abstract class credito {
 			let encargoIOFdiario = amortizacao * somaFatorIOFdiario;
 			encargoIOFdiario = Math.min(encargoIOFdiario, bruto * 0.03);
 
-			const descontosTotais = (<TDemandaCredito>this.args).tac + encargoFlat + iofFixo + encargoIOFdiario;
+			const descontosTotais =
+				(<TDemandaCredito>this.args).tac +
+				encargoFlat +
+				iofFixo +
+				encargoIOFdiario;
 			const liquidoCalculado = bruto - descontosTotais;
 
 			const erro = liquidoCalculado - (<TLiberado>this.args).liquido;
@@ -240,7 +218,10 @@ export abstract class credito {
 			}
 
 			// Margem adaptativa proporcional ao erro relativo (entre 0,5% e 10%)
-			const margem = Math.max(0.005, Math.min(0.1, Math.abs(erro / (<TLiberado>this.args).liquido)));
+			const margem = Math.max(
+				0.005,
+				Math.min(0.1, Math.abs(erro / (<TLiberado>this.args).liquido)),
+			);
 
 			if (erro > 0) {
 				brutoMax = bruto - bruto * margem;
@@ -249,7 +230,8 @@ export abstract class credito {
 			}
 		}
 
-		throw new Error("Não convergiu para o valor bruto dentro das iterações máximas.");
+		throw new Error(
+			'Não convergiu para o valor bruto dentro das iterações máximas.',
+		);
 	}
-
 }
