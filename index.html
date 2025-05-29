@@ -130,173 +130,123 @@
 				>, preventing us from directing you to the address.
 			</p>
 		</noscript>
+
 		<div id="Master"></div>
 
 		<script type="module">
-			const progressContainer = document.getElementById('progress-container');
-			const progressBar = document.getElementById('progress-bar');
-			const loader = document.getElementById('loader');
+			const progress = document.getElementById('progress-bar');
+			let progressStage = 0;
+			const steps = 4;
 
-			function setProgress(ratio) {
-				progressBar.style.width = `${Math.round(ratio * 100)}%`;
-			}
+			const updateProgress = () => {
+				progressStage++;
+				progress.style.width = `${(progressStage / steps) * 100}%`;
+			};
 
-			function loadScript(url, isModule = false) {
-				return new Promise((resolve, reject) => {
-					if (document.querySelector(`script[src="${url}"]`)) {
-						resolve();
-						return;
-					}
-					const script = document.createElement('script');
-					script.src = url;
-					if (isModule) script.type = 'module';
-					script.async = true;
-					script.onload = () => resolve();
-					script.onerror = () =>
-						reject(new Error(`Falha ao carregar script: ${url}`));
-					document.head.appendChild(script);
-				});
-			}
-
-			async function loadImportMap(url) {
-				const response = await fetch(url);
-				if (!response.ok)
-					throw new Error(`Falha ao carregar import map: ${url}`);
-				const importMapText = await response.text();
-
-				// Remove importmap anterior, se existir
-				const existing = document.querySelector('script[type="importmap"]');
-				if (existing) existing.remove();
-
-				const script = document.createElement('script');
-				script.type = 'importmap';
-				script.textContent = importMapText;
-				document.head.appendChild(script);
-			}
-
-			async function tryLoadBundle() {
-				const bundleUrl = 'assets/js/bundle.js'; // ajuste seu bundle aqui
+			async function loadScript(url, isModule = false) {
 				try {
-					await loadScript(bundleUrl, true);
-					console.log('Bundle compilado carregado com sucesso!');
+					const res = await fetch(url, { cache: 'no-store' });
+					if (!res.ok) throw new Error(`Erro ao carregar ${url}`);
+					const content = await res.text();
+					const script = document.createElement('script');
+					if (isModule) script.type = 'module';
+					script.textContent = content;
+					document.head.appendChild(script);
+					updateProgress();
 					return true;
-				} catch (e) {
-					console.warn(
-						'Bundle não encontrado, carregando módulos individuais...',
-					);
+				} catch (err) {
+					console.warn(err);
 					return false;
 				}
 			}
 
+			async function loadEsbuild() {
+				if (window.esbuildInitialized) return;
+				await loadScript(
+					'https://unpkg.com/esbuild-wasm@0.19.12/esbuild-wasm.js',
+				);
+				await window.esbuild.initialize({
+					wasmURL: 'https://unpkg.com/esbuild-wasm@0.19.12/esbuild.wasm',
+				});
+				window.esbuildInitialized = true;
+				updateProgress();
+			}
+
 			async function loadSass() {
-				if (window.sassInstance) return window.sassInstance; // cache
+				if (window.sass) return window.sass;
 				await loadScript(
 					'https://cdn.jsdelivr.net/npm/sass.js@latest/dist/sass.sync.js',
 				);
-				window.sassInstance = new Sass();
-				return window.sassInstance;
+				updateProgress();
+				return window.sass;
 			}
 
-			async function loadESModuleShims() {
-				return new Promise((resolve, reject) => {
-					if (window.esmsInit) {
-						resolve();
-						return;
-					}
-					const s = document.createElement('script');
-					s.src =
-						'https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js';
-					s.async = true;
-					s.onload = async () => {
-						try {
-							window.esmsInit = true;
+			await loadEsbuild(); // Pré-carrega o wasm
+			await loadSass(); // Pré-carrega sass.js
 
-							// Configura hooks para .scss
-							window.importShim.configure({
-								resolveHook: async (specifier, parentUrl) => {
-									if (specifier.endsWith('.scss')) {
-										return new URL(specifier, parentUrl).href;
-									}
-									return null;
-								},
-								fetchHook: async (url, context, importShim) => {
-									if (url.endsWith('.scss')) {
-										const sass = await loadSass();
-										const res = await fetch(url);
-										if (!res.ok)
-											throw new Error(`Falha ao carregar SCSS: ${url}`);
-										const scssText = await res.text();
-										return new Promise((resolve, reject) => {
-											sass.compile(scssText, function (result) {
-												if (result.status !== 0) {
-													reject(
-														new Error(
-															`Erro compilando SCSS: ${result.formatted}`,
-														),
-													);
-													return;
-												}
-												const jsModule = `
-                        const style = document.createElement('style');
-                        style.textContent = ${JSON.stringify(result.text)};
-                        document.head.appendChild(style);
-                        export default {};
-                      `;
-												resolve(jsModule);
-											});
-										});
-									}
-									return null;
-								},
+			// Agora configuramos o importShim
+			await loadScript(
+				'https://unpkg.com/es-module-shims@1.8.3/dist/es-module-shims.js',
+				true,
+			);
+
+			window.importShim.configure({
+				polyfillEnable: ['modulepreload'],
+				shimMode: 'auto',
+				resolveHook: async (specifier, parentUrl) => {
+					if (
+						specifier.endsWith('.ts') ||
+						specifier.endsWith('.tsx') ||
+						specifier.endsWith('.scss')
+					) {
+						return new URL(specifier, parentUrl).href;
+					}
+					return null;
+				},
+				fetchHook: async (url, context, defaultFetch) => {
+					const ext = url.split('.').pop().toLowerCase();
+					const res = await fetch(url);
+					if (!res.ok) throw new Error(`Erro ao carregar ${url}`);
+					const source = await res.text();
+
+					if (ext === 'scss') {
+						const sass = await loadSass();
+						return new Promise((resolve, reject) => {
+							sass.compile(source, (result) => {
+								if (result.status !== 0) return reject(result.formatted);
+								resolve(`
+                const style = document.createElement('style');
+                style.textContent = ${JSON.stringify(result.text)};
+                document.head.appendChild(style);
+                export default {};
+              `);
 							});
-
-							resolve();
-						} catch (e) {
-							reject(e);
-						}
-					};
-					s.onerror = reject;
-					document.head.appendChild(s);
-				});
-			}
-
-			async function loadRuntimeModules() {
-				progressContainer.style.display = 'block';
-				setProgress(0);
-
-				await loadESModuleShims();
-				setProgress(0.7);
-
-				const mainScript = document.createElement('script');
-				mainScript.type = 'module-shim';
-				mainScript.src = 'assets/tsx/main.tsx'; // ajuste seu caminho
-				mainScript.onload = () => {
-					setProgress(1);
-					progressContainer.style.display = 'none';
-					loader.style.display = 'none';
-				};
-				mainScript.onerror = () => {
-					console.error('Falha ao carregar main.tsx');
-					progressContainer.style.display = 'none';
-					loader.style.display = 'none';
-				};
-				document.body.appendChild(mainScript);
-			}
-
-			(async () => {
-				try {
-					const bundleLoaded = await tryLoadBundle();
-					if (!bundleLoaded) {
-						await loadImportMap('dist/importmap.json'); // ajuste sua URL
-						await loadRuntimeModules();
-					} else {
-						loader.style.display = 'none';
+						});
 					}
-				} catch (e) {
-					console.error('Erro no carregamento:', e);
-					loader.style.display = 'none';
-				}
-			})();
+
+					if (ext === 'ts' || ext === 'tsx') {
+						await loadEsbuild();
+						const result = await window.esbuild.transform(source, {
+							loader: ext,
+							format: 'esm',
+						});
+						return result.code;
+					}
+
+					return null;
+				},
+			});
+
+			updateProgress();
+
+			// Carregamento principal com fallback
+			const ok = await loadScript('./index.bundle.js', true);
+			if (!ok) {
+				await loadScript('./importmap.json', true);
+				await loadScript('./main.tsx', true);
+			}
+			progress.style.width = '100%';
+			setTimeout(() => progress.remove(), 500);
 		</script>
 	</body>
 </html>
