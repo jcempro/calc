@@ -9,7 +9,7 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* seu spinner original */
+    /* Seu estilo original */
     noscript,
     .lds {
       width: calc(3 * 1.25rem);
@@ -56,7 +56,6 @@
       }
     }
 
-    /* Barra de progresso simples */
     #progress-container {
       position: fixed;
       top: 0;
@@ -65,6 +64,7 @@
       width: 100%;
       background: #eee;
       z-index: 10000;
+      display: none;
     }
 
     #progress-bar {
@@ -112,8 +112,7 @@
 
 <body class="theme-light">
 
-  <!-- Progress bar -->
-  <div id="progress-container" style="display:none;">
+  <div id="progress-container">
     <div id="progress-bar"></div>
   </div>
 
@@ -134,13 +133,11 @@
     const progressBar = document.getElementById('progress-bar');
     const loader = document.getElementById('loader');
 
-    // Função para atualizar barra de progresso (0 a 1)
     function setProgress(ratio) {
       progressBar.style.width = `${Math.round(ratio * 100)}%`;
     }
 
-    // Tenta carregar um script, retorna Promise que resolve no load e rejeita no erro
-    function loadScript(url) {
+    function loadScript(url, isModule = false) {
       return new Promise((resolve, reject) => {
         if (document.querySelector(`script[src="${url}"]`)) {
           resolve();
@@ -148,83 +145,86 @@
         }
         const script = document.createElement('script');
         script.src = url;
+        if (isModule) script.type = 'module';
         script.async = true;
-        script.type = 'module'; // <<< ESSENCIAL para módulos ES6
         script.onload = () => resolve();
         script.onerror = () => reject(new Error(`Falha ao carregar script: ${url}`));
         document.head.appendChild(script);
       });
     }
 
-    // Tenta carregar o bundle compilado
+    function injectImportMap() {
+      const importMap = {
+        imports: {
+          "preact": "https://unpkg.com/preact@10.13.2/dist/preact.module.js",
+          "preact/hooks": "https://unpkg.com/preact@10.13.2/hooks/dist/hooks.module.js"
+        }
+      };
+      const script = document.createElement('script');
+      script.type = 'importmap';
+      script.textContent = JSON.stringify(importMap);
+      document.head.appendChild(script);
+    }
+
     async function tryLoadBundle() {
-      const bundleUrl = 'assets/js/bundle.js'; // ajuste para seu bundle compilado
+      const bundleUrl = 'assets/js/bundle.js'; // ajuste aqui conforme seu bundle
       try {
-        await loadScript(bundleUrl);
+        await loadScript(bundleUrl, true);
         console.log('Bundle compilado carregado com sucesso!');
         return true;
       } catch (e) {
-        console.warn('Bundle compilado não encontrado, carregando módulos individuais...');
+        console.warn('Bundle não encontrado, carregando módulos individuais...');
         return false;
       }
     }
 
-    // Carregar os módulos JS individualmente + main TSX com tsx runtime
-    async function loadIndividualModules() {
+    async function loadRuntimeModules() {
       progressContainer.style.display = 'block';
       setProgress(0);
 
-      // Exemplo: lista das dependências e arquivos TSX (ajuste conforme seu projeto)
-      const modules = [
+      // 1. Carrega es-module-shims
+      await loadScript('https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js');
+      setProgress(0.2);
+
+      // 2. Injeta import map
+      injectImportMap();
+      setProgress(0.3);
+
+      // 3. Carrega módulos Preact e seus hooks via module-shim (import map resolve)
+      // Usamos module-shim para que es-module-shims processe os módulos e import map
+      const moduleShimScripts = [
         'https://unpkg.com/preact@10.13.2/dist/preact.module.js',
-        'https://unpkg.com/preact@10.13.2/hooks/dist/hooks.module.js',
-        'https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js',
-        // biblioteca runtime TSX - por exemplo, https://cdn.skypack.dev/@esbuild-runner/browser
-        'https://cdn.skypack.dev/esbuild-wasm', 
-        // seu main.tsx pode ser carregado usando um loader runtime, veja abaixo
+        'https://unpkg.com/preact@10.13.2/hooks/dist/hooks.module.js'
       ];
+      // Não precisamos carregar manualmente, porque vamos carregar o main.tsx que importa esses módulos
 
-      let loadedCount = 0;
-      const total = modules.length;
+      setProgress(0.4);
 
-      for (const mod of modules) {
-        try {
-          await loadScript(mod);
-          loadedCount++;
-          setProgress(loadedCount / total * 0.8); // 80% para libs
-          console.log(`Carregado módulo: ${mod}`);
-        } catch (e) {
-          console.error(e);
-          throw e;
-        }
-      }
+      // 4. Carrega main.tsx via module-shim para rodar no browser
+      // IMPORTANTE: você precisa que seu servidor sirva o arquivo .tsx com Content-Type correto, e o navegador entenda
+      // para isso, é melhor que seu main.tsx esteja em JS ou que você use um transpiler runtime (não abordado aqui)
 
-      // Agora carregar o main.tsx via runtime TS (exemplo simples usando esbuild-wasm)
-      // Exemplo genérico, precisa do código tsx compilado em runtime
-      // Aqui você precisaria de um loader TSX runtime, como @esbuild-runner/browser ou tsx-runner
-      // Vou deixar um placeholder simples para o seu main.tsx, que seria compilado e executado no navegador:
-
-      async function loadMainTsx() {
-        // Placeholder para lógica de carregar/compilar/executar main.tsx no runtime
-        // Isso envolve fetch do main.tsx, compilação com esbuild-wasm e execução do código.
-        // É um pouco extenso e complexo para colocar aqui, mas posso ajudar se quiser.
-
-        console.log('Placeholder: compilação e execução do main.tsx no runtime');
-        // Exemplo: fetch, compilar com esbuild, executar...
-      }
-
-      await loadMainTsx();
-      setProgress(1);
-      progressContainer.style.display = 'none';
-      loader.style.display = 'none';
+      // Cria o script module-shim para main.tsx
+      const mainScript = document.createElement('script');
+      mainScript.type = 'module-shim';
+      mainScript.src = 'assets/tsx/main.tsx'; // ajuste o caminho do seu main.tsx
+      mainScript.onload = () => {
+        setProgress(1);
+        progressContainer.style.display = 'none';
+        loader.style.display = 'none';
+      };
+      mainScript.onerror = () => {
+        console.error('Falha ao carregar main.tsx');
+        progressContainer.style.display = 'none';
+        loader.style.display = 'none';
+      };
+      document.body.appendChild(mainScript);
     }
 
     (async () => {
       const bundleLoaded = await tryLoadBundle();
-
       if (!bundleLoaded) {
-        // Bundle não carregado, iniciar carregamento manual
-        await loadIndividualModules();
+        await loadRuntimeModules();
       } else {
         loader.style.display = 'none';
       }
