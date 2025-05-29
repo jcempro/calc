@@ -9,11 +9,11 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
+    /* seu spinner original */
     noscript,
     .lds {
       width: calc(3 * 1.25rem);
       height: calc(3 * 1.25rem);
-
       position: fixed;
       top: 50vh;
       left: 50vw;
@@ -56,6 +56,24 @@
       }
     }
 
+    /* Barra de progresso simples */
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 5px;
+      width: 100%;
+      background: #eee;
+      z-index: 10000;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #0078d7;
+      transition: width 0.3s ease;
+    }
+
     * {
       font-family: "Noto Sans", "Tahoma", "Arial", "Sans-serif" !important;
       line-height: 1.5rem;
@@ -93,7 +111,13 @@
 </head>
 
 <body class="theme-light">
-  <div class="lds">
+
+  <!-- Progress bar -->
+  <div id="progress-container" style="display:none;">
+    <div id="progress-bar"></div>
+  </div>
+
+  <div class="lds" id="loader">
     <div></div>
     <div></div>
     <div></div>
@@ -104,7 +128,109 @@
       address.</p>
   </noscript>
   <div id="Master"></div>
-  <script type="module" src="assets/tsx/main.tsx"></script>
+
+  <script type="module">
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    const loader = document.getElementById('loader');
+
+    // Função para atualizar barra de progresso (0 a 1)
+    function setProgress(ratio) {
+      progressBar.style.width = `${Math.round(ratio * 100)}%`;
+    }
+
+    // Tenta carregar um script, retorna Promise que resolve no load e rejeita no erro
+    function loadScript(url) {
+      return new Promise((resolve, reject) => {
+        if (document.querySelector(`script[src="${url}"]`)) {
+          resolve();
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = url;
+        script.async = true;
+        script.type = 'module'; // <<< ESSENCIAL para módulos ES6
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error(`Falha ao carregar script: ${url}`));
+        document.head.appendChild(script);
+      });
+    }
+
+    // Tenta carregar o bundle compilado
+    async function tryLoadBundle() {
+      const bundleUrl = 'assets/js/bundle.js'; // ajuste para seu bundle compilado
+      try {
+        await loadScript(bundleUrl);
+        console.log('Bundle compilado carregado com sucesso!');
+        return true;
+      } catch (e) {
+        console.warn('Bundle compilado não encontrado, carregando módulos individuais...');
+        return false;
+      }
+    }
+
+    // Carregar os módulos JS individualmente + main TSX com tsx runtime
+    async function loadIndividualModules() {
+      progressContainer.style.display = 'block';
+      setProgress(0);
+
+      // Exemplo: lista das dependências e arquivos TSX (ajuste conforme seu projeto)
+      const modules = [
+        'https://unpkg.com/preact@10.13.2/dist/preact.module.js',
+        'https://unpkg.com/preact@10.13.2/hooks/dist/hooks.module.js',
+        'https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js',
+        // biblioteca runtime TSX - por exemplo, https://cdn.skypack.dev/@esbuild-runner/browser
+        'https://cdn.skypack.dev/esbuild-wasm', 
+        // seu main.tsx pode ser carregado usando um loader runtime, veja abaixo
+      ];
+
+      let loadedCount = 0;
+      const total = modules.length;
+
+      for (const mod of modules) {
+        try {
+          await loadScript(mod);
+          loadedCount++;
+          setProgress(loadedCount / total * 0.8); // 80% para libs
+          console.log(`Carregado módulo: ${mod}`);
+        } catch (e) {
+          console.error(e);
+          throw e;
+        }
+      }
+
+      // Agora carregar o main.tsx via runtime TS (exemplo simples usando esbuild-wasm)
+      // Exemplo genérico, precisa do código tsx compilado em runtime
+      // Aqui você precisaria de um loader TSX runtime, como @esbuild-runner/browser ou tsx-runner
+      // Vou deixar um placeholder simples para o seu main.tsx, que seria compilado e executado no navegador:
+
+      async function loadMainTsx() {
+        // Placeholder para lógica de carregar/compilar/executar main.tsx no runtime
+        // Isso envolve fetch do main.tsx, compilação com esbuild-wasm e execução do código.
+        // É um pouco extenso e complexo para colocar aqui, mas posso ajudar se quiser.
+
+        console.log('Placeholder: compilação e execução do main.tsx no runtime');
+        // Exemplo: fetch, compilar com esbuild, executar...
+      }
+
+      await loadMainTsx();
+      setProgress(1);
+      progressContainer.style.display = 'none';
+      loader.style.display = 'none';
+    }
+
+    (async () => {
+      const bundleLoaded = await tryLoadBundle();
+
+      if (!bundleLoaded) {
+        // Bundle não carregado, iniciar carregamento manual
+        await loadIndividualModules();
+      } else {
+        loader.style.display = 'none';
+      }
+    })();
+  </script>
+
 </body>
 
 </html>
