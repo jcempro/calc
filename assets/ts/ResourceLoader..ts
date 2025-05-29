@@ -1,22 +1,4 @@
-/**
- * Evento disparado após tentativa de carregar recurso externo.
- */
-type LoadEvent = {
-  url: string;
-  success: boolean;
-  error?: Error;
-  durationMs?: number;
-};
-
-/** Callback para eventos de carregamento */
-type Listener = (event: LoadEvent) => void;
-
-/** Opções para carregamento de recurso */
-type LoadOptions = {
-  timeoutMs?: number;    // Tempo máximo para carregar (ms)
-  retries?: number;      // Número de tentativas em caso de erro
-  condition?: () => boolean; // Condição para carregar recurso
-};
+import type { LoadEvent, Listener, LoadOptions } from './ResourceLoader.types';
 
 /**
  * Classe para carregamento genérico de recursos externos (JS, CSS, JSON, fontes, etc).
