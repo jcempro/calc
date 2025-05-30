@@ -152,6 +152,7 @@
 					if (isModule) script.type = 'module';
 					script.textContent = content;
 					document.head.appendChild(script);
+					console.log(`Carregado: ${url}`);
 					updateProgress();
 					return true;
 				} catch (err) {
@@ -163,7 +164,7 @@
 			async function loadEsbuild() {
 				if (window.esbuildInitialized) return;
 				await loadScript(
-					'https://unpkg.com/esbuild-wasm@0.19.12/esbuild-wasm.js',
+					'https://unpkg.com/esbuild-wasm@0.25.5/lib/main.js',
 				);
 				await window.esbuild.initialize({
 					wasmURL: 'https://unpkg.com/esbuild-wasm@0.19.12/esbuild.wasm',
@@ -240,10 +241,10 @@
 			updateProgress();
 
 			// Carregamento principal com fallback
-			const ok = await loadScript('./index.bundle.js', true);
+			const ok = await loadScript('dist/index.bundle.js', false);
 			if (!ok) {
-				await loadScript('./importmap.json', true);
-				await loadScript('./main.tsx', true);
+				await loadScript('dist/importmap.json', true);
+				await loadScript('assets/tsx/main.tsx', true);
 			}
 			progress.style.width = '100%';
 			setTimeout(() => progress.remove(), 500);

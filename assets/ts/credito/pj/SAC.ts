@@ -15,21 +15,22 @@ import {
 	TFinanciado,
 	TParcelaDemo,
 	TDemandaCredito,
+	inicializaDemandaCredito,
 } from './credito.ts';
 
 /*
  */
 export abstract class SAC {
-	private args: null | TDemandaCredito;
+	private args: TDemandaCredito;
 
 	/*
 	 **/
-	constructor(args: TDemandaCredito) {
-		this.args = this._sacInicializaValores(args);
+	constructor(input: any) {
+		this.args = inicializaDemandaCredito(args);
 	}
 
 	protected validKey(obj: any, key: string): boolean {
-		return !(key in obj) || typeof obj.data_operacao != undefined;
+		return !(key in obj) || obj[key] === undefined;
 	}
 
 	/*
@@ -57,8 +58,16 @@ export abstract class SAC {
 
 		let r: TRCredito = this.args as TRCredito;
 
-		for (let i = 0; i <= r.prazo; i++) {
-			let car: boolean = i <= r.carencia;
+		r.repo = {
+			extrato: [],
+			pgtoTotal: 0,
+			pgtoAMais: 0,
+			maiorParcela: 0,
+			menorParcela: Infinity,
+		};
+
+		for (let i = 0; i <= r.prazoMeses; i++) {
+			let car: boolean = i <= r.carenciaDias;
 			let jrs: boolean = !car || r.jurosNaCarencia;
 
 			/* inicializa com os valores no padrão 0 meses */
@@ -73,12 +82,14 @@ export abstract class SAC {
 			p.data = diaUtilOuProx(
 				i === 0
 					? r.data_operacao
-					: proximaDataBase(
-							i > 1
-								? r.data_operacao
-								: r.repo.extrato[r.repo.extrato.length - 1].data,
-							r.diabase,
-							false,
+					: <TDate>(
+							proximaDataBase(
+								i > 1
+									? r.data_operacao
+									: r.repo.extrato[r.repo.extrato.length - 1].data,
+								r.diabase,
+								false,
+							)
 					  ),
 			);
 
@@ -122,36 +133,36 @@ export abstract class SAC {
 
 		const dataPrimeiroVenc = diaUtilOuProx(
 			new Date(
-				(<TDemandaCredito>this.args).data_operacao.getFullYear(),
-				(<TDemandaCredito>this.args).data_operacao.getMonth(),
-				(<TDemandaCredito>this.args).diabase,
+				this.args.data_operacao.getFullYear(),
+				this.args.data_operacao.getMonth(),
+				this.args.diabase,
 			),
 		);
 
 		let vencimentoBase = new Date(dataPrimeiroVenc);
 		while (
-			diasCorridos((<TDemandaCredito>this.args).data_operacao, vencimentoBase) <
-			(<TDemandaCredito>this.args).carencia
+			diasCorridos(this.args.data_operacao, vencimentoBase) <
+			this.args.carenciaDias
 		) {
 			vencimentoBase.setMonth(vencimentoBase.getMonth() + 1);
 			vencimentoBase = diaUtilOuProx(
 				new Date(
 					vencimentoBase.getFullYear(),
 					vencimentoBase.getMonth(),
-					(<TDemandaCredito>this.args).diabase,
+					this.args.diabase,
 				),
 			);
 		}
 
-		for (let i = 0; i < (<TDemandaCredito>this.args).prazo; i++) {
+		for (let i = 0; i < this.args.prazoMeses; i++) {
 			const venc = diaUtilOuProx(
 				new Date(
 					vencimentoBase.getFullYear(),
 					vencimentoBase.getMonth() + i,
-					(<TDemandaCredito>this.args).diabase,
+					this.args.diabase,
 				),
 			);
-			dias.push(diasCorridos((<TDemandaCredito>this.args).data_operacao, venc));
+			dias.push(diasCorridos(this.args.data_operacao, venc));
 		}
 
 		return dias;
@@ -168,8 +179,8 @@ export abstract class SAC {
 		let diasPorParcela: number[] = this.gerarDiasPorParcela();
 
 		if (
-			(<TDemandaCredito>this.args).prazo <= 0 ||
-			diasPorParcela.length !== (<TDemandaCredito>this.args).prazo
+			this.args.prazoMeses <= 0 ||
+			diasPorParcela.length !== this.args.prazoMeses
 		) {
 			throw new Error(
 				'Parâmetros inválidos: número de parcelas e dias por parcela devem ser consistentes.',
@@ -185,9 +196,7 @@ export abstract class SAC {
 		// Estimativa inicial baseada nos principais encargos (máximo legal de IOF: 3%)
 		const estimativaInicial =
 			(<TLiberado>this.args).liquido *
-				(1 + (<TDemandaCredito>this.args).flat + 0.03) +
-			(<TDemandaCredito>this.args).tac +
-			iofFixo;
+			(1 + (this.args.flat + 0.03) + this.args.tac + iofFixo);
 
 		// Define o intervalo inicial da busca com ±10% de margem sobre a estimativa
 		let brutoMin = estimativaInicial * 0.9;
@@ -196,18 +205,15 @@ export abstract class SAC {
 
 		while (iter++ < maxIter) {
 			const bruto = (brutoMin + brutoMax) / 2; // ponto médio
-			const amortizacao = bruto / (<TDemandaCredito>this.args).prazo;
+			const amortizacao = bruto / this.args.prazoMeses;
 
 			// Cálculo de encargos com limites legais
-			const encargoFlat = bruto * (<TDemandaCredito>this.args).flat;
+			const encargoFlat = bruto * this.args.flat;
 			let encargoIOFdiario = amortizacao * somaFatorIOFdiario;
 			encargoIOFdiario = Math.min(encargoIOFdiario, bruto * 0.03);
 
 			const descontosTotais =
-				(<TDemandaCredito>this.args).tac +
-				encargoFlat +
-				iofFixo +
-				encargoIOFdiario;
+				this.args.tac + encargoFlat + iofFixo + encargoIOFdiario;
 			const liquidoCalculado = bruto - descontosTotais;
 
 			const erro = liquidoCalculado - (<TLiberado>this.args).liquido;
