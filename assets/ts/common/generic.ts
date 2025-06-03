@@ -11,4 +11,3 @@ export interface MatchWithGroups extends RegExpMatchArray {
 export function validarBoolean(valor: any, padrao: boolean): boolean {
 	return typeof valor === 'boolean' ? valor : padrao;
 }
-
