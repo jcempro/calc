@@ -66,6 +66,11 @@ export abstract class SAC {
 			menorParcela: Infinity,
 		};
 
+		let naoRepetirAmortiza = false;
+		const amortizacaoConstante =
+			(<TFinanciado>r).financiado.value / r.prazoMeses;
+		const taxaDiaria = r.jurosAm.value / 30; // simplificação: 30 dias no mês
+
 		for (let i = 0; i <= r.prazoMeses; i++) {
 			let car: boolean = i <= r.carenciaDias;
 			let jrs: boolean = !car || r.jurosNaCarencia;
@@ -106,14 +111,20 @@ export abstract class SAC {
 
 			/* calcula parcela */
 			if (i > 0) {
-				p.amortizacao.value = car ? 0 : -1;
-				p.juros.value = !jrs ? 0 : 1;
-				p.pagamento.value = p.amortizacao.value + p.juros.value;
-				p.saldoDevedor.value =
-					(i > 1
+				const sldAnterior =
+					i > 1
 						? (<TFinanciado>r).financiado
-						: r.repo.extrato[r.repo.extrato.length - 1].saldoDevedor) -
-					p.pagamento.value;
+						: r.repo.extrato[r.repo.extrato.length - 1].saldoDevedor;
+
+				p.amortizacao.value = car
+					? 0
+					: !naoRepetirAmortiza
+					? ((naoRepetirAmortiza = true) ? 0 : 0) * amortizacaoConstante
+					: -1;
+				p.juros.value = jrs ? sldAnterior * (taxaDiaria * p.dias) : 1;
+
+				p.pagamento.value = amortizacaoConstante + p.juros.value;
+				p.saldoDevedor.value = sldAnterior - p.amortizacao.value;
 			}
 
 			/* calcula a maior e menor parcela */
