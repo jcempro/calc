@@ -1,21 +1,21 @@
+import { numberRange } from '../../common/numbers.ts';
+
 import {
-	isDiaUtil,
-	teto,
-	tetoPiso,
 	diaBaseUtilOuProx,
 	diaUtilOuProx,
 	diasCorridos,
 	proximaDataBase,
-	numberRange,
-} from '../../common.ts';
+	TDate,
+} from '../../common/datas.ts';
 
 import {
 	TRCredito,
 	TLiberado,
 	TFinanciado,
-	TParcelaDemo,
+	TParcelaRecord,
 	TDemandaCredito,
 	inicializaDemandaCredito,
+	ExtratoCredito,
 } from './credito.ts';
 
 /*
@@ -26,7 +26,7 @@ export abstract class SAC {
 	/*
 	 **/
 	constructor(input: any) {
-		this.args = inicializaDemandaCredito(args);
+		this.args = inicializaDemandaCredito(input);
 	}
 
 	protected validKey(obj: any, key: string): boolean {
@@ -59,7 +59,7 @@ export abstract class SAC {
 		let r: TRCredito = this.args as TRCredito;
 
 		r.repo = {
-			extrato: [],
+			extrato: new ExtratoCredito([]),
 			pgtoTotal: 0,
 			pgtoAMais: 0,
 			maiorParcela: 0,
@@ -71,12 +71,12 @@ export abstract class SAC {
 			let jrs: boolean = !car || r.jurosNaCarencia;
 
 			/* inicializa com os valores no padrão 0 meses */
-			let p: TParcelaDemo = <TParcelaDemo>{
+			let p: TParcelaRecord = {
 				amortizacao: 0,
 				juros: 0,
 				pagamento: 0,
 				saldoDevedor: (<TFinanciado>r).financiado,
-			};
+			} as unknown as TParcelaRecord;
 
 			/* calcula a data desta parcela */
 			p.data = diaUtilOuProx(
@@ -106,19 +106,19 @@ export abstract class SAC {
 
 			/* calcula parcela */
 			if (i > 0) {
-				p.amortizacao = car ? 0 : 1;
-				p.juros = !jrs ? 0 : 1;
-				p.pagamento = p.amortizacao + p.juros;
-				p.saldoDevedor =
+				p.amortizacao.value = car ? 0 : -1;
+				p.juros.value = !jrs ? 0 : 1;
+				p.pagamento.value = p.amortizacao.value + p.juros.value;
+				p.saldoDevedor.value =
 					(i > 1
 						? (<TFinanciado>r).financiado
 						: r.repo.extrato[r.repo.extrato.length - 1].saldoDevedor) -
-					p.pagamento;
+					p.pagamento.value;
 			}
 
 			/* calcula a maior e menor parcela */
-			r.repo.maiorParcela = Math.max(r.repo.maiorParcela, p.pagamento);
-			r.repo.menorParcela = Math.min(r.repo.menorParcela, p.pagamento);
+			r.repo.maiorParcela = Math.max(r.repo.maiorParcela, p.pagamento.value);
+			r.repo.menorParcela = Math.min(r.repo.menorParcela, p.pagamento.value);
 
 			/* adicionado */
 			r.repo.extrato.push(p);
@@ -195,8 +195,8 @@ export abstract class SAC {
 
 		// Estimativa inicial baseada nos principais encargos (máximo legal de IOF: 3%)
 		const estimativaInicial =
-			(<TLiberado>this.args).liquido *
-			(1 + (this.args.flat + 0.03) + this.args.tac + iofFixo);
+			(<TLiberado>this.args).liquido.value *
+			(1 + (this.args.flat.value + 0.03) + this.args.tac.value + iofFixo);
 
 		// Define o intervalo inicial da busca com ±10% de margem sobre a estimativa
 		let brutoMin = estimativaInicial * 0.9;
@@ -208,15 +208,15 @@ export abstract class SAC {
 			const amortizacao = bruto / this.args.prazoMeses;
 
 			// Cálculo de encargos com limites legais
-			const encargoFlat = bruto * this.args.flat;
+			const encargoFlat = bruto * this.args.flat.value;
 			let encargoIOFdiario = amortizacao * somaFatorIOFdiario;
 			encargoIOFdiario = Math.min(encargoIOFdiario, bruto * 0.03);
 
 			const descontosTotais =
-				this.args.tac + encargoFlat + iofFixo + encargoIOFdiario;
+				this.args.tac.value + encargoFlat + iofFixo + encargoIOFdiario;
 			const liquidoCalculado = bruto - descontosTotais;
 
-			const erro = liquidoCalculado - (<TLiberado>this.args).liquido;
+			const erro = liquidoCalculado - (<TLiberado>this.args).liquido.value;
 			const toleranciaRelativa = Math.max(tolerancia, bruto * 0.0001);
 
 			if (Math.abs(erro) < toleranciaRelativa) {
@@ -226,7 +226,7 @@ export abstract class SAC {
 			// Margem adaptativa proporcional ao erro relativo (entre 0,5% e 10%)
 			const margem = Math.max(
 				0.005,
-				Math.min(0.1, Math.abs(erro / (<TLiberado>this.args).liquido)),
+				Math.min(0.1, Math.abs(erro / (<TLiberado>this.args).liquido.value)),
 			);
 
 			if (erro > 0) {
