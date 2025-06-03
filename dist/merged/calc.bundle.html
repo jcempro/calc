@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<title>Preact App</title>
+
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+		/>
+		<style>
+			noscript,
+			.lds {
+				width: calc(3 * 1.25rem);
+				height: calc(3 * 1.25rem);
+
+				position: fixed;
+				top: 50vh;
+				left: 50vw;
+				margin-left: calc(-1.5 * 1.25rem);
+				margin-top: calc(-1.5 * 1.25rem);
+			}
+
+			.lds div {
+				box-sizing: border-box;
+				display: block;
+				position: absolute;
+				width: 3rem;
+				height: 3rem;
+				margin: 8px;
+				border: 8px solid #ccc;
+				border-radius: 50%;
+				animation: lds 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+				border-color: #ccc transparent transparent transparent;
+			}
+
+			.lds div:nth-child(1) {
+				animation-delay: -0.45s;
+			}
+
+			.lds div:nth-child(2) {
+				animation-delay: -0.3s;
+			}
+
+			.lds div:nth-child(3) {
+				animation-delay: -0.15s;
+			}
+
+			@keyframes lds {
+				0% {
+					transform: rotate(0deg);
+				}
+
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+
+			#progress-container {
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 5px;
+				width: 100%;
+				background: #eee;
+				z-index: 10000;
+				display: none;
+			}
+
+			#progress-bar {
+				height: 100%;
+				width: 0%;
+				background: #0078d7;
+				transition: width 0.3s ease;
+			}
+
+			* {
+				font-family: 'Noto Sans', 'Tahoma', 'Arial', 'Sans-serif' !important;
+				line-height: 1.5rem;
+				margin: 0;
+				padding: 0;
+				color: #222;
+			}
+
+			noscript {
+				display: block;
+				width: 280px;
+				max-width: 280px;
+				height: 160px;
+				margin-left: calc(-140px - 1rem);
+				margin-top: calc(-80px - 0.5rem);
+				background: rgba(255, 255, 255, 0.9);
+				padding: 0.5rem 1rem;
+				border-left: 0.5rem solid #eee;
+			}
+
+			noscript span {
+				opacity: 0.6;
+				font-size: 0.9rem;
+			}
+
+			noscript p {
+				margin-top: 0.5rem;
+				font-weight: 600;
+			}
+
+			noscript p span {
+				font-size: 1.1rem;
+			}
+		</style>
+	</head>
+
+	<body class="theme-light">
+		<div id="progress-container">
+			<div id="progress-bar"></div>
+		</div>
+
+		<div class="lds" id="loader">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+		<noscript
+			><span>There is something <strong>wrong</strong> here!</span>
+			<p>
+				<span>#noScript</span> <u>Javascript is <strong>disabled</strong></u
+				>, preventing us from directing you to the address.
+			</p>
+		</noscript>
+
+		<div id="Master"></div>
+
+    <script>
+      (async () => {
+        const progress = document.getElementById("progress-bar");
+
+        const step = (n) => {
+          progress.style.width = `${n}%`;
+        };
+
+        const loadScript = async (src, async = true, type = "text/javascript") => {
+          return new Promise((resolve) => {
+            const s = document.createElement("script");
+            s.src = src;
+            s.async = async;
+            s.type = type;
+            s.onload = () => resolve(true);
+            s.onerror = () => resolve(false);
+            document.head.appendChild(s);
+          });
+        };
+
+        const loadEsbuild = async () => {
+          window.esbuildInitializePromise = new Promise(async (resolve) => {
+            const ok = await loadScript("https://unpkg.com/esbuild-wasm@0.21.4/esbuild.wasm.js", true);
+            if (ok && window.esbuild) {
+              await window.esbuild.initialize({
+                wasmURL: "https://unpkg.com/esbuild-wasm@0.21.4/esbuild.wasm",
+                worker: false,
+              });
+            }
+            resolve();
+          });
+        };
+
+        const loadSass = async () => {
+          if (!window.Sass) {
+            await loadScript("https://cdn.jsdelivr.net/npm/sass.js@latest/dist/sass.sync.js", true);
+          }
+        };
+
+        try {
+          step(5);
+          await loadEsbuild();
+          step(20);
+          await loadSass();
+          step(35);
+          await loadScript(
+            "https://unpkg.com/es-module-shims@1.8.3/dist/es-module-shims.js",
+            true,
+            "importmap-shim"
+          );
+          step(50);
+
+          const bundleLoaded = await loadScript("./index.bundle.js", true);
+          step(75);
+
+          if (!bundleLoaded) {
+            await loadScript("./importmap.json", true, "importmap-shim");
+            step(85);
+            await loadScript("./main.tsx", true, "module-shim");
+            step(95);
+          }
+
+          step(100);
+        } catch (e) {
+          console.error("Erro ao carregar:", e);
+        }
+      })();
+    </script>
+	</body>
+</html>
