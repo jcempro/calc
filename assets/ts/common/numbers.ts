@@ -61,7 +61,7 @@ export function tetoPiso(valor: number, min: number, max: number): number {
 	return teto(piso(valor, min), max);
 }
 
-export abstract class TNumberTypes {
+export abstract class TNumberTypes implements Number {
 	private _value: number = 0;
 	protected __decimais = 0;
 
@@ -84,6 +84,34 @@ export abstract class TNumberTypes {
 
 		/* valida a entrada */
 		this.value = valida ? valida(this.value) : this.value;
+	}
+
+	/**
+	 * Retorna a representação em ponto fixo.
+	 */
+	toFixed(fractionDigits?: number): string {
+		return this._value.toFixed(fractionDigits ?? this.__decimais);
+	}
+
+	/**
+	 * Retorna a representação exponencial do valor.
+	 */
+	toExponential(fractionDigits?: number): string {
+		return this._value.toExponential(fractionDigits);
+	}
+
+	/**
+	 * Retorna o valor com precisão significativa.
+	 */
+	toPrecision(precision?: number): string {
+		return this._value.toPrecision(precision);
+	}
+
+	/**
+	 * Retorna o valor numérico primitivo da instância.
+	 */
+	valueOf(): number {
+		return this._value;
 	}
 
 	toString(): string {
