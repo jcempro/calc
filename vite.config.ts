@@ -11,9 +11,18 @@ export default defineConfig({
 	root: '.',
 	build: {
 		outDir: 'dist/www',
+		minify: 'esbuild',
 		rollupOptions: {
 			input: 'index.html',
 		},
+		// Habilita renomeação/mangle agressiva de identificadores
+		terserOptions: undefined, // não usamos
+	},
+	esbuild: {
+		drop: ['console', 'debugger'], // remove console.log e debugger
+		minifyIdentifiers: true,      // mangle de variáveis
+		minifySyntax: true,           // simplificação de sintaxe
+		minifyWhitespace: true,       // remoção de espaços
 	},
 	resolve: {
 		alias: {
