@@ -87,6 +87,19 @@ export abstract class TNumberTypes implements Number {
 	}
 
 	/**
+	 * Retorna uma string formatada de acordo com a localidade e opções fornecidas.
+	 * Útil para formatações como moeda, porcentagem ou estilo decimal internacionalizado.
+	 * @param locales Código(s) de localidade (ex: 'pt-BR', 'en-US')
+	 * @param options Opções de formatação numérica (estilo, moeda, casas decimais, etc.)
+	 */
+	toLocaleString(
+		locales?: string | string[],
+		options?: Intl.NumberFormatOptions,
+	): string {
+		return this._value.toLocaleString(locales, options);
+	}
+
+	/**
 	 * Retorna a representação em ponto fixo.
 	 */
 	toFixed(fractionDigits?: number): string {
