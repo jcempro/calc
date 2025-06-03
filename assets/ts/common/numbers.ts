@@ -65,8 +65,8 @@ export abstract class TNumberTypes implements Number {
 	private _value: number = 0;
 	protected __decimais = 0;
 
-	protected markpos = '';
-	protected markpre = '';
+	protected _markpos = '';
+	protected _markpre = '';
 
 	constructor(
 		input: number | string | undefined,
@@ -128,8 +128,8 @@ export abstract class TNumberTypes implements Number {
 	}
 
 	toString(): string {
-		return `${this.markpre}${this._value.toFixed(this.__decimais)}${
-			this.markpos
+		return `${this._markpre}${this._value.toFixed(this.__decimais)}${
+			this._markpos
 		}`;
 	}
 
@@ -140,9 +140,9 @@ export abstract class TNumberTypes implements Number {
 	protected getRegex(): RegExp {
 		return new RegExp(
 			'^' +
-				(this.markpre ? `(${this.s(this.markpre)})` : '') +
+				(this._markpre ? `(${this.s(this._markpre)})` : '') +
 				`(?<value>[\\d]+([,\\.][\\d]{0,${this.__decimais}})?)` +
-				(this.markpos ? `(${this.s(this.markpos)})` : '') +
+				(this._markpos ? `(${this.s(this._markpos)})` : '') +
 				'$',
 			'd',
 		);
@@ -181,12 +181,12 @@ export abstract class TNumberTypes implements Number {
 
 export class TPercent extends TNumberTypes {
 	protected __decimais = 2;
-	protected markpos = ' %';
-	protected markpre = '';
+	protected _markpos = ' %';
+	protected _markpre = '';
 }
 
 export class TCurrency extends TNumberTypes {
 	protected __decimais = 2;
-	protected markpos = '';
-	protected markpre = 'R$ ';
+	protected _markpos = '';
+	protected _markpre = 'R$ ';
 }

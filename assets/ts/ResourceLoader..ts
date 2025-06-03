@@ -63,13 +63,13 @@ class ResourceLoader {
 
     const loadFn = () => {
       switch (extension) {
-        case 'js': return this.loadScript(url);
-        case 'css': return this.loadStyle(url);
-        case 'json': return this.loadJson<T>(url);
+        case 'js': return this._loadScript(url);
+        case 'css': return this._loadStyle(url);
+        case 'json': return this._loadJson<T>(url);
         case 'woff':
         case 'woff2':
-        case 'ttf': return this.loadFont(url);
-        default: return this.loadGeneric(url);
+        case 'ttf': return this._loadFont(url);
+        default: return this._loadGeneric(url);
       }
     };
 
@@ -109,7 +109,7 @@ class ResourceLoader {
    * @param url URL do script
    * @returns Promise resolvida ao carregar
    */
-  private static loadScript(url: string): Promise<void> {
+  private static _loadScript(url: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (document.querySelector(`script[src="${url}"]`)) {
         resolve();
@@ -132,7 +132,7 @@ class ResourceLoader {
    * @param url URL do CSS
    * @returns Promise resolvida ao carregar
    */
-  private static loadStyle(url: string): Promise<void> {
+  private static _loadStyle(url: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (document.querySelector(`link[href="${url}"]`)) {
         resolve();
@@ -155,7 +155,7 @@ class ResourceLoader {
    * @param url URL do JSON
    * @returns Promise resolvida com dados JSON
    */
-  private static loadJson<T>(url: string): Promise<T> {
+  private static _loadJson<T>(url: string): Promise<T> {
     return fetch(url).then(res => {
       if (!res.ok) throw new Error(`Erro ao carregar JSON: ${res.statusText}`);
       return res.json() as Promise<T>;
@@ -167,9 +167,9 @@ class ResourceLoader {
    * @param url URL da fonte
    * @returns Promise resolvida ao adicionar
    */
-  private static loadFont(url: string): Promise<void> {
+  private static _loadFont(url: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const fontName = this.getFontNameFromUrl(url);
+      const fontName = this._getFontNameFromUrl(url);
       if (!fontName) {
         reject(new Error('Nome da fonte não pôde ser extraído do URL'));
         return;
@@ -185,7 +185,7 @@ class ResourceLoader {
       style.textContent = `
         @font-face {
           font-family: '${fontName}';
-          src: url('${url}') format('${this.getFontFormatFromExtension(url)}');
+          src: url('${url}') format('${this._getFontFormatFromExtension(url)}');
           font-weight: normal;
           font-style: normal;
         }
@@ -201,7 +201,7 @@ class ResourceLoader {
    * @param url URL do recurso
    * @returns Promise resolvida com texto do recurso
    */
-  private static loadGeneric(url: string): Promise<string> {
+  private static _loadGeneric(url: string): Promise<string> {
     return fetch(url).then(res => {
       if (!res.ok) throw new Error(`Erro ao carregar recurso: ${res.statusText}`);
       return res.text();
@@ -213,7 +213,7 @@ class ResourceLoader {
    * @param url URL da fonte
    * @returns Nome da fonte ou null
    */
-  private static getFontNameFromUrl(url: string): string | null {
+  private static _getFontNameFromUrl(url: string): string | null {
     const parts = url.split('/');
     const filename = parts[parts.length - 1];
     if (!filename) return null;
@@ -225,7 +225,7 @@ class ResourceLoader {
    * @param url URL da fonte
    * @returns Formato da fonte (ex: 'woff2', 'truetype')
    */
-  private static getFontFormatFromExtension(url: string): string {
+  private static _getFontFormatFromExtension(url: string): string {
     const ext = url.split('.').pop()?.toLowerCase();
     switch (ext) {
       case 'woff': return 'woff';

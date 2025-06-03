@@ -29,7 +29,7 @@ export abstract class SAC {
 		this.args = inicializaDemandaCredito(input);
 	}
 
-	protected validKey(obj: any, key: string): boolean {
+	protected _validKey(obj: any, key: string): boolean {
 		return !(key in obj) || obj[key] === undefined;
 	}
 
@@ -39,10 +39,10 @@ export abstract class SAC {
 		args: TDemandaCredito,
 	): null | TDemandaCredito => {
 		args.data_operacao = diaUtilOuProx(
-			this.validKey(args, 'data_operacao') ? args.data_operacao : new Date(),
+			this._validKey(args, 'data_operacao') ? args.data_operacao : new Date(),
 		);
 
-		args.diabase = this.validKey(args, 'diabase')
+		args.diabase = this._validKey(args, 'diabase')
 			? args.diabase
 			: <numberRange<1, 28>>diaBaseUtilOuProx(args.data_operacao).getDate();
 
@@ -139,7 +139,7 @@ export abstract class SAC {
 	};
 
 	// Gera array com os dias corridos entre a liberação e cada parcela
-	protected gerarDiasPorParcela(): number[] {
+	protected _gerarDiasPorParcela(): number[] {
 		const dias: number[] = [];
 
 		const dataPrimeiroVenc = diaUtilOuProx(
@@ -181,13 +181,13 @@ export abstract class SAC {
 
 	// Estratégia de busca binária com estimativa inicial e margem adaptativa
 	// Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
-	protected calcularBrutoNecessario(
+	protected _calcularBrutoNecessario(
 		iofFixo: number,
 		alqDiaria: number,
 		tolerancia = 0.01,
 		maxIter = 100,
 	): number {
-		let diasPorParcela: number[] = this.gerarDiasPorParcela();
+		let diasPorParcela: number[] = this._gerarDiasPorParcela();
 
 		if (
 			this.args.prazoMeses <= 0 ||
