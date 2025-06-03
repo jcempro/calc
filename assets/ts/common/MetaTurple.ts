@@ -26,7 +26,7 @@ export class MetaTupleBase<T extends Record<string, any>> {
 		return this.data[key];
 	}
 
-	/** Exporta para JSON com metadados e valores em array */
+	/** Exporta para JSON em array */
 	toJSON(): any[] {
 		return this.meta.map(([key]) => this.data[key]);
 	}
@@ -68,6 +68,34 @@ export class MetaTuple<T extends Record<string, any>> {
 	/** Adiciona uma nova entrada */
 	push(item: Partial<T> | any[]) {
 		this.entries.push(new MetaTupleBase<T>(item, this.meta));
+	}
+
+	/** Remove e retorna o último item */
+	pop(): MetaTupleBase<T> | undefined {
+		return this.entries.pop();
+	}
+
+	/** Retorna o último item sem remover */
+	top(): MetaTupleBase<T> | undefined {
+		return this.entries.at(-1);
+	}
+
+	/** Remove o item de um índice específico */
+	deleteAt(index: number): boolean {
+		if (index >= 0 && index < this.entries.length) {
+			this.entries.splice(index, 1);
+			return true;
+		}
+		return false;
+	}
+
+	/** Remove todos os itens que satisfaçam a condição */
+	deleteBy(predicate: (item: T, index: number) => boolean): number {
+		const originalLength = this.entries.length;
+		this.entries = this.entries.filter(
+			(entry, i) => !predicate(entry.toObject(), i),
+		);
+		return originalLength - this.entries.length;
 	}
 
 	/** Serializa todas as tuplas para JSON */
