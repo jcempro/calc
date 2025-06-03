@@ -1,17 +1,21 @@
 import {
-	numberRange,
-	validarNumero,
-	validarEnum,
-	toDate,
 	validarBoolean,
-	TDiaMes,
 	TupleFromObjectOrdered,
+} from '../../common/generic.ts';
+
+import { toDate, TDiaMes } from '../../common/datas.ts';
+import {
+	validarEnum,
+	validarNumero,
 	TCurrency,
 	TPercent,
-} from '../../common.ts';
+} from '../../common/numbers.ts';
 
-import { Meta, MetaTuple, registerType } from '../../MetaTurple.ts';
+import { registerType } from '../../common/evalTypes.ts';
 
+import { Meta, MetaTuple } from '../../common/MetaTurple.ts';
+
+//MetaTuple
 registerType('TCurrency', TCurrency);
 registerType('TPercent', TPercent);
 

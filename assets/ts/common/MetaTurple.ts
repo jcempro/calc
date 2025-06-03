@@ -1,41 +1,6 @@
-// Tipos auxiliares
-export type TypeHint = string;
+import { TypeHint, parseValue } from './evalTypes';
+
 export type Meta<T> = [keyof T, TypeHint][];
-export type TypeRegistry = Record<string, new (...args: any[]) => any>;
-
-// Registro global de tipos para desserialização
-export const typeRegistry: TypeRegistry = {};
-
-/**
- * Registra uma classe customizada para uso posterior durante a desserialização
- * @param name Nome do tipo
- * @param cls Construtor da classe
- */
-export function registerType(name: string, cls: new (...args: any[]) => any) {
-	typeRegistry[name] = cls;
-}
-
-/**
- * Converte um valor de acordo com o tipo informado
- */
-export function parseValue(type: TypeHint, value: any): any {
-	switch (type) {
-		case 'number':
-			return Number(value);
-		case 'string':
-			return String(value);
-		case 'boolean':
-			return Boolean(value);
-		case 'Date':
-			return new Date(value);
-		case 'object':
-			return typeof value === 'object' ? value : {};
-		default:
-			const ClassRef = typeRegistry[type];
-			if (ClassRef) return new ClassRef(value);
-			throw new Error(`Tipo não registrado: ${type}`);
-	}
-}
 
 /**
  * Representa uma tupla com metadados de tipo e acesso seguro aos valores
