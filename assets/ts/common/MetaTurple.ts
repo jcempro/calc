@@ -65,6 +65,21 @@ export class MetaTuple<T extends Record<string, any>> {
 		}
 	}
 
+	/** Número de elementos */
+	get length(): number {
+		return this.entries.length;
+	}
+
+	/** Iterável via for...of */
+	[Symbol.iterator](): Iterator<MetaTupleBase<T>> {
+		return this.entries[Symbol.iterator]();
+	}
+
+	/** Acesso por índice */
+	get(index: number): MetaTupleBase<T> | undefined {
+		return this.entries[index];
+	}
+
 	/** Adiciona uma nova entrada */
 	push(item: Partial<T> | any[]) {
 		this.entries.push(new MetaTupleBase<T>(item, this.meta));
@@ -129,5 +144,26 @@ export class MetaTuple<T extends Record<string, any>> {
 	/** Acesso direto às instâncias de MetaTupleBase */
 	getTuples(): MetaTupleBase<T>[] {
 		return this.entries;
+	}
+
+	/** Funções estilo array */
+	map<U>(callback: (value: MetaTupleBase<T>, index: number) => U): U[] {
+		return this.entries.map(callback);
+	}
+
+	filter(
+		predicate: (value: MetaTupleBase<T>, index: number) => boolean,
+	): MetaTupleBase<T>[] {
+		return this.entries.filter(predicate);
+	}
+
+	find(
+		predicate: (value: MetaTupleBase<T>, index: number) => boolean,
+	): MetaTupleBase<T> | undefined {
+		return this.entries.find(predicate);
+	}
+
+	forEach(callback: (value: MetaTupleBase<T>, index: number) => void): void {
+		this.entries.forEach(callback);
 	}
 }
