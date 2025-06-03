@@ -42,9 +42,11 @@ const TParcelaRecordMeta: Meta<TParcelaRecord> = [
 	['dias', 'number'],
 ];
 
-export type ParcelaRecord = MetaTuple<TParcelaRecord>;
-
-export type TExtratoCredito = TParcelaRecord[];
+export class ExtratoCredito extends MetaTuple<TParcelaRecord> {
+	constructor(data?: (Partial<TParcelaRecord> | any[])[]) {
+		super(TParcelaRecordMeta, data);
+	}
+}
 
 export type TLiberado = {
 	liquido: TCurrency;
@@ -83,7 +85,7 @@ export type TRCredito = TDemandaCredito & {
 		pgtoAMais: number;
 		maiorParcela: number;
 		menorParcela: number;
-		extrato: TExtratoCredito;
+		extrato: ExtratoCredito;
 	};
 };
 
