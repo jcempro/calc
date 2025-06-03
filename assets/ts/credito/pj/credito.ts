@@ -4,17 +4,23 @@ import {
 	validarEnum,
 	toDate,
 	validarBoolean,
-	TPercent,
-	TCurrency,
 	TDiaMes,
+	TupleFromObjectOrdered,
+	TCurrency,
+	TPercent,
 } from '../../common.ts';
+
+import { Meta, MetaTuple, registerType } from '../../MetaTurple.ts';
+
+registerType('TCurrency', TCurrency);
+registerType('TPercent', TPercent);
 
 export enum TSacPrice {
 	SAC = 1,
 	PRICE = 2,
 }
 
-export type TParcelaDemo = {
+export type TParcelaRecord = {
 	amortizacao: TCurrency;
 	juros: TPercent;
 	pagamento: TCurrency;
@@ -23,7 +29,18 @@ export type TParcelaDemo = {
 	dias: number;
 };
 
-export type TExtratoCredito = TParcelaDemo[];
+const TParcelaRecordMeta: Meta<TParcelaRecord> = [
+	['amortizacao', 'TCurrency'],
+	['juros', 'TPercent'],
+	['pagamento', 'TCurrency'],
+	['saldoDevedor', 'TCurrency'],
+	['data', 'Date'],
+	['dias', 'number'],
+];
+
+export type ParcelaRecord = MetaTuple<TParcelaRecord>;
+
+export type TExtratoCredito = TParcelaRecord[];
 
 export type TLiberado = {
 	liquido: TCurrency;
@@ -76,7 +93,9 @@ export function inicializaDemandaCredito(data?: any): TDemandaCredito {
 
 	return {
 		// TCreditoAlvo
-		financiado: new TCurrency(get<number>('financiado'), (v)=>validarNumero(v, 0)),
+		financiado: new TCurrency(get<number>('financiado'), (v) =>
+			validarNumero(v, 0),
+		),
 		liquido: new TCurrency(validarNumero(get<number>('liquido'), 0)),
 
 		// TDemandaCredito

@@ -1,129 +1,139 @@
+// Tipos auxiliares
 export type TypeHint = string;
-
 export type Meta<T> = [keyof T, TypeHint][];
 export type TypeRegistry = Record<string, new (...args: any[]) => any>;
 
+// Registro global de tipos para desserialização
+export const typeRegistry: TypeRegistry = {};
+
+/**
+ * Registra uma classe customizada para uso posterior durante a desserialização
+ * @param name Nome do tipo
+ * @param cls Construtor da classe
+ */
+export function registerType(name: string, cls: new (...args: any[]) => any) {
+	typeRegistry[name] = cls;
+}
+
+/**
+ * Converte um valor de acordo com o tipo informado
+ */
+export function parseValue(type: TypeHint, value: any): any {
+	switch (type) {
+		case 'number':
+			return Number(value);
+		case 'string':
+			return String(value);
+		case 'boolean':
+			return Boolean(value);
+		case 'Date':
+			return new Date(value);
+		case 'object':
+			return typeof value === 'object' ? value : {};
+		default:
+			const ClassRef = typeRegistry[type];
+			if (ClassRef) return new ClassRef(value);
+			throw new Error(`Tipo não registrado: ${type}`);
+	}
+}
+
+/**
+ * Representa uma tupla com metadados de tipo e acesso seguro aos valores
+ */
 export class MetaTupleBase<T extends Record<string, any>> {
 	private data: T;
 	private meta: Meta<T>;
-	private static registry: TypeRegistry = {};
 
 	constructor(value: Partial<T> | any[], meta: Meta<T>) {
 		this.meta = meta;
 
-		if (Array.isArray(value)) {
-			this.data = {} as T;
-			meta.forEach(([key, type], i) => {
-				(this.data as any)[key] = MetaTupleBase.parseValue(type, value[i]);
-			});
-		} else {
-			this.data = value as T;
-		}
+		// Se for array, converte para objeto com base na meta
+		this.data = Array.isArray(value)
+			? meta.reduce((acc, [key, type], i) => {
+					acc[key] = parseValue(type, value[i]);
+					return acc;
+			  }, {} as T)
+			: (value as T);
 	}
 
-	/** Acesso via propriedade */
+	/** Acesso ao campo pelo nome */
 	get<K extends keyof T>(key: K): T[K] {
 		return this.data[key];
 	}
 
-	/** Converte para JSON com meta + tupla */
-	toJSON(): { '@meta': Meta<T>; value: any[] } {
-		const value = this.meta.map(([key]) => this.data[key]);
-		return {
-			'@meta': this.meta,
-			value,
-		};
+	/** Exporta para JSON com metadados e valores em array */
+	toJSON(): any[] {
+		return this.meta.map(([key]) => this.data[key]);
 	}
 
-	/** Exporta como string JSON */
+	/** Serializa a tupla para string JSON */
 	toString(): string {
 		return JSON.stringify(this.toJSON());
 	}
 
-	/** Objeto plano */
+	/** Retorna o objeto plano com os dados */
 	toObject(): T {
 		return { ...this.data };
 	}
 
-	/** Constrói a partir de um JSON contendo @meta e value */
+	/** Reconstrói uma tupla a partir de JSON */
 	static fromJSON<U extends Record<string, any>>(json: {
 		'@meta': Meta<U>;
 		value: any[];
 	}): MetaTupleBase<U> {
 		return new MetaTupleBase<U>(json.value, json['@meta']);
 	}
-
-	/** Adiciona classe personalizada ao registro */
-	static registerType(name: string, cls: new (...args: any[]) => any) {
-		this.registry[name] = cls;
-	}
-
-	/** Interpreta um valor baseado no tipo declarado */
-	private static parseValue(type: TypeHint, value: any): any {
-		switch (type) {
-			case 'number':
-				return Number(value);
-			case 'string':
-				return String(value);
-			case 'boolean':
-				return Boolean(value);
-			case 'Date':
-				return new Date(value);
-			case 'object':
-				return typeof value === 'object' ? value : {};
-			default:
-				const ClassRef = this.registry[type];
-				if (ClassRef) return new ClassRef(value);
-				throw new Error(`Tipo não registrado: ${type}`);
-		}
-	}
 }
 
+/**
+ * Conjunto de tuplas com metadados compartilhados
+ */
 export class MetaTuple<T extends Record<string, any>> {
 	private meta: Meta<T>;
-	private entries: MetaTupleBase<T>[];
+	private entries: MetaTupleBase<T>[] = [];
 
 	constructor(meta: Meta<T>, data?: (Partial<T> | any[])[]) {
 		this.meta = meta;
-		this.entries = [];
 
 		if (data) {
-			for (const item of data) {
-				this.push(item);
-			}
+			data.forEach((item) => this.push(item));
 		}
 	}
 
+	/** Adiciona uma nova entrada */
 	push(item: Partial<T> | any[]) {
 		this.entries.push(new MetaTupleBase<T>(item, this.meta));
 	}
 
+	/** Serializa todas as tuplas para JSON */
 	toJSON(): { '@meta': Meta<T>; values: any[][] } {
 		return {
 			'@meta': this.meta,
-			values: this.entries.map((e) => e.toJSON().value),
+			values: this.entries.map((entry) => entry.toJSON()), // << CORRETO
 		};
 	}
 
+	/** Serializa para string JSON */
 	toString(): string {
 		return JSON.stringify(this.toJSON());
 	}
 
+	/** Reconstrói um conjunto de tuplas a partir de JSON */
 	static fromJSON<U extends Record<string, any>>(json: {
 		'@meta': Meta<U>;
 		values: any[][];
 	}): MetaTuple<U> {
-		const arr = new MetaTuple<U>(json['@meta']);
-		for (const v of json.values) {
-			arr.push(v);
-		}
-		return arr;
+		const instance = new MetaTuple<U>(json['@meta']);
+		json.values.forEach((v) => instance.push(v));
+		return instance;
 	}
 
+	/** Retorna todos os objetos planos */
 	getAll(): T[] {
-		return this.entries.map((e) => e.toObject());
+		return this.entries.map((entry) => entry.toObject());
 	}
 
+	/** Acesso direto às instâncias de MetaTupleBase */
 	getTuples(): MetaTupleBase<T>[] {
 		return this.entries;
 	}
