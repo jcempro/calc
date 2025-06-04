@@ -10,10 +10,18 @@ export default function HeaderMain() {
 
         LeftBtbs={[
           {
-            htmlFor: "menu-toggle",
             className: "menu-button",
             ariaLabel: "Abrir menu",
-            icone: "fas fa-bars"
+            icone: "fas fa-bars",
+            itens:
+              [
+                {
+                  htmlFor: "right-main-toggle",
+                  className: "menu-button",
+                  ariaLabel: "Menu direito",
+                  icone: "fas fa-ellipsis-v"
+                }
+              ]
           }
         ]}
 

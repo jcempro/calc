@@ -4,7 +4,7 @@ export default function MainContent() {
   return (
     <>
       <section className="main-content">        
-
+        
         <main className="main-content">
           <p>Conteúdo principal da página.</p>
           {[...Array(60)].map((_, i) => (

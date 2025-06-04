@@ -1,6 +1,6 @@
-import { TypeHint, parseValue } from './evalTypes';
+import { TypeHintNested, deserialize as parseValue } from './evalTypes';
 
-export type Meta<T> = [keyof T, TypeHint][];
+export type Meta<T> = [keyof T, TypeHintNested][];
 
 /**
  * Representa uma tupla com metadados de tipo e acesso seguro aos valores
@@ -15,9 +15,9 @@ export class MetaTupleBase<T extends Record<string, any>> {
 		// Se for array, converte para objeto com base na meta
 		this.data = Array.isArray(value)
 			? meta.reduce((acc, [key, type], i) => {
-					acc[key] = parseValue(type, value[i]);
-					return acc;
-			  }, {} as T)
+				acc[key] = parseValue(type, value[i]);
+				return acc;
+			}, {} as T)
 			: (value as T);
 	}
 

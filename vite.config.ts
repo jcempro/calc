@@ -2,6 +2,9 @@ import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
+
+execSync('ts-node scripts/generate-type-metadata.ts');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,7 +17,7 @@ export default defineConfig({
 		minify: 'esbuild',
 		rollupOptions: {
 			input: 'index.html',
-		},				
+		},
 		// Habilita renomeação/mangle agressiva de identificadores
 		terserOptions: undefined, // não usamos
 	},

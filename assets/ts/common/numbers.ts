@@ -1,4 +1,7 @@
+
 import { MatchWithGroups } from './generic';
+
+import { INumberType } from './interfaces'
 
 // WARNING: Não use com valores > 100 para evitar erros de recursão no TS
 export type Enumerate<
@@ -61,7 +64,7 @@ export function tetoPiso(valor: number, min: number, max: number): number {
 	return teto(piso(valor, min), max);
 }
 
-export abstract class TNumberTypes implements Number {
+export abstract class TNumberTypes implements INumberType {
 	private _value: number = 0;
 	protected __decimais = 0;
 
@@ -128,9 +131,8 @@ export abstract class TNumberTypes implements Number {
 	}
 
 	toString(): string {
-		return `${this._markpre}${this._value.toFixed(this.__decimais)}${
-			this._markpos
-		}`;
+		return `${this._markpre}${this._value.toFixed(this.__decimais)}${this._markpos
+			}`;
 	}
 
 	protected s(regex: string): string {
@@ -140,10 +142,10 @@ export abstract class TNumberTypes implements Number {
 	protected getRegex(): RegExp {
 		return new RegExp(
 			'^' +
-				(this._markpre ? `(${this.s(this._markpre)})` : '') +
-				`(?<value>[\\d]+([,\\.][\\d]{0,${this.__decimais}})?)` +
-				(this._markpos ? `(${this.s(this._markpos)})` : '') +
-				'$',
+			(this._markpre ? `(${this.s(this._markpre)})` : '') +
+			`(?<value>[\\d]+([,\\.][\\d]{0,${this.__decimais}})?)` +
+			(this._markpos ? `(${this.s(this._markpos)})` : '') +
+			'$',
 			'd',
 		);
 	}

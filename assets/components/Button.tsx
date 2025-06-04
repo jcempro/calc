@@ -13,7 +13,7 @@ export function Button({
   caption,
   ...props
 }: IButton) {
-  props.className = `btb${props.className ? ' ' + props.className : ''}`;
+  props.className = `btb-${props.className ? ' ' + props.className : ''}`;
   return (
     <label {...props}>
       {icone && <i className={icone}></i>}

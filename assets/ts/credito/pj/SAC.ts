@@ -1,4 +1,5 @@
-import {_PRMs_} from "../../common/params.ts"
+import { TIOF } from "../../common/interfaces.ts"
+import { _PRMs_ } from '../../common/params.ts'
 import { numberRange } from '../../common/numbers.ts';
 
 import {
@@ -22,12 +23,14 @@ import {
 /*
  */
 export abstract class SAC {
-	private args: TDemandaCredito;
+	private _args: TDemandaCredito;
+	private _iof: TIOF;
 
 	/*
 	 **/
-	constructor(input: any) {
-		this.args = inicializaDemandaCredito(input);
+	constructor(input: any, iof: TIOF) {
+		this._args = inicializaDemandaCredito(input);
+		this._iof = iof;
 	}
 
 	protected _validKey(obj: any, key: string): boolean {
@@ -53,11 +56,11 @@ export abstract class SAC {
 	/*
 	 **/
 	protected _sac = (): boolean | TRCredito => {
-		if (this.args === null || !('financiado' in this.args)) {
+		if (this._args === null || !('financiado' in this._args)) {
 			return false;
 		}
 
-		let r: TRCredito = this.args as TRCredito;
+		let r: TRCredito = this._args as TRCredito;
 
 		r.repo = {
 			extrato: new ExtratoCredito([]),
@@ -89,14 +92,14 @@ export abstract class SAC {
 				i === 0
 					? r.data_operacao
 					: <TDate>(
-							proximaDataBase(
-								i > 1
-									? r.data_operacao
-									: r.repo.extrato[r.repo.extrato.length - 1].data,
-								r.diabase,
-								false,
-							)
-					  ),
+						proximaDataBase(
+							i > 1
+								? r.data_operacao
+								: r.repo.extrato[r.repo.extrato.length - 1].data,
+							r.diabase,
+							false,
+						)
+					),
 			);
 
 			/* calculas os dias decorridos */
@@ -104,11 +107,11 @@ export abstract class SAC {
 				i === 0
 					? 0
 					: diasCorridos(
-							i > 1
-								? r.data_operacao
-								: r.repo.extrato[r.repo.extrato.length - 1].data,
-							p.data,
-					  );
+						i > 1
+							? r.data_operacao
+							: r.repo.extrato[r.repo.extrato.length - 1].data,
+						p.data,
+					);
 
 			/* calcula parcela */
 			if (i > 0) {
@@ -120,8 +123,8 @@ export abstract class SAC {
 				p.amortizacao.value = car
 					? 0
 					: !naoRepetirAmortiza
-					? ((naoRepetirAmortiza = true) ? 0 : 0) * amortizacaoConstante
-					: -1;
+						? ((naoRepetirAmortiza = true) ? 0 : 0) * amortizacaoConstante
+						: -1;
 				p.juros.value = jrs ? sldAnterior * (taxaDiaria * p.dias) : 1;
 
 				p.pagamento.value = amortizacaoConstante + p.juros.value;
@@ -145,36 +148,36 @@ export abstract class SAC {
 
 		const dataPrimeiroVenc = diaUtilOuProx(
 			new Date(
-				this.args.data_operacao.getFullYear(),
-				this.args.data_operacao.getMonth(),
-				this.args.diabase,
+				this._args.data_operacao.getFullYear(),
+				this._args.data_operacao.getMonth(),
+				this._args.diabase,
 			),
 		);
 
 		let vencimentoBase = new Date(dataPrimeiroVenc);
 		while (
-			diasCorridos(this.args.data_operacao, vencimentoBase) <
-			this.args.carenciaDias
+			diasCorridos(this._args.data_operacao, vencimentoBase) <
+			this._args.carenciaDias
 		) {
 			vencimentoBase.setMonth(vencimentoBase.getMonth() + 1);
 			vencimentoBase = diaUtilOuProx(
 				new Date(
 					vencimentoBase.getFullYear(),
 					vencimentoBase.getMonth(),
-					this.args.diabase,
+					this._args.diabase,
 				),
 			);
 		}
 
-		for (let i = 0; i < this.args.prazoMeses; i++) {
+		for (let i = 0; i < this._args.prazoMeses; i++) {
 			const venc = diaUtilOuProx(
 				new Date(
 					vencimentoBase.getFullYear(),
 					vencimentoBase.getMonth() + i,
-					this.args.diabase,
+					this._args.diabase,
 				),
 			);
-			dias.push(diasCorridos(this.args.data_operacao, venc));
+			dias.push(diasCorridos(this._args.data_operacao, venc));
 		}
 
 		return dias;
@@ -183,16 +186,15 @@ export abstract class SAC {
 	// Estratégia de busca binária com estimativa inicial e margem adaptativa
 	// Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
 	protected _calcularBrutoNecessario(
-		iofFixo: number,
-		alqDiaria: number,
 		tolerancia = 0.01,
 		maxIter = 100,
 	): number {
+
 		let diasPorParcela: number[] = this._gerarDiasPorParcela();
 
 		if (
-			this.args.prazoMeses <= 0 ||
-			diasPorParcela.length !== this.args.prazoMeses
+			this._args.prazoMeses <= 0 ||
+			diasPorParcela.length !== this._args.prazoMeses
 		) {
 			throw new Error(
 				'Parâmetros inválidos: número de parcelas e dias por parcela devem ser consistentes.',
@@ -201,14 +203,14 @@ export abstract class SAC {
 
 		// Soma ponderada de dias para o cálculo do IOF diário
 		const somaFatorIOFdiario = diasPorParcela.reduce(
-			(soma, dias) => soma + dias * alqDiaria,
+			(soma, dias) => soma + dias * this._iof.diario.value,
 			0,
 		);
 
 		// Estimativa inicial baseada nos principais encargos (máximo legal de IOF: 3%)
 		const estimativaInicial =
-			(<TLiberado>this.args).liquido.value *
-			(1 + (this.args.flat.value + 0.03) + this.args.tac.value + iofFixo);
+			(<TLiberado>this._args).liquido.value *
+			(1 + (this._args.flat.value + this._iof.diario.value) + this._args.tac.value + this._iof.adicional.value);
 
 		// Define o intervalo inicial da busca com ±10% de margem sobre a estimativa
 		let brutoMin = estimativaInicial * 0.9;
@@ -217,18 +219,20 @@ export abstract class SAC {
 
 		while (iter++ < maxIter) {
 			const bruto = (brutoMin + brutoMax) / 2; // ponto médio
-			const amortizacao = bruto / this.args.prazoMeses;
+			const amortizacao = bruto / this._args.prazoMeses;
 
 			// Cálculo de encargos com limites legais
-			const encargoFlat = bruto * this.args.flat.value;
+			const encargoFlat = bruto * this._args.flat.value;
 			let encargoIOFdiario = amortizacao * somaFatorIOFdiario;
-			encargoIOFdiario = Math.min(encargoIOFdiario, bruto * 0.03);
+			encargoIOFdiario = Math.min(encargoIOFdiario, bruto * this._iof.teto.value);
 
 			const descontosTotais =
-				this.args.tac.value + encargoFlat + iofFixo + encargoIOFdiario;
+				this._args.tac.value + encargoFlat +
+				this._iof.adicional.value +
+				encargoIOFdiario;
 			const liquidoCalculado = bruto - descontosTotais;
 
-			const erro = liquidoCalculado - (<TLiberado>this.args).liquido.value;
+			const erro = liquidoCalculado - (<TLiberado>this._args).liquido.value;
 			const toleranciaRelativa = Math.max(tolerancia, bruto * 0.0001);
 
 			if (Math.abs(erro) < toleranciaRelativa) {
@@ -238,7 +242,7 @@ export abstract class SAC {
 			// Margem adaptativa proporcional ao erro relativo (entre 0,5% e 10%)
 			const margem = Math.max(
 				0.005,
-				Math.min(0.1, Math.abs(erro / (<TLiberado>this.args).liquido.value)),
+				Math.min(0.1, Math.abs(erro / (<TLiberado>this._args).liquido.value)),
 			);
 
 			if (erro > 0) {

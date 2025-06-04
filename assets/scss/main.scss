@@ -39,13 +39,6 @@ html,
 		font-size: 1rem;
 	}
 
-	.header-icons label,
-	.header-secondary label {
-		width: 2rem;
-		height: 2rem;
-		font-size: 1rem;
-	}
-
 	.main-content {
 		padding: 1rem;
 		padding-top: calc(#{$header-height} + #{$header2-height} + 1rem);

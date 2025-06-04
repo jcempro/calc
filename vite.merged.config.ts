@@ -3,6 +3,9 @@ import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import path from 'path';
+import { execSync } from 'child_process';
+
+execSync('ts-node scripts/generate-type-metadata.ts');
 
 export default defineConfig({
 	plugins: [preact(), viteSingleFile()],

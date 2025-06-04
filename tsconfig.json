@@ -1,7 +1,9 @@
 {
 	"compilerOptions": {
-		"target": "ES2022",
+		"target": "ESNext",
 		"module": "ESNext",
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
 		"jsx": "react-jsx",
 		"moduleDetection": "force",
 		"jsxImportSource": "preact",
@@ -15,16 +17,32 @@
 		"resolveJsonModule": true,
 		"baseUrl": ".",
 		"paths": {
-			"@ext/*": ["assets/components/*"],
-			"@/*": ["assets/tsx/*"],
-			"@tsx/*": ["assets/tsx/*"],
-			"@ts/*": ["assets/ts/*"],
-			"@scss/*": ["assets/scss/*"],
-			"@css/*": ["assets/css/*"]
+			"@ext/*": [
+				"assets/components/*"
+			],
+			"@/*": [
+				"assets/tsx/*"
+			],
+			"@tsx/*": [
+				"assets/tsx/*"
+			],
+			"@ts/*": [
+				"assets/ts/*"
+			],
+			"@scss/*": [
+				"assets/scss/*"
+			],
+			"@css/*": [
+				"assets/css/*"
+			]
 		}
 	},
-  "ts-node": {
-    "esm": true
-  },	
-	"include": ["assets/tsx", "assets/components"]
+	"ts-node": {
+		"esm": true
+	},
+	"include": [
+		"assets/tsx",
+		"assets/components",
+		"assets/ts"
+	]
 }
