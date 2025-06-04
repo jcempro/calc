@@ -157,7 +157,7 @@ function obterFeriadosBrasil(ano: number): Set<string> {
 	return feriados;
 }
 
-export function isDiaUtil(data: TDate | number): boolean {
+export function isDiaUtil(data: TDate): boolean {
 	const d = toDate(data);
 	const ano = d.getFullYear();
 	const feriados = obterFeriadosBrasil(ano);
@@ -166,7 +166,7 @@ export function isDiaUtil(data: TDate | number): boolean {
 	return diaSemana !== 0 && diaSemana !== 6 && !feriados.has(dataStr);
 }
 
-export function diasUteis(inicio: TDate | number, fim: TDate | number): number {
+export function diasUteis(inicio: TDate, fim: TDate): number {
 	let ini = toDate(inicio);
 	let end = toDate(fim);
 	if (ini > end) [ini, end] = [end, ini];
@@ -181,7 +181,7 @@ export function diasUteis(inicio: TDate | number, fim: TDate | number): number {
 	return count;
 }
 
-export function proxDiaUtil(data: TDate | number): Date {
+export function proxDiaUtil(data: TDate): Date {
 	let atual = toDate(data);
 	atual.setDate(atual.getDate() + 1); // não incluir o dia fornecido
 
@@ -192,12 +192,12 @@ export function proxDiaUtil(data: TDate | number): Date {
 	return atual;
 }
 
-export function diaUtilOuProx(data: TDate | number): Date {
+export function diaUtilOuProx(data: TDate): Date {
 	return isDiaUtil(data) ? new Date(data) : proxDiaUtil(data);
 }
 
 export function diaBaseUtilOuProx(
-	data: TDate | number,
+	data: TDate,
 	max: number = 28,
 ): Date {
 	let n: number;
