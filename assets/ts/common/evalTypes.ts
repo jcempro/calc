@@ -8,12 +8,16 @@ export type Constructor<T = any> = new (...args: any[]) => T;
 /**
  * Tipo primitivo ou classe instanciável.
  */
-export type TypeHint = Constructor | string;
+export type TypeHint = Constructor | string | number | symbol;
 
 /**
  * Pode ser um tipo simples, um array homogêneo (ex: ['Pessoa']) ou uma tupla (ex: ['string', 'number']).
  */
-export type TypeHintNested = TypeHint | [TypeHint] | TypeHint[];
+export type TypeHintNested =
+	| TypeHint
+	| [TypeHint]
+	| TypeHint[]
+	| { [key: string | number | symbol]: TypeHint };
 
 /**
  * Define o tipo de cada campo de uma classe registrada.
@@ -56,7 +60,7 @@ const _typeRegistry = new Map<string, TTypeDefs>();
 export function registerType(
 	name: string,
 	definition: TypeHint,
-	fieldTypes?: TFieldType
+	fieldTypes?: TFieldType,
 ) {
 	const def: TTypeDefs = { name: definition };
 	if (fieldTypes) {
@@ -76,10 +80,14 @@ function convertPrimitive(type: TypeHint | TypeHint[], value: any): any {
 	}
 
 	switch (type) {
-		case 'string': return String(value);
-		case 'number': return Number(value);
-		case 'boolean': return Boolean(value);
-		case 'Date': return new Date(value);
+		case 'string':
+			return String(value);
+		case 'number':
+			return Number(value);
+		case 'boolean':
+			return Boolean(value);
+		case 'Date':
+			return new Date(value);
 		case 'object':
 			return typeof value === 'object' ? { ...value } : {};
 		default:
@@ -117,9 +125,9 @@ function findDefinitionByConstructor(type: Constructor): TTypeDefs | undefined {
  * // Tupla
  * const coords = deserialize<[number, number]>(['number', 'number'], [12.3, 45.6]);
  */
-export function deserialize<T>(type: TypeHint | TypeHint[], data: any): T {
+export function deserialize<T>(type: TypeHintNested, data: any): T {
 	if (data === null || typeof data !== 'object') {
-		return convertPrimitive(type, data) as any;
+		return convertPrimitive(<TypeHint>type, data) as any;
 	}
 
 	// Array ou tupla
@@ -138,7 +146,7 @@ export function deserialize<T>(type: TypeHint | TypeHint[], data: any): T {
 			}
 
 			// Array homogêneo (ex: ['Pessoa'])
-			return data.map(item => deserialize(type[0], item)) as any;
+			return data.map((item) => deserialize(type[0], item)) as any;
 		}
 
 		throw new Error('Tipo array ou tupla não especificado corretamente.');
