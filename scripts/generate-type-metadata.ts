@@ -7,9 +7,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(path.dirname(__filename));
 console.log(__dirname);
 
-console.log(path.resolve(__dirname, './assets/ts/' + `**/*.ts`));
+console.log(path.resolve(__dirname, './src/ts/' + `**/*.ts`));
 const project = new Project({ tsConfigFilePath: path.resolve(__dirname, './tsconfig.json') });
-const sourceFiles = project.getSourceFiles([path.resolve(__dirname, './assets/ts/' + `**/*.ts`)]);
+const sourceFiles = project.getSourceFiles([path.resolve(__dirname, './src/ts/' + `**/*.ts`)]);
 console.log('Arquivos encontrados:', sourceFiles.map(file => file.getBaseName()));
 const outputLines: string[] = [`import { registerType } from '../ts/common/evalTypes';\n`];
 
@@ -62,7 +62,7 @@ for (const file of sourceFiles) {
 }
 
 // Criar o arquivo de saída e escrever os tipos registrados
-const outputPath = path.resolve(__dirname, './assets/__generated__/typeRegistry.ts');
+const outputPath = path.resolve(__dirname, './src/__generated__/typeRegistry.ts');
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, outputLines.join('\n') + '\n');
 

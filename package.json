@@ -7,7 +7,8 @@
 		"scss": "sass src/assets/scss:src/assets/css --no-source-map --style=compressed --watch",
 		"build": "npm run build:bundle && vite build && vite build:importmap",
 		"build:bundle": "vite build --config vite.merged.config.ts && shx mv dist/merged/index.html dist/merged/calc.bundle.html",
-		"build:importmap": "ts-node --esm ./scripts/genImportMap.ts",
+		"build:importmap": "tsc -p ./tsconfig.scripts.json && node ./.temp-scripts/scripts/genImportMap.js",
+		"build:meta": "ts-node --esm ./scripts/generate-type-metadata.ts",
 		"format": "prettier --write .",
 		"lint": "eslint src/assets/tsx --ext .ts,.tsx"
 	},

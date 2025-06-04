@@ -21,7 +21,7 @@
 				"src/assets/components/*"
 			],
 			"@/*": [
-				"src/scripts/tsx/*"
+				"*"
 			],
 			"@tsx/*": [
 				"src/scripts/tsx/*"
@@ -42,7 +42,7 @@
 	},
 	"include": [
 		"src/scripts/tsx",
-		"src/assets/components",
+		"src/scripts/components",
 		"src/scripts/ts"
 	]
 }
