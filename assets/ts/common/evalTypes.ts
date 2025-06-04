@@ -17,7 +17,7 @@ export type TypeHintNested =
 	| TypeHint
 	| [TypeHint]
 	| TypeHint[]
-	| { [key: string | number | symbol]: TypeHint };
+	| { [key: string | number | symbol]: TypeHintNested };
 
 /**
  * Define o tipo de cada campo de uma classe registrada.
