@@ -1,43 +1,35 @@
-import { TIOF } from './interfaces';
-import { deserialize } from './evalTypes'
-import { registerType } from './evalTypes'
+import { TIOFP } from './interfaces';
+import { deserialize } from './evalTypes';
+import { registerType } from './evalTypes';
+import { TCurrency, TNumberTypes } from './numbers';
 
-export type TIOFPartial = Partial<TIOF>;
+export type TIOFPartial = Partial<TIOFP>;
 
-export interface TIOF_PJ extends TIOF {
+export interface TIOF_PJ extends TIOFP {
 	simples: {
 		ate30000: TIOFPartial;
 		maior30000: TIOFPartial;
 	};
 }
 
-registerType('TIOF_PJ', Object, {
-	teto: 'number',
-	diario: 'number',
-	fixo: 'number',
-	simples: {
-		ate30000: 'TIOF',      // TIOFPartial = Partial<TIOF> => mesma estrutura
-		maior30000: 'TIOF',
-	},
-});
-
 export interface IParams {
 	iof: {
 		credito: {
-			pf: TIOF;
+			pf: TIOFP;
 			pj: TIOF_PJ;
 		};
 	};
+	custos: {
+		teto: {
+			flat: {
+				[k: string]: TNumberTypes;
+			};
+			tac: {
+				[k: string]: TNumberTypes;
+			};
+		};
+	};
 }
-
-registerType('IParams', Object, {
-	iof: {
-		credito: {
-			pf: 'TIOF',
-			pj: 'TIOF_PJ',
-		},
-	},
-});
 
 export const _PRMs_: IParams = deserialize<IParams>('IParams', {
 	iof: {
@@ -62,6 +54,12 @@ export const _PRMs_: IParams = deserialize<IParams>('IParams', {
 					},
 				},
 			},
+		},
+	},
+	custos: {
+		teto: {
+			tac: {},
+			flat: {},
 		},
 	},
 });

@@ -1,7 +1,6 @@
-import {
-	validarBoolean,
-	TupleFromObjectOrdered,
-} from '../../common/generic.ts';
+import { validarBoolean } from '../../common/generic.ts';
+
+import { TIOF, TIOFC } from '../../common/interfaces.ts';
 
 import { toDate, TDiaMes } from '../../common/datas.ts';
 import {
@@ -9,6 +8,7 @@ import {
 	validarNumero,
 	TCurrency,
 	TPercent,
+	TNumberTypes,
 } from '../../common/numbers.ts';
 
 import { registerType } from '../../common/evalTypes.ts';
@@ -57,38 +57,75 @@ export type TFinanciado = {
 
 export type TCreditoAlvo = TFinanciado | TLiberado | (TFinanciado & TLiberado);
 
+export type TFlatTAC = {
+	v: TNumberTypes;
+	teto?: TCurrency;
+};
+
+export type TCustos = {
+	flat: TFlatTAC;
+	tac: TFlatTAC;
+};
+
 export type TDemandaCredito = TCreditoAlvo & {
 	data_operacao: Date;
 	diabase: TDiaMes;
 	jurosAm: TPercent;
 	prazoMeses: number;
 	carenciaDias: number;
-	tac: TPercent;
-	flat: TPercent;
+	custos: TCustos;
 	tipo: TSacPrice;
 	jurosNaCarencia: boolean;
+	simplesn: boolean;
 };
 
-export type TRCredito = TDemandaCredito & {
-	info: {
+export type TComputed = {
+	diasUteis: number;
+	iof: Partial<TIOF>;
+	custos: TCustos;
+	i: {
 		datas: {
 			primeira: Date;
 			ultima: Date;
 		};
-		diasUteis: number;
-		iofFixo: number;
-		iofDiario: number;
-	};
-	repo: {
 		pgtoTotal: number;
 		pgtoAMais: number;
 		maiorParcela: number;
 		menorParcela: number;
-		extrato: ExtratoCredito;
 	};
+	extrato: ExtratoCredito;
 };
 
-export function inicializaDemandaCredito(data?: any): TDemandaCredito {
+export type TRCredito = TDemandaCredito & {
+	computed: TComputed;
+};
+
+/**
+ * Inicializa uma instância do tipo `TDemandaCredito` com validações e valores padrão,
+ * a partir de um objeto de entrada genérico (`any`). Os campos são validados conforme
+ * os tipos esperados e, quando ausentes ou inválidos, valores padrão são aplicados.
+ *
+ * A função serve como uma etapa de sanitização e preparação de dados para processos
+ * de simulação ou cálculo de crédito.
+ *
+ * @param {any} data - Objeto contendo os dados brutos para inicialização do crédito.
+ * Pode conter as seguintes propriedades:
+ *   - `financiado` {number} Valor total financiado (obrigatório)
+ *   - `liquido` {number} Valor líquido a ser recebido (obrigatório)
+ *   - `data_operacao` {string|Date} Data da operação (opcional, padrão: `new Date()`)
+ *   - `diabase` {number} Número de dias por mês para base de cálculo (opcional, padrão: 30)
+ *   - `jurosAm` {number} Taxa de juros ao mês como percentual (opcional, padrão: 0.01)
+ *   - `prazoMeses` {number} Número de meses do financiamento (opcional, padrão: 12)
+ *   - `carenciaDias` {number} Dias de carência até o primeiro pagamento (opcional, padrão: 0)
+ *   - `tac` {number} Custo TAC em percentual (opcional, padrão: 0)
+ *   - `flat` {number} Custo flat em percentual (opcional, padrão: 0)
+ *   - `tipo` {number} Tipo de sistema de amortização: 1 (SAC) ou 2 (PRICE). (opcional, padrão: 1)
+ *   - `jurosNaCarencia` {boolean} Se os juros devem ser aplicados durante a carência (opcional, padrão: `false`)
+ *
+ * @returns {TDemandaCredito} Um objeto tipado com dados validados e prontos para uso.
+ *
+ */
+export function inicializaDemandaCredito(data: any): TDemandaCredito {
 	const obj = typeof data === 'object' && data !== null ? data : {};
 
 	const get = <T>(key: string): T | undefined =>
@@ -113,8 +150,14 @@ export function inicializaDemandaCredito(data?: any): TDemandaCredito {
 		prazoMeses: validarNumero(get<number>('prazoMeses'), 12, 1, 460),
 		carenciaDias: validarNumero(get<number>('carenciaDias'), 0, 0, 360),
 
-		tac: new TPercent(validarNumero(get<number>('tac'), 0)),
-		flat: new TPercent(validarNumero(get<number>('flat'), 0)),
+		custos: {
+			tac: {
+				v: <TNumberTypes>new TPercent(validarNumero(get<number>('tac'), 0)),
+			},
+			flat: {
+				v: <TNumberTypes>new TPercent(validarNumero(get<number>('flat'), 0)),
+			},
+		},
 
 		tipo: validarEnum(
 			get<number>('tipo'),
@@ -123,5 +166,6 @@ export function inicializaDemandaCredito(data?: any): TDemandaCredito {
 		),
 
 		jurosNaCarencia: validarBoolean(get<unknown>('jurosNaCarencia'), false),
+		simplesn: false,
 	};
 }

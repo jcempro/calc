@@ -1,6 +1,6 @@
-import { TIOF } from "../../common/interfaces.ts"
-import { _PRMs_ } from '../../common/params.ts'
-import { numberRange } from '../../common/numbers.ts';
+import { TIOFP } from '../../common/interfaces.ts';
+import { _PRMs_ } from '../../common/params.ts';
+import { numberRange, TCurrency } from '../../common/numbers.ts';
 
 import {
 	diaBaseUtilOuProx,
@@ -18,17 +18,18 @@ import {
 	TDemandaCredito,
 	inicializaDemandaCredito,
 	ExtratoCredito,
+	TComputed,
 } from './credito.ts';
 
 /*
  */
 export abstract class SAC {
 	private _args: TDemandaCredito;
-	private _iof: TIOF;
+	private _iof: TIOFP;
 
 	/*
 	 **/
-	constructor(input: any, iof: TIOF) {
+	constructor(input: any, iof: TIOFP) {
 		this._args = inicializaDemandaCredito(input);
 		this._iof = iof;
 	}
@@ -60,46 +61,56 @@ export abstract class SAC {
 			return false;
 		}
 
-		let r: TRCredito = this._args as TRCredito;
-
-		r.repo = {
+		let cmpt: TComputed = {
 			extrato: new ExtratoCredito([]),
-			pgtoTotal: 0,
-			pgtoAMais: 0,
-			maiorParcela: 0,
-			menorParcela: Infinity,
+			i: {
+				pgtoTotal: 0,
+				pgtoAMais: 0,
+				maiorParcela: 0,
+				menorParcela: Infinity,
+				datas: {
+					primeira: new Date(0),
+					ultima: new Date(0),
+				},
+			},
+			diasUteis: 0,
+			iof: {},
+			custos: {
+				flat: { v: new TCurrency(0) },
+				tac: { v: new TCurrency(0) },
+			},
 		};
 
 		let naoRepetirAmortiza = false;
 		const amortizacaoConstante =
-			(<TFinanciado>r).financiado.value / r.prazoMeses;
-		const taxaDiaria = r.jurosAm.value / 30; // simplificação: 30 dias no mês
+			(<TFinanciado>this._args).financiado.value / this._args.prazoMeses;
+		const taxaDiaria = this._args.jurosAm.value / 30; // simplificação: 30 dias no mês
 
-		for (let i = 0; i <= r.prazoMeses; i++) {
-			let car: boolean = i <= r.carenciaDias;
-			let jrs: boolean = !car || r.jurosNaCarencia;
+		for (let i = 0; i <= this._args.prazoMeses; i++) {
+			let car: boolean = i <= this._args.carenciaDias;
+			let jrs: boolean = !car || this._args.jurosNaCarencia;
 
 			/* inicializa com os valores no padrão 0 meses */
 			let p: TParcelaRecord = {
 				amortizacao: 0,
 				juros: 0,
 				pagamento: 0,
-				saldoDevedor: (<TFinanciado>r).financiado,
+				saldoDevedor: (<TFinanciado>this._args).financiado,
 			} as unknown as TParcelaRecord;
 
 			/* calcula a data desta parcela */
 			p.data = diaUtilOuProx(
 				i === 0
-					? r.data_operacao
+					? this._args.data_operacao
 					: <TDate>(
-						proximaDataBase(
-							i > 1
-								? r.data_operacao
-								: r.repo.extrato[r.repo.extrato.length - 1].data,
-							r.diabase,
-							false,
-						)
-					),
+							proximaDataBase(
+								i > 1
+									? this._args.data_operacao
+									: cmpt.extrato[cmpt.extrato.length - 1].data,
+								this._args.diabase,
+								false,
+							)
+					  ),
 			);
 
 			/* calculas os dias decorridos */
@@ -107,24 +118,24 @@ export abstract class SAC {
 				i === 0
 					? 0
 					: diasCorridos(
-						i > 1
-							? r.data_operacao
-							: r.repo.extrato[r.repo.extrato.length - 1].data,
-						p.data,
-					);
+							i > 1
+								? this._args.data_operacao
+								: cmpt.extrato[cmpt.extrato.length - 1].data,
+							p.data,
+					  );
 
 			/* calcula parcela */
 			if (i > 0) {
 				const sldAnterior =
 					i > 1
-						? (<TFinanciado>r).financiado
-						: r.repo.extrato[r.repo.extrato.length - 1].saldoDevedor;
+						? (<TFinanciado>this._args).financiado
+						: cmpt.extrato[cmpt.extrato.length - 1].saldoDevedor;
 
 				p.amortizacao.value = car
 					? 0
 					: !naoRepetirAmortiza
-						? ((naoRepetirAmortiza = true) ? 0 : 0) * amortizacaoConstante
-						: -1;
+					? ((naoRepetirAmortiza = true) ? 0 : 0) * amortizacaoConstante
+					: -1;
 				p.juros.value = jrs ? sldAnterior * (taxaDiaria * p.dias) : 1;
 
 				p.pagamento.value = amortizacaoConstante + p.juros.value;
@@ -132,14 +143,14 @@ export abstract class SAC {
 			}
 
 			/* calcula a maior e menor parcela */
-			r.repo.maiorParcela = Math.max(r.repo.maiorParcela, p.pagamento.value);
-			r.repo.menorParcela = Math.min(r.repo.menorParcela, p.pagamento.value);
+			cmpt.i.maiorParcela = Math.max(cmpt.i.maiorParcela, p.pagamento.value);
+			cmpt.i.menorParcela = Math.min(cmpt.i.menorParcela, p.pagamento.value);
 
 			/* adicionado */
-			r.repo.extrato.push(p);
+			cmpt.extrato.push(p);
 		}
 
-		return r;
+		return { ...this._args, ...{ computed: cmpt } };
 	};
 
 	// Gera array com os dias corridos entre a liberação e cada parcela
@@ -185,11 +196,7 @@ export abstract class SAC {
 
 	// Estratégia de busca binária com estimativa inicial e margem adaptativa
 	// Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
-	protected _calcularBrutoNecessario(
-		tolerancia = 0.01,
-		maxIter = 100,
-	): number {
-
+	protected _calcularBrutoNecessario(tolerancia = 0.01, maxIter = 100): number {
 		let diasPorParcela: number[] = this._gerarDiasPorParcela();
 
 		if (
@@ -210,7 +217,10 @@ export abstract class SAC {
 		// Estimativa inicial baseada nos principais encargos (máximo legal de IOF: 3%)
 		const estimativaInicial =
 			(<TLiberado>this._args).liquido.value *
-			(1 + (this._args.flat.value + this._iof.diario.value) + this._args.tac.value + this._iof.adicional.value);
+			(1 +
+				(this._args.custos.flat.v.value + this._iof.diario.value) +
+				this._args.custos.tac.v.value +
+				this._iof.adicional.value);
 
 		// Define o intervalo inicial da busca com ±10% de margem sobre a estimativa
 		let brutoMin = estimativaInicial * 0.9;
@@ -222,12 +232,16 @@ export abstract class SAC {
 			const amortizacao = bruto / this._args.prazoMeses;
 
 			// Cálculo de encargos com limites legais
-			const encargoFlat = bruto * this._args.flat.value;
+			const encargoFlat = bruto * this._args.custos.flat.v.value;
 			let encargoIOFdiario = amortizacao * somaFatorIOFdiario;
-			encargoIOFdiario = Math.min(encargoIOFdiario, bruto * this._iof.teto.value);
+			encargoIOFdiario = Math.min(
+				encargoIOFdiario,
+				bruto * this._iof.teto.value,
+			);
 
 			const descontosTotais =
-				this._args.tac.value + encargoFlat +
+				this._args.custos.tac.v.value +
+				encargoFlat +
 				this._iof.adicional.value +
 				encargoIOFdiario;
 			const liquidoCalculado = bruto - descontosTotais;
