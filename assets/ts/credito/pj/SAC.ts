@@ -197,7 +197,7 @@ export abstract class SAC {
 	// Estratégia de busca binária com estimativa inicial e margem adaptativa
 	// Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
 	protected _calcularBrutoNecessario(tolerancia = 0.01, maxIter = 100): number {
-		let diasPorParcela: number[] = this._gerarDiasPorParcela();
+		const diasPorParcela: number[] = this._gerarDiasPorParcela();
 
 		if (
 			this._args.prazoMeses <= 0 ||
@@ -208,55 +208,65 @@ export abstract class SAC {
 			);
 		}
 
-		// Soma ponderada de dias para o cálculo do IOF diário
+		// Soma ponderada dos fatores diários
 		const somaFatorIOFdiario = diasPorParcela.reduce(
 			(soma, dias) => soma + dias * this._iof.diario.value,
 			0,
 		);
 
-		// Estimativa inicial baseada nos principais encargos (máximo legal de IOF: 3%)
+		const liquidoDesejado = (<TLiberado>this._args).liquido.value;
+
 		const estimativaInicial =
-			(<TLiberado>this._args).liquido.value *
+			liquidoDesejado *
 			(1 +
-				(this._args.custos.flat.v.value + this._iof.diario.value) +
+				this._args.custos.flat.v.value +
+				this._iof.diario.value +
 				this._args.custos.tac.v.value +
 				this._iof.adicional.value);
 
-		// Define o intervalo inicial da busca com ±10% de margem sobre a estimativa
 		let brutoMin = estimativaInicial * 0.9;
 		let brutoMax = estimativaInicial * 1.1;
+
 		let iter = 0;
 
 		while (iter++ < maxIter) {
-			const bruto = (brutoMin + brutoMax) / 2; // ponto médio
+			const bruto = (brutoMin + brutoMax) / 2;
 			const amortizacao = bruto / this._args.prazoMeses;
 
-			// Cálculo de encargos com limites legais
 			const encargoFlat = bruto * this._args.custos.flat.v.value;
+
 			let encargoIOFdiario = amortizacao * somaFatorIOFdiario;
-			encargoIOFdiario = Math.min(
-				encargoIOFdiario,
-				bruto * this._iof.teto.value,
-			);
+
+			// Aplica teto do IOF se definido
+			if (
+				'teto' in this._iof &&
+				typeof this._iof.teto !== undefined &&
+				typeof this._iof.teto?.value === 'number'
+			) {
+				encargoIOFdiario = Math.min(
+					encargoIOFdiario,
+					bruto * this._iof.teto.value,
+				);
+			}
 
 			const descontosTotais =
 				this._args.custos.tac.v.value +
 				encargoFlat +
 				this._iof.adicional.value +
 				encargoIOFdiario;
+
 			const liquidoCalculado = bruto - descontosTotais;
 
-			const erro = liquidoCalculado - (<TLiberado>this._args).liquido.value;
+			const erro = liquidoCalculado - liquidoDesejado;
 			const toleranciaRelativa = Math.max(tolerancia, bruto * 0.0001);
 
 			if (Math.abs(erro) < toleranciaRelativa) {
-				return bruto; // convergência atingida
+				return bruto;
 			}
 
-			// Margem adaptativa proporcional ao erro relativo (entre 0,5% e 10%)
 			const margem = Math.max(
 				0.005,
-				Math.min(0.1, Math.abs(erro / (<TLiberado>this._args).liquido.value)),
+				Math.min(0.1, Math.abs(erro / liquidoDesejado)),
 			);
 
 			if (erro > 0) {
