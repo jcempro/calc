@@ -18,22 +18,22 @@
 		"baseUrl": ".",
 		"paths": {
 			"@ext/*": [
-				"assets/components/*"
+				"src/assets/components/*"
 			],
 			"@/*": [
-				"assets/tsx/*"
+				"src/scripts/tsx/*"
 			],
 			"@tsx/*": [
-				"assets/tsx/*"
+				"src/scripts/tsx/*"
 			],
 			"@ts/*": [
-				"assets/ts/*"
+				"src/scripts/ts/*"
 			],
 			"@scss/*": [
-				"assets/scss/*"
+				"src/assets/scss/*"
 			],
 			"@css/*": [
-				"assets/css/*"
+				"src/assets/css/*"
 			]
 		}
 	},
@@ -41,8 +41,8 @@
 		"esm": true
 	},
 	"include": [
-		"assets/tsx",
-		"assets/components",
-		"assets/ts"
+		"src/scripts/tsx",
+		"src/assets/components",
+		"src/scripts/ts"
 	]
 }

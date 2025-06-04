@@ -16,7 +16,7 @@ export default defineConfig({
 		outDir: 'dist/www',
 		minify: 'esbuild',
 		rollupOptions: {
-			input: 'index.html',
+			input: 'src/index.html',
 		},
 		// Habilita renomeação/mangle agressiva de identificadores
 		terserOptions: undefined, // não usamos
@@ -29,13 +29,13 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			'@ext': path.resolve(__dirname, 'assets/components'),
-			'@scss': path.resolve(__dirname, 'assets/scss'),
-			'@css': path.resolve(__dirname, 'assets/css'),
-			'@tsx': path.resolve(__dirname, 'assets/tsx'),
-			'@ts': path.resolve(__dirname, 'assets/ts'),
-			'@js': path.resolve(__dirname, 'assets/js'),
-			'@s': path.resolve(__dirname, 'assets/s'),
+			'@ext': path.resolve(__dirname, 'src/assets/scripts/components'),
+			'@scss': path.resolve(__dirname, 'src/assets/scss'),
+			'@css': path.resolve(__dirname, 'src/assets/css'),
+			'@tsx': path.resolve(__dirname, 'src/assets/scripts/tsx'),
+			'@ts': path.resolve(__dirname, 'src/assets/scripts/ts'),
+			'@js': path.resolve(__dirname, 'src/assets/js'),
+			'@s': path.resolve(__dirname, 'src/assets/s'),
 		},
 	},
 });
