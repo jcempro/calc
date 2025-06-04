@@ -20,7 +20,7 @@ export interface Icurrency extends INumberType {}
 export type TIOFP = {
 	diario: IPercent;
 	adicional: IPercent;
-	teto: IPercent;
+	teto?: IPercent;
 };
 
 export type TIOFC = {
