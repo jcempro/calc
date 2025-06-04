@@ -1,7 +1,6 @@
-
 import { MatchWithGroups } from './generic';
 
-import { INumberType } from './interfaces'
+import { INumberType } from './interfaces';
 
 // WARNING: Não use com valores > 100 para evitar erros de recursão no TS
 export type Enumerate<
@@ -64,12 +63,19 @@ export function tetoPiso(valor: number, min: number, max: number): number {
 	return teto(piso(valor, min), max);
 }
 
+export enum ENumberIs {
+	percentual = 0,
+	currency = 1,
+}
+
 export abstract class TNumberTypes implements INumberType {
 	private _value: number = 0;
 	protected __decimais = 0;
 
 	protected _markpos = '';
 	protected _markpre = '';
+
+	abstract _tipo: ENumberIs;
 
 	constructor(
 		input: number | string | undefined,
@@ -131,8 +137,9 @@ export abstract class TNumberTypes implements INumberType {
 	}
 
 	toString(): string {
-		return `${this._markpre}${this._value.toFixed(this.__decimais)}${this._markpos
-			}`;
+		return `${this._markpre}${this._value.toFixed(this.__decimais)}${
+			this._markpos
+		}`;
 	}
 
 	protected s(regex: string): string {
@@ -142,10 +149,10 @@ export abstract class TNumberTypes implements INumberType {
 	protected getRegex(): RegExp {
 		return new RegExp(
 			'^' +
-			(this._markpre ? `(${this.s(this._markpre)})` : '') +
-			`(?<value>[\\d]+([,\\.][\\d]{0,${this.__decimais}})?)` +
-			(this._markpos ? `(${this.s(this._markpos)})` : '') +
-			'$',
+				(this._markpre ? `(${this.s(this._markpre)})` : '') +
+				`(?<value>[\\d]+([,\\.][\\d]{0,${this.__decimais}})?)` +
+				(this._markpos ? `(${this.s(this._markpos)})` : '') +
+				'$',
 			'd',
 		);
 	}
@@ -185,10 +192,12 @@ export class TPercent extends TNumberTypes {
 	protected __decimais = 2;
 	protected _markpos = ' %';
 	protected _markpre = '';
+	_tipo = ENumberIs.percentual;
 }
 
 export class TCurrency extends TNumberTypes {
 	protected __decimais = 2;
 	protected _markpos = '';
 	protected _markpre = 'R$ ';
+	_tipo = ENumberIs.currency;
 }
