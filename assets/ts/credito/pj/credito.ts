@@ -33,18 +33,17 @@ export type TParcelaRecord = {
 	dias: number;
 };
 
-const TParcelaRecordMeta: Meta<TParcelaRecord> = [
-	['amortizacao', 'TCurrency'],
-	['juros', 'TPercent'],
-	['pagamento', 'TCurrency'],
-	['saldoDevedor', 'TCurrency'],
-	['data', 'Date'],
-	['dias', 'number'],
-];
-
 export class ExtratoCredito extends MetaTuple<TParcelaRecord> {
+	public static _TParcelaRecordMeta: Meta<TParcelaRecord> = [
+		['amortizacao', 'TCurrency'],
+		['juros', 'TPercent'],
+		['pagamento', 'TCurrency'],
+		['saldoDevedor', 'TCurrency'],
+		['data', 'Date'],
+		['dias', 'number'],
+	];
 	constructor(data?: (Partial<TParcelaRecord> | any[])[]) {
-		super(TParcelaRecordMeta, data);
+		super(ExtratoCredito._TParcelaRecordMeta, data);
 	}
 }
 
