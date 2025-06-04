@@ -65,6 +65,8 @@ export class MetaTuple<T extends Record<string, any>> {
 		}
 	}
 
+	[key: string | number | symbol]: any;
+
 	/** Número de elementos */
 	get length(): number {
 		return this.entries.length;
