@@ -3,7 +3,6 @@ import preact from '@preact/preset-vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
-import fs from 'fs';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 
 // Resolve caminho para ESM
@@ -20,9 +19,15 @@ try {
 }
 
 export default defineConfig({
-	plugins: [preact(), viteSingleFile()],
+	plugins: [preact(), viteSingleFile(), {
+		name: 'generate-type-registry',
+		buildStart() {
+			console.log('🔄 Gerando typeRegistry.ts...');
+			execSync('node ./scripts/generate-type-metadata.ts', { stdio: 'inherit' });
+		}
+	}],	
 	build: {
-		outDir: 'dist/www',
+		outDir: 'dist/merged',
 		minify: 'esbuild',
 		rollupOptions: {
 			input: 'src/index.html',

@@ -3,7 +3,6 @@ import preact from '@preact/preset-vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
-import fs from 'fs';
 
 // Resolve caminho para ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -25,8 +24,25 @@ export default defineConfig({
 			console.log('🔄 Gerando typeRegistry.ts...');
 			execSync('node ./scripts/generate-type-metadata.ts', { stdio: 'inherit' });
 		}
-	}],
-	root: './src',
+	}],	
+	build: {
+		outDir: 'dist/www',
+		minify: 'esbuild',
+		rollupOptions: {
+			input: 'src/index.html',
+		},
+	},
+	esbuild: {
+		drop: ['console', 'debugger'],
+		minifyIdentifiers: true,
+		minifySyntax: true,
+		minifyWhitespace: true,
+	},
+	server: {
+		watch: {
+			ignored: ['!**/__generated__/typeRegistry.ts'] // não ignorar este arquivo
+		}
+	},
 	resolve: {
 		alias: {
 			'@ext': path.resolve(__dirname, 'src/scripts/components'),
@@ -37,23 +53,5 @@ export default defineConfig({
 			'@js': path.resolve(__dirname, 'src/assets/js'),
 			'@s': path.resolve(__dirname, 'src/assets/s'),
 		},
-	},
-	esbuild: {
-		drop: ['console', 'debugger'],
-		minifyIdentifiers: true,
-		minifySyntax: true,
-		minifyWhitespace: true,
-	},
-	build: {
-		outDir: 'dist/www',
-		minify: 'esbuild',
-		rollupOptions: {
-			input: 'src/index.html',
-		},
-	},
-	server: {
-		watch: {
-			ignored: ['!**/__generated__/typeRegistry.ts'] // não ignorar este arquivo
-		}
 	}
 });
