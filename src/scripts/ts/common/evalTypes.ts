@@ -57,16 +57,57 @@ const _typeRegistry = new Map<string, TTypeDefs>();
  *   idade: 'number'
  * });
  */
+type RegisterTypeArgs =
+	{ name: string; tipo: TypeHint; fieldTypes?: TFieldType } |
+	{ name: string; fieldTypes: TFieldType };
+
 export function registerType(
-	name: string,
-	definition: TypeHint,
-	fieldTypes?: TFieldType,
-) {
-	const def: TTypeDefs = { name: definition };
-	if (fieldTypes) {
-		def.detalhe = fieldTypes;
+	name_args: string | RegisterTypeArgs,
+	tipo?: TypeHint,
+	fieldTypes?: TFieldType
+): void {
+	if (
+		(
+			(typeof name_args !== `string`) &&
+			(typeof name_args !== `object`)
+		) ||
+		(
+			(typeof name_args === `object`) &&
+			(!('tipo' in name_args)) &&
+			(!('fieldTypes' in name_args))
+		)
+	) {
+		throw `error`;
 	}
-	_typeRegistry.set(name, def);
+
+	const def: TTypeDefs =
+	{
+		...
+		{
+			name:
+				tipo
+					? tipo
+					: (typeof name_args === `object`) && ('tipo' in name_args)
+						? name_args.tipo
+						: typeof name_args === `string`
+							? name_args
+							: ((): string => {
+								throw `registerType: não foi possível definir o 'name' com o parametros ${name_args}.`;
+							})()
+		}
+		,
+		...(
+			(fieldTypes
+				|| (
+					'fieldTypes' in <RegisterTypeArgs>name_args
+					&& (<RegisterTypeArgs>name_args).fieldTypes)
+			)
+				? { detalhe: fieldTypes ? fieldTypes : (<RegisterTypeArgs>name_args).fieldTypes }
+				: {}
+		)
+	}
+
+	_typeRegistry.set(def.name as string, def);
 }
 
 /**
