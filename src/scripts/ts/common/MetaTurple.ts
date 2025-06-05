@@ -15,9 +15,9 @@ export class MetaTupleBase<T extends Record<string, any>> {
 		// Se for array, converte para objeto com base na meta
 		this.data = Array.isArray(value)
 			? meta.reduce((acc, [key, type], i) => {
-				acc[key] = parseValue(type, value[i]);
-				return acc;
-			}, {} as T)
+					acc[key] = parseValue(type, value[i]);
+					return acc;
+			  }, {} as T)
 			: (value as T);
 	}
 
@@ -26,9 +26,18 @@ export class MetaTupleBase<T extends Record<string, any>> {
 		return this.data[key];
 	}
 
-	/** Exporta para JSON em array */
-	toJSON(): any[] {
-		return this.meta.map(([key]) => this.data[key]);
+	/** Exporta para JSON em array ou objeto com metadados */
+	toJSON(full: boolean = true): any[] | { '@meta': Meta<T>; value: any[] } {
+		const values = this.meta.map(([key]) => this.data[key]);
+
+		if (full) {
+			return {
+				'@meta': this.meta,
+				value: values,
+			};
+		}
+
+		return values;
 	}
 
 	/** Serializa a tupla para string JSON */
@@ -116,10 +125,11 @@ export class MetaTuple<T extends Record<string, any>> {
 	}
 
 	/** Serializa todas as tuplas para JSON */
+	/** Serializa todas as tuplas para JSON */
 	toJSON(): { '@meta': Meta<T>; values: any[][] } {
 		return {
 			'@meta': this.meta,
-			values: this.entries.map((entry) => entry.toJSON()), // << CORRETO
+			values: this.entries.map((entry) => <any[]>entry.toJSON(false)), // << FORÇA modo simples
 		};
 	}
 
