@@ -196,7 +196,7 @@ export abstract class SAC {
 
 	// Estratégia de busca binária com estimativa inicial e margem adaptativa
 	// Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
-	protected _calcularBrutoNecessario(tolerancia = 0.01, maxIter = 100): number {
+	public _calcularBrutoNecessario(tolerancia = 0.01, maxIter = 100): number {
 		const diasPorParcela: number[] = this._gerarDiasPorParcela();
 
 		if (
