@@ -3,6 +3,8 @@
 	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
+		"test": "vitest run",
+		"test:watch": "vitest",
 		"dev": "npm run generate-types && vite",
 		"generate-types": "ts-node ./scripts/generate-type-metadata.ts",
 		"scss": "sass src/assets/scss:src/assets/css --no-source-map --style=compressed --watch",
