@@ -28,7 +28,7 @@ console.log(`\r\n`, SRC_DIR, `\r\n`, TSCONFIG_PATH, `\r\n`, OUTPUT_PATH, `\r\n`,
 
 const checker = project.getTypeChecker();
 
-const importLines: string[] = [`import { registerType } from '../ts/common/evalTypes';`];
+const importLines: string[] = [`import { registerType } from '../scripts/ts/common/evalTypes';`];
 const registerLines: string[] = [];
 
 const importMap = new Map<string, Set<string>>(); // arquivo => Set<nomes>
@@ -56,9 +56,14 @@ function serializeTypeHint(type: Type, depth = 0): string {
 
   if (name && name !== '__type') {
     const decl = symbol?.getDeclarations()?.[0];
-    if (!decl) return `'any'`; // símbolo sem declaração rastreável
-
+    if (!decl) return `'any'`; // símbolo sem declaração rastreável    
     const filePath = decl.getSourceFile().getFilePath();
+
+    // Ignora tipos definidos fora do SRC_DIR (ex: node_modules, lib.es5.d.ts, etc.)
+    if (!filePath.startsWith(SRC_DIR)) {
+      return `'any'`; // ou: return `'${name}'` apenas se quiser preservar o nome, mas evitar o import
+    }
+
     const rel = path.relative(path.dirname(OUTPUT_PATH), filePath).replace(/\\/g, '/').replace(/\.ts$/, '');
     if (!importMap.has(rel)) importMap.set(rel, new Set());
     importMap.get(rel)!.add(name);
@@ -89,6 +94,25 @@ function extractFieldTypes(node: InterfaceDeclaration | TypeAliasDeclaration): s
     if (!valueDecl) continue;
     const propType = prop.getTypeAtLocation(valueDecl);
     const serialized = serializeTypeHint(propType);
+
+    // 1. Ignora propriedades inválidas (como "__@iterator @78")
+    if (!/^[$A-Z_][0-9A-Z_$]*$/i.test(prop.getName())) continue;
+
+    // 2. Ignora métodos (propriedades que são funções)
+    if (propType.getCallSignatures().length > 0) {
+      continue;
+    }
+
+    // 3. Ignora classes (tipo declarado como class ou com construct signature)
+    if (propType.getConstructSignatures().length > 0) {
+      continue;
+    }
+
+    // 4. (Opcional) ignora símbolos com nome 'prototype'
+    if (prop.getName() === 'prototype') {
+      continue;
+    }
+
     lines.push(`  ${prop.getName()}: ${serialized},`);
   }
 
@@ -98,12 +122,21 @@ function extractFieldTypes(node: InterfaceDeclaration | TypeAliasDeclaration): s
 for (const file of sourceFiles) {
   for (const node of file.getStatements()) {
     if (
-      Node.isInterfaceDeclaration(node) ||
-      Node.isTypeAliasDeclaration(node)
+      (
+        Node.isInterfaceDeclaration(node) ||
+        Node.isTypeAliasDeclaration(node)
+      ) &&
+      node.isExported() &&
+      !Node.isClassDeclaration(node)
     ) {
+      if (!node.isExported()) continue;
       const name = node.getName();
+
       const fields = extractFieldTypes(node);
-      registerLines.push(`registerType('${name}', ${name}, ${fields});`);
+      const symbol = node.getSymbol();
+      const isRuntimeValue = symbol?.getDeclarations()?.some(d => d.isKind(SyntaxKind.VariableDeclaration) || d.isKind(SyntaxKind.ClassDeclaration) || d.isKind(SyntaxKind.FunctionDeclaration));
+      registerLines.push(`registerType({name: "${name}", ${isRuntimeValue ? `definition:${name},` : ''} fieldTypes:${fields}});`);
+
 
       // Adiciona import
       const filePath = file.getFilePath();

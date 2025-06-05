@@ -1,41 +1,36 @@
-import { writeFileSync, mkdirSync } from 'node:fs';
-import FastGlob from 'fast-glob';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+import fg from 'fast-glob';
+import { writeFileSync, mkdirSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirName = dirname(__filename);
+const __dirname = dirname(__filename);
 
-const tsDir = resolve(__dirName, '../src/ts');
-const tsxDir = resolve(__dirName, '../src/tsx');
-const outputFile = resolve(__dirName, '../dist/importmap.json');
+// 👇 Caminhos sempre relativos à raiz do projeto
+const tsDir = resolve(__dirname, '../src/scripts/ts');
+const tsxDir = resolve(__dirname, '../src/scripts/tsx');
+const outputFile = resolve(__dirname, '../dist/importmap.json');
 
-(async () => {
-	const tsFiles = await FastGlob('**/*.ts', { cwd: tsDir });
-	const tsxFiles = await FastGlob('**/*.tsx', { cwd: tsxDir });
+// 👇 Diagnóstico
+console.log('[genImportMap] Buscando arquivos...');
+console.log('tsDir:', tsDir);
+console.log('tsxDir:', tsxDir);
 
-	const imports: Record<string, string> = {};
+const tsFiles = await fg('**/*.ts', { cwd: tsDir });
+const tsxFiles = await fg('**/*.tsx', { cwd: tsxDir });
 
-	// .ts files
-	for (const file of tsFiles) {
-		const moduleName = './' + file.replace(/\\/g, '/').replace(/\.ts$/, '');
-		const outputPath =
-			'src/ts/' + file.replace(/\\/g, '/').replace(/\.ts$/, '.js');
-		imports[moduleName] = outputPath;
-	}
+console.log(`Encontrados: ${tsFiles.length} .ts e ${tsxFiles.length} .tsx`);
 
-	// .tsx files
-	for (const file of tsxFiles) {
-		const moduleName = './' + file.replace(/\\/g, '/').replace(/\.tsx$/, '');
-		const outputPath =
-			'src/tsx/' + file.replace(/\\/g, '/').replace(/\.tsx$/, '.js');
-		imports[moduleName] = outputPath;
-	}
+const importMap = {
+  imports: Object.fromEntries([
+    ...tsFiles.map(f => [`/ts/${f.replace(/\.ts$/, '')}`, `/src/scripts/ts/${f}`]),
+    ...tsxFiles.map(f => [`/tsx/${f.replace(/\.tsx$/, '')}`, `/src/scrtips/tsx/${f}`])
+  ])
+};
 
-	const importMap = { imports };
+// Garante que pasta existe
+mkdirSync(resolve(__dirname, '../dist'), { recursive: true });
 
-	mkdirSync(dirname(outputFile), { recursive: true });
-	writeFileSync(outputFile, JSON.stringify(importMap, null, 2), 'utf-8');
+writeFileSync(outputFile, JSON.stringify(importMap, null, 2));
 
-	console.log('✅ dist/importmap.json gerado com sucesso!');
-})();
+console.log(`[genImportMap] Import map gerado com sucesso em: ${outputFile}`);
