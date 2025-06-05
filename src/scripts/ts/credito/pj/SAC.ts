@@ -26,6 +26,7 @@ import {
 export class SAC {
 	private _args: TDemandaCredito;
 	private _iof: TIOFP;
+	private _diasPorParcela: number[] = [];
 
 	/*
 	 **/
@@ -155,7 +156,9 @@ export class SAC {
 
 	// Gera array com os dias corridos entre a liberação e cada parcela
 	protected _gerarDiasPorParcela(): number[] {
-		const dias: number[] = [];
+		if (this._diasPorParcela.length > 0) {
+			return this._diasPorParcela;
+		}
 
 		const dataPrimeiroVenc = diaUtilOuProx(
 			new Date(
@@ -188,10 +191,10 @@ export class SAC {
 					this._args.diabase,
 				),
 			);
-			dias.push(diasCorridos(this._args.data_operacao, venc));
+			this._diasPorParcela.push(diasCorridos(this._args.data_operacao, venc));
 		}
 
-		return dias;
+		return this._diasPorParcela;
 	}
 
 	// Estratégia de busca binária com estimativa inicial e margem adaptativa
