@@ -14,17 +14,25 @@ try {
 		stdio: 'inherit',
 	});
 } catch (err) {
-	console.error('[vite.config.ts] Erro ao executar generate-type-metadata.ts:', err);
+	console.error(
+		'[vite.config.ts] Erro ao executar generate-type-metadata.ts:',
+		err,
+	);
 }
 
 export default defineConfig({
-	plugins: [preact(), {
-		name: 'generate-type-registry',
-		buildStart() {
-			console.log('🔄 Gerando typeRegistry.ts...');
-			execSync('node ./scripts/generate-type-metadata.ts', { stdio: 'inherit' });
-		}
-	}],	
+	plugins: [
+		preact(),
+		{
+			name: 'generate-type-registry',
+			buildStart() {
+				console.log('🔄 Gerando typeRegistry.ts...');
+				execSync('node ./scripts/generate-type-metadata.ts', {
+					stdio: 'inherit',
+				});
+			},
+		},
+	],
 	build: {
 		outDir: 'dist/www',
 		minify: 'esbuild',
@@ -40,8 +48,8 @@ export default defineConfig({
 	},
 	server: {
 		watch: {
-			ignored: ['!**/__generated__/typeRegistry.ts'] // não ignorar este arquivo
-		}
+			ignored: ['!**/__generated__/typeRegistry.ts'], // não ignorar este arquivo
+		},
 	},
 	resolve: {
 		alias: {
@@ -53,5 +61,11 @@ export default defineConfig({
 			'@js': path.resolve(__dirname, 'src/assets/js'),
 			'@s': path.resolve(__dirname, 'src/assets/s'),
 		},
-	}
+	},
+	test: {
+		globals: true,
+		environment: 'jsdom',
+		setupFiles: './test/setup.ts',
+		include: ['test/**/*.test.{ts,tsx}'],
+	},
 });
