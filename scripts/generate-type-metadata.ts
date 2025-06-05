@@ -1,69 +1,132 @@
-import { Project, SyntaxKind, InterfaceDeclaration, TypeAliasDeclaration, PropertySignature } from 'ts-morph';
+import {
+  Project,
+  SyntaxKind,
+  InterfaceDeclaration,
+  TypeAliasDeclaration,
+  Node,
+  Type,
+} from 'ts-morph';
+import { findUp } from 'find-up';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import glob from 'fast-glob';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(path.dirname(__filename));
-console.log(__dirname);
+const __dirname = path.dirname(__filename);
 
-console.log(path.resolve(__dirname, './src/ts/' + `**/*.ts`));
-const project = new Project({ tsConfigFilePath: path.resolve(__dirname, './tsconfig.json') });
-const sourceFiles = project.getSourceFiles([path.resolve(__dirname, './src/ts/' + `**/*.ts`)]);
-console.log('Arquivos encontrados:', sourceFiles.map(file => file.getBaseName()));
-const outputLines: string[] = [`import { registerType } from '../ts/common/evalTypes';\n`];
+const SRC_DIR = path.resolve(__dirname, '../src/scripts/ts');
+const TSCONFIG_PATH = await findUp('tsconfig.json', { cwd: __dirname });
+const OUTPUT_PATH = path.resolve(__dirname, '../src/__generated__/typeRegistry.ts');
 
-// Função para extrair os tipos dos campos de uma interface ou alias de tipo
+const SRC_CORINGA = path.posix.join(SRC_DIR.replace(/\\/g, '/'), '**/*.ts?(x)');
+const project = new Project({ tsConfigFilePath: TSCONFIG_PATH });
+project.addSourceFilesAtPaths(SRC_CORINGA);
+const sourceFiles = project.getSourceFiles(SRC_CORINGA);
+
+console.log(`\r\n`, SRC_DIR, `\r\n`, TSCONFIG_PATH, `\r\n`, OUTPUT_PATH, `\r\n`, SRC_CORINGA, `\r\n`);
+
+const checker = project.getTypeChecker();
+
+const importLines: string[] = [`import { registerType } from '../ts/common/evalTypes';`];
+const registerLines: string[] = [];
+
+const importMap = new Map<string, Set<string>>(); // arquivo => Set<nomes>
+
+function serializeTypeHint(type: Type, depth = 0): string {
+  if (type.isString()) return `'string'`;
+  if (type.isNumber()) return `'number'`;
+  if (type.isBoolean()) return `'boolean'`;
+  if (type.isEnumLiteral()) return `'number'`;
+
+  if (type.getSymbol()?.getName() === 'Date') return `'Date'`;
+
+  if (type.isArray()) {
+    const elementType = type.getArrayElementType();
+    return `[${elementType ? serializeTypeHint(elementType, depth + 1) : `'any'`}]`;
+  }
+
+  if (type.isTuple()) {
+    const elements = type.getTupleElements().map(t => serializeTypeHint(t, depth + 1));
+    return `[${elements.join(', ')}]`;
+  }
+
+  const symbol = type.getSymbol();
+  const name = symbol?.getName();
+
+  if (name && name !== '__type') {
+    const decl = symbol?.getDeclarations()?.[0];
+    if (!decl) return `'any'`; // símbolo sem declaração rastreável
+
+    const filePath = decl.getSourceFile().getFilePath();
+    const rel = path.relative(path.dirname(OUTPUT_PATH), filePath).replace(/\\/g, '/').replace(/\.ts$/, '');
+    if (!importMap.has(rel)) importMap.set(rel, new Set());
+    importMap.get(rel)!.add(name);
+    return `'${name}'`;
+  }
+
+  if (type.isAnonymous()) {
+    const props = type.getProperties();
+    const entries = props.map(prop => {
+      const valueDecl = prop.getValueDeclaration();
+      if (!valueDecl) return '';
+      const propType = prop.getTypeAtLocation(valueDecl);
+      return `${prop.getName()}: ${serializeTypeHint(propType, depth + 1)}`;
+    });
+    return `{ ${entries.join(', ')} }`;
+  }
+
+  return `'any'`;
+}
+
 function extractFieldTypes(node: InterfaceDeclaration | TypeAliasDeclaration): string {
-  const members = (node.getKind() === SyntaxKind.InterfaceDeclaration)
-    ? (node as InterfaceDeclaration).getProperties()
-    : (node as TypeAliasDeclaration).getTypeNodeOrThrow().getType().getProperties();
+  const type = node.getType();
+  const props = type.getProperties();
+  const lines: string[] = [];
 
-  const fieldLines: string[] = [];
-
-  // Iterando sobre os membros da interface ou alias de tipo
-  for (const member of members) {
-    const name = member.getName();
-    let typeText = '';
-
-    // Verificando se é uma PropertySignature (uma propriedade) ou um Symbol
-    if (member instanceof PropertySignature) {
-      // Se for uma PropertySignature, pegamos o tipo diretamente
-      typeText = member.getType().getText();
-    } else if (member instanceof Symbol) {
-      // Se for um Symbol, pegamos o tipo pela localização
-      typeText = member.getTypeAtLocation(member.getValueDeclarationOrThrow()).getText();
-    }
-
-    // Se o tipo for complexo (ex: união ou função), ignoramos
-    if (typeText.includes('|') || typeText.includes('{') || typeText.includes('=>')) continue;
-
-    // Aqui tratamos tipos como arrays ou tipos simples
-    const fieldType = `'${typeText.replace(/\[\]$/, '')}'` + (typeText.endsWith('[]') ? `[]` : '');
-    fieldLines.push(`  ${name}: ${fieldType},`);
+  for (const prop of props) {
+    const valueDecl = prop.getValueDeclaration();
+    if (!valueDecl) continue;
+    const propType = prop.getTypeAtLocation(valueDecl);
+    const serialized = serializeTypeHint(propType);
+    lines.push(`  ${prop.getName()}: ${serialized},`);
   }
 
-  return `{\n${fieldLines.join('\n')}\n}`;
+  return `{\n${lines.join('\n')}\n}`;
 }
 
-// Para cada arquivo TypeScript encontrado, extraímos os tipos e registramos
-console.log(`-----`);
 for (const file of sourceFiles) {
-  console.log(`Processando arquivo: ${file.getBaseName()}`);
   for (const node of file.getStatements()) {
-    if (node.getKind() === SyntaxKind.InterfaceDeclaration || node.getKind() === SyntaxKind.TypeAliasDeclaration) {
-      const name = (node as InterfaceDeclaration | TypeAliasDeclaration).getName();
-      console.log(`Encontrado tipo: ${name}`);
-      const fields = extractFieldTypes(node as InterfaceDeclaration);
-      console.log(`Campos extraídos: ${fields}`);
-      outputLines.push(`registerType('${name}', Object, ${fields});`);
+    if (
+      Node.isInterfaceDeclaration(node) ||
+      Node.isTypeAliasDeclaration(node)
+    ) {
+      const name = node.getName();
+      const fields = extractFieldTypes(node);
+      registerLines.push(`registerType('${name}', ${name}, ${fields});`);
+
+      // Adiciona import
+      const filePath = file.getFilePath();
+      const rel = path.relative(path.dirname(OUTPUT_PATH), filePath).replace(/\\/g, '/').replace(/\.ts$/, '');
+      if (!importMap.has(rel)) importMap.set(rel, new Set());
+      importMap.get(rel)!.add(name);
     }
   }
 }
 
-// Criar o arquivo de saída e escrever os tipos registrados
-const outputPath = path.resolve(__dirname, './src/__generated__/typeRegistry.ts');
-fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-fs.writeFileSync(outputPath, outputLines.join('\n') + '\n');
+// Gera linhas de import
+for (const [rel, names] of importMap.entries()) {
+  const sorted = Array.from(names).sort().join(', ');
+  importLines.push(`import { ${sorted} } from '${rel.startsWith('.') ? rel : './' + rel}';`);
+}
 
-console.log(`✔ Tipos registrados em: ${outputPath}`);
+// Escreve o arquivo final
+fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
+fs.writeFileSync(
+  OUTPUT_PATH,
+  [...importLines.sort(), '', ...registerLines.sort(), ''].join('\n'),
+  'utf8'
+);
+
+console.log(`✅ Tipos registrados com sucesso: ${registerLines.length}`);
+console.log(`📄 Arquivo gerado: ${OUTPUT_PATH}`);
