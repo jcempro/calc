@@ -23,7 +23,7 @@ import {
 
 /*
  */
-export abstract class SAC {
+export class SAC {
 	private _args: TDemandaCredito;
 	private _iof: TIOFP;
 
