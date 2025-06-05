@@ -55,6 +55,33 @@ export class SAC {
 		return args;
 	};
 
+	private _simularDescontos(bruto: number, diasPorParcela: number[]): number {
+		const amortizacao = bruto / this._args.prazoMeses;
+		const encargoFlat = bruto * this._args.custos.flat.v.value;
+
+		let encargoIOFdiario =
+			amortizacao *
+			diasPorParcela.reduce(
+				(soma, dias) => soma + dias * this._iof.diario.value,
+				0,
+			);
+
+		if ('teto' in this._iof && typeof this._iof.teto?.value === 'number') {
+			encargoIOFdiario = Math.min(
+				encargoIOFdiario,
+				bruto * this._iof.teto.value,
+			);
+		}
+
+		const descontosTotais =
+			this._args.custos.tac.v.value +
+			encargoFlat +
+			this._iof.adicional.value +
+			encargoIOFdiario;
+
+		return bruto - descontosTotais;
+	}
+
 	/*
 	 **/
 	protected _sac = (): boolean | TRCredito => {
@@ -234,9 +261,7 @@ export class SAC {
 
 		while (iter++ < maxIter) {
 			const bruto = (brutoMin + brutoMax) / 2;
-			const amortizacao = bruto / this._args.prazoMeses;
-
-			const encargoFlat = bruto * this._args.custos.flat.v.value;
+			const amortizacao = bruto / this._args.prazoMeses;		
 
 			let encargoIOFdiario = amortizacao * somaFatorIOFdiario;
 
@@ -252,13 +277,7 @@ export class SAC {
 				);
 			}
 
-			const descontosTotais =
-				this._args.custos.tac.v.value +
-				encargoFlat +
-				this._iof.adicional.value +
-				encargoIOFdiario;
-
-			const liquidoCalculado = bruto - descontosTotais;
+			const liquidoCalculado = this._simularDescontos(bruto, diasPorParcela);
 
 			const erro = liquidoCalculado - liquidoDesejado;
 			const toleranciaRelativa = Math.max(tolerancia, bruto * 0.0001);
