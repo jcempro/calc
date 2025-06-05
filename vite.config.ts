@@ -26,7 +26,7 @@ export default defineConfig({
 			execSync('node ./scripts/generate-type-metadata.ts', { stdio: 'inherit' });
 		}
 	}],
-	root: '.',
+	root: './src',
 	resolve: {
 		alias: {
 			'@ext': path.resolve(__dirname, 'src/assets/components'),
