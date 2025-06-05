@@ -29,8 +29,8 @@ export default defineConfig({
 	root: './src',
 	resolve: {
 		alias: {
-			'@ext': path.resolve(__dirname, 'src/assets/components'),
-			'@scss': path.resolve(__dirname, 'src/assets/scss'),
+			'@ext': path.resolve(__dirname, 'src/scripts/components'),
+			'@scss': path.resolve(__dirname, 'src/scss'),
 			'@css': path.resolve(__dirname, 'src/assets/css'),
 			'@tsx': path.resolve(__dirname, 'src/scripts/tsx'),
 			'@ts': path.resolve(__dirname, 'src/scripts/ts'),
@@ -48,7 +48,7 @@ export default defineConfig({
 		outDir: 'dist/www',
 		minify: 'esbuild',
 		rollupOptions: {
-			input: 'index.html',
+			input: 'src/index.html',
 		},
 	},
 	server: {

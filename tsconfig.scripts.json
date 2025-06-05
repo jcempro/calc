@@ -18,8 +18,8 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@ext/*": ["src/assets/components/*"],
-      "@scss/*": ["src/assets/scss/*"],
+      "@ext/*": ["src/scripts/components/*"],
+      "@scss/*": ["src/scss/*"],
       "@css/*": ["src/assets/css/*"],
       "@tsx/*": ["src/scripts/tsx/*"],
       "@ts/*": ["src/scripts/ts/*"],

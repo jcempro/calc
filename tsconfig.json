@@ -21,11 +21,11 @@
 
     "baseUrl": ".",
     "paths": {
-      "@ext/*": ["src/assets/components/*"],
+      "@ext/*": ["src/scripts/components/*"],
       "@/*": ["*"],
       "@tsx/*": ["src/scripts/tsx/*"],
       "@ts/*": ["src/scripts/ts/*"],
-      "@scss/*": ["src/assets/scss/*"],
+      "@scss/*": ["src/scss/*"],
       "@css/*": ["src/assets/css/*"]
     }
   },

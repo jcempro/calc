@@ -1,5 +1,5 @@
-@use '../scss/variables' as *;
-@use '../scss/common' as *;
+@use '../../scss/variables' as *;
+@use '../../scss/common' as *;
 
 label.btb {
 	@include btb(var(--color-icon), rgba(255,255,255,0.2));
