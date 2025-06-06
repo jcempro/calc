@@ -31,6 +31,7 @@ export type TParcelaRecord = {
 	saldoDevedor: TCurrency;
 	data: Date;
 	dias: number;
+	iof: TCurrency;
 };
 
 export class ExtratoCredito extends MetaTuple<TParcelaRecord> {
@@ -41,6 +42,7 @@ export class ExtratoCredito extends MetaTuple<TParcelaRecord> {
 		['saldoDevedor', 'TCurrency'],
 		['data', 'Date'],
 		['dias', 'number'],
+		['iof', 'TCurrency'],
 	];
 	constructor(data?: (Partial<TParcelaRecord> | any[])[]) {
 		super(ExtratoCredito._TParcelaRecordMeta, data);
