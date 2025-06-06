@@ -180,7 +180,7 @@ export abstract class TNumberTypes implements INumberType {
 			}
 
 			this._value = parseFloat(
-				(<MatchWithGroups>m).groups['value'].trim().replaceAll(/,/, '.'),
+				(<MatchWithGroups>m).groups['value'].trim().replace(/,/g, '.'),
 			);
 		} else {
 			throw `'${n}': valor não é válido, '${v}'.`;
