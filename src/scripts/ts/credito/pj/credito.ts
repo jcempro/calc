@@ -1,6 +1,6 @@
 import { validarBoolean } from '../../common/generic.ts';
 
-import { TIOF, TIOFC } from '../../common/interfaces.ts';
+import { TIOF, T_get_nested } from '../../common/interfaces.ts';
 
 import { toDate, TDiaMes } from '../../common/datas.ts';
 import {
@@ -14,6 +14,8 @@ import {
 import { registerType } from '../../common/evalTypes.ts';
 
 import { Meta, MetaTuple } from '../../common/MetaTurple.ts';
+
+import { GET } from '../../common/generic.ts';
 
 //MetaTuple
 registerType('TCurrency', TCurrency);
@@ -79,6 +81,7 @@ export type TDemandaCredito = TCreditoAlvo & {
 	tipo: TSacPrice;
 	jurosNaCarencia: boolean;
 	simplesn: boolean;
+	iof: TIOF;
 };
 
 export type TComputed = {
@@ -130,10 +133,7 @@ export type TRCredito = TDemandaCredito & {
 export function inicializaDemandaCredito(data: any): TDemandaCredito {
 	const obj = typeof data === 'object' && data !== null ? data : {};
 
-	const get = <T>(key: string): T | undefined =>
-		Object.prototype.hasOwnProperty.call(obj, key)
-			? (obj[key] as T)
-			: undefined;
+	const get = <T>(key: T_get_nested): T | undefined => GET(key, obj);
 
 	return {
 		// TCreditoAlvo
@@ -158,6 +158,20 @@ export function inicializaDemandaCredito(data: any): TDemandaCredito {
 			},
 			flat: {
 				v: <TNumberTypes>new TPercent(validarNumero(get<number>('flat'), 0)),
+			},
+		},
+
+		iof: {
+			p: {
+				diario: <TNumberTypes>(
+					new TPercent(validarNumero(get<number>(['iof', 'p', 'diario']), 0))
+				),
+				adicional: <TNumberTypes>(
+					new TPercent(validarNumero(get<number>(['iof', 'p', 'adicional']), 0))
+				),
+				teto: <TNumberTypes>(
+					new TPercent(validarNumero(get<number>(['iof', 'p', 'teto']), 0))
+				),
 			},
 		},
 

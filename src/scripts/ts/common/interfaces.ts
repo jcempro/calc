@@ -32,3 +32,5 @@ export type TIOF = {
 	p: TIOFP;
 	c?: TIOFC;
 };
+
+export type T_get_nested = string | string[];
