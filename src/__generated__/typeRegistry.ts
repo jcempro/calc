@@ -5,7 +5,7 @@ import { IParams, TIOFPartial, TIOF_PJ } from '../scripts/ts/common/params';
 import { Listener, LoadEvent, LoadOptions } from '../scripts/ts/ResourceLoader.types';
 import { MatchWithGroups, TupleFromObjectOrdered } from '../scripts/ts/common/generic';
 import { Meta } from '../scripts/ts/common/MetaTurple';
-import { TComputed, TCreditoAlvo, TCustos, TDemandaCredito, TFinanciado, TFlatTAC, TLiberado, TParcelaRecord, TRCredito } from '../scripts/ts/credito/pj/credito';
+import { TComputed, TCreditoAlvo, TCustos, TDemandaCredito, TFinanciado, TFlatTAC, TLiberado, TParcelaRecord, TRCredito } from '../scripts/ts/credito/credito';
 import { TDate, TDiaMes } from '../scripts/ts/common/datas';
 import { registerType } from '../scripts/ts/common/evalTypes';
 
