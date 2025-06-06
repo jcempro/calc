@@ -105,6 +105,33 @@ export type TRCredito = TDemandaCredito & {
 	computed: TComputed;
 };
 
+export function inicializaIOF(data: any): TIOF {
+	const obj = typeof data === 'object' && data !== null ? data : {};
+	const get = <T>(key: T_get_nested): T | undefined => GET(key, obj);
+
+	return {
+		p: {
+			diario: <TNumberTypes>(
+				new TPercent(validarNumero(get<number>(['p', 'diario']), 0))
+			),
+			adicional: <TNumberTypes>(
+				new TPercent(validarNumero(get<number>(['p', 'adicional']), 0))
+			),
+			teto: <TNumberTypes>(
+				new TPercent(validarNumero(get<number>(['p', 'teto']), 0))
+			),
+		},
+		c: {
+			diario: <TNumberTypes>(
+				new TPercent(validarNumero(get<number>(['c', 'diario']), 0))
+			),
+			adicional: <TNumberTypes>(
+				new TPercent(validarNumero(get<number>(['c', 'adicional']), 0))
+			),
+		},
+	};
+}
+
 /**
  * Inicializa uma instância do tipo `TDemandaCredito` com validações e valores padrão,
  * a partir de um objeto de entrada genérico (`any`). Os campos são validados conforme
@@ -130,6 +157,7 @@ export type TRCredito = TDemandaCredito & {
  * @returns {TDemandaCredito} Um objeto tipado com dados validados e prontos para uso.
  *
  */
+
 export function inicializaDemandaCredito(data: any): TDemandaCredito {
 	const obj = typeof data === 'object' && data !== null ? data : {};
 
@@ -161,19 +189,7 @@ export function inicializaDemandaCredito(data: any): TDemandaCredito {
 			},
 		},
 
-		iof: {
-			p: {
-				diario: <TNumberTypes>(
-					new TPercent(validarNumero(get<number>(['iof', 'p', 'diario']), 0))
-				),
-				adicional: <TNumberTypes>(
-					new TPercent(validarNumero(get<number>(['iof', 'p', 'adicional']), 0))
-				),
-				teto: <TNumberTypes>(
-					new TPercent(validarNumero(get<number>(['iof', 'p', 'teto']), 0))
-				),
-			},
-		},
+		iof: inicializaIOF(obj.iof),
 
 		tipo: validarEnum(
 			get<number>('tipo'),
