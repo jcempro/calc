@@ -1,4 +1,4 @@
-import { MatchWithGroups } from './generic';
+import { HAS, MatchWithGroups } from './generic';
 
 import { INumberType } from './interfaces';
 
@@ -64,8 +64,9 @@ export function tetoPiso(valor: number, min: number, max: number): number {
 }
 
 export enum ENumberIs {
-	percentual = 0,
-	currency = 1,
+	percentual = 1,
+	currency = 2,
+	generic = 3,
 }
 
 export abstract class TNumberTypes implements INumberType {
@@ -137,9 +138,8 @@ export abstract class TNumberTypes implements INumberType {
 	}
 
 	toString(): string {
-		return `${this._markpre}${this._value.toFixed(this.__decimais)}${
-			this._markpos
-		}`;
+		return `${this._markpre}${this._value.toFixed(this.__decimais)}${this._markpos
+			}`;
 	}
 
 	protected s(regex: string): string {
@@ -149,10 +149,10 @@ export abstract class TNumberTypes implements INumberType {
 	protected getRegex(): RegExp {
 		return new RegExp(
 			'^' +
-				(this._markpre ? `(${this.s(this._markpre)})` : '') +
-				`(?<value>[\\d]+([,\\.][\\d]{0,${this.__decimais}})?)` +
-				(this._markpos ? `(${this.s(this._markpos)})` : '') +
-				'$',
+			(this._markpre ? `(?<pre>${this.s(this._markpre)})` : '') +
+			`(?<value>[\\d]+([,\\.][\\d]{0,${this.__decimais}})?)` +
+			(this._markpos ? `(?<pos>${this.s(this._markpos)})` : '') +
+			'$',
 			'd',
 		);
 	}
@@ -179,6 +179,30 @@ export abstract class TNumberTypes implements INumberType {
 				throw `'${n}': valor não é válido, '${v}'.`;
 			}
 
+			this._markpre = this._markpre.length > 0
+				? this._markpre
+				: HAS('pre', (<MatchWithGroups>m).groups)
+					//@ts-ignore
+					? (<MatchWithGroups>m).groups['pre'].trim()
+					: '';
+
+			this._markpos = this._markpos.length > 0
+				? this._markpos
+				: HAS('pos', (<MatchWithGroups>m).groups)
+					//@ts-ignore
+					? (<MatchWithGroups>m).groups['pos'].trim()
+					: '';
+
+			const mark: string = `${this._markpre},${this._markpre}`;
+
+			this._tipo = this._tipo
+				? this._tipo
+				: (mark.match(/[\%]/))
+					? ENumberIs.percentual
+					: (mark.match(/[\$]/))
+						? ENumberIs.currency
+						: ENumberIs.generic;
+
 			this._value = parseFloat(
 				(<MatchWithGroups>m).groups['value'].trim().replace(/,/g, '.'),
 			);
@@ -190,7 +214,7 @@ export abstract class TNumberTypes implements INumberType {
 
 export class TPercent extends TNumberTypes {
 	protected __decimais = 2;
-	protected _markpos = ' %';
+	protected _markpos = '%';
 	protected _markpre = '';
 	_tipo = ENumberIs.percentual;
 }
@@ -198,6 +222,6 @@ export class TPercent extends TNumberTypes {
 export class TCurrency extends TNumberTypes {
 	protected __decimais = 2;
 	protected _markpos = '';
-	protected _markpre = 'R$ ';
+	protected _markpre = '$ ';
 	_tipo = ENumberIs.currency;
 }
