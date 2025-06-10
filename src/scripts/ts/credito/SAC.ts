@@ -54,8 +54,8 @@ export class SAC {
 		this._iof = iof;
 	}
 
-	protected _validKey(obj: any, key: string): boolean {
-		return !(key in obj) || obj[key] === undefined;
+	protected _has(obj: any, key: string): boolean {
+		return HAS(key, obj);		
 	}
 
 	/*
@@ -64,10 +64,10 @@ export class SAC {
 		args: TDemandaCredito,
 	): null | TDemandaCredito => {
 		args.data_operacao = diaUtilOuProx(
-			this._validKey(args, 'data_operacao') ? args.data_operacao : new Date(),
+			this._has(args, 'data_operacao') ? args.data_operacao : new Date(),
 		);
 
-		args.diabase = this._validKey(args, 'diabase')
+		args.diabase = this._has(args, 'diabase')
 			? args.diabase
 			: <numberRange<1, 28>>diaBaseUtilOuProx(args.data_operacao).getDate();
 
