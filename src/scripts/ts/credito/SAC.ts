@@ -1,7 +1,7 @@
 import { IPercent, TIOFP } from '../common/interfaces.ts';
 import { _PRMs_ } from '../common/params.ts';
 import { numberRange, TCurrency, TPercent } from '../common/numbers.ts';
-import { HAS } from '../common/generic.ts';
+import { HAS, PropertyStr } from '../common/generic.ts';
 
 import {
 	diaBaseUtilOuProx,
@@ -21,14 +21,29 @@ import {
 	ExtratoCredito,
 	TComputed,
 	inicializaIOF,
+	//	DemandaCreditoDatas,
+	IDemandaCreditoDatas,
 } from './credito.ts';
+
+type TDiasCount = {
+	lista: [Date, number][];
+	total: number;
+};
+type AsString<T> = T extends string ? T : string;
+
+export class DiasCountCacheRecordkey extends PropertyStr<IDemandaCreditoDatas> {}
+export type TDiasCountCacheRecord = Record<
+	AsString<DiasCountCacheRecordkey>,
+	TDiasCount
+>;
 
 /*
  */
 export class SAC {
 	private _demanda: TDemandaCredito;
 	private _iof: TIOFP;
-	private _diasPorParcela: [Date, number][] = [];
+	private _diasPorParcela: TDiasCount = { lista: {}, total: 0 };
+	private static _cache__diasPorParcela: TDiasCountCacheRecord = {};
 
 	/*
 	 **/
@@ -86,7 +101,7 @@ export class SAC {
 
 	/*
 	 **/
-	protected static _sac = (
+	protected static __sac = (
 		demanda: TDemandaCredito,
 		naoRepetirAmortiza = true,
 	): boolean | TRCredito => {
@@ -124,10 +139,12 @@ export class SAC {
 
 		const amortizacaoConstante =
 			(<TFinanciado>demanda).financiado.value / demanda.prazoMeses;
-		const taxaDiaria = demanda.jurosAm.value / 30; // simplificação: 30 dias no mês
+		const jurosDiario = demanda.jurosAm.value / 30; // simplificação: 30 dias no mês
 
-		for (let i = 0; i <= demanda.prazoMeses; i++) {
-			let car: boolean = i <= demanda.carenciaDias;
+		const datas = this.__gerarDiasPorParcela(demanda);
+
+		for (let j = 0; j <= datas.lista.length; j++) {
+			let car: boolean = j <= demanda.carenciaDias;
 			let jrs: boolean = !car || demanda.jurosNaCarencia;
 
 			/* inicializa com os valores no padrão 0 meses */
@@ -139,44 +156,24 @@ export class SAC {
 			} as unknown as TParcelaRecord;
 
 			/* calcula a data desta parcela */
-			p.data = diaUtilOuProx(
-				i === 0
-					? demanda.data_operacao
-					: <TDate>(
-							proximaDataBase(
-								i > 1
-									? demanda.data_operacao
-									: cmpt.extrato[cmpt.extrato.length - 1].data,
-								demanda.diabase,
-								false,
-							)
-					  ),
-			);
+			p.data = datas.lista[j][0];
 
 			/* calculas os dias decorridos */
-			p.dias =
-				i === 0
-					? 0
-					: diasCorridos(
-							i > 1
-								? demanda.data_operacao
-								: cmpt.extrato[cmpt.extrato.length - 1].data,
-							p.data,
-					  );
+			p.dias = datas.lista[j][1];
 
 			/* calcula parcela */
-			if (i > 0) {
+			if (j > 0) {
 				const sldAnterior =
-					i > 1
+					j > 1
 						? (<TFinanciado>demanda).financiado
 						: cmpt.extrato[cmpt.extrato.length - 1].saldoDevedor;
 
 				p.amortizacao.value = car
 					? 0
-					: (naoRepetirAmortiza = true)
+					: naoRepetirAmortiza
 					? -1 // indica que o valor é o mesmo da parcela 1, evitando redundancia
 					: amortizacaoConstante;
-				p.juros.value = jrs ? sldAnterior * (taxaDiaria * p.dias) : 0;
+				p.juros.value = jrs ? sldAnterior * (jurosDiario * p.dias) : 0;
 
 				p.pagamento.value = amortizacaoConstante + p.juros.value;
 				p.saldoDevedor.value = sldAnterior - p.amortizacao.value;
@@ -206,15 +203,15 @@ export class SAC {
 			let saldoDevedor_diario: number = p.saldoDevedor.value;
 			p.iof.value = 0;
 			for (
-				i = 1;
-				i <= p.dias &&
+				let d = 1;
+				d <= p.dias &&
 				teto > 0 &&
 				cmpt.iof.c &&
 				cmpt.iof.c?.diario.value + p.iof.value + cmpt.iof.c?.adicional.value <
 					teto;
-				i++
+				d++
 			) {
-				saldoDevedor_diario *= demanda.jurosAm.value / 30; // calcula o saldo devedor com base na taxa de juros diária
+				saldoDevedor_diario *= jurosDiario; // calcula o saldo devedor com base na taxa de juros diária
 				p.iof.value += saldoDevedor_diario * <number>cmpt.iof.p?.diario.value;
 			}
 
@@ -225,8 +222,12 @@ export class SAC {
 		return { ...demanda, ...{ computed: cmpt } };
 	};
 
-	protected _gerarDiasPorParcela(): [Date, number][] {
-		if (!this._diasPorParcela || this._diasPorParcela.length === 0) {
+	protected _gerarDiasPorParcela(): TDiasCount {
+		if (
+			!this._diasPorParcela ||
+			!this._diasPorParcela.lista ||
+			this._diasPorParcela.lista.length === 0
+		) {
 			this._diasPorParcela = (
 				this.constructor as typeof SAC
 			).__gerarDiasPorParcela(this._demanda);
@@ -235,59 +236,87 @@ export class SAC {
 		return this._diasPorParcela;
 	}
 
-	protected static __gerarDiasPorParcela(
-		demanda: TDemandaCredito,
-	): [Date, number][] {
-		const dataOperacao = demanda.data_operacao;
+	protected static __gerarDiasPorParcela(demanda: TDemandaCredito): TDiasCount {
+		const cache_key: string = (<String>(
+			new DiasCountCacheRecordkey(<IDemandaCreditoDatas>demanda)
+		)) as string;
 
-		const dataPrimeiroVenc = diaUtilOuProx(
-			new Date(
-				dataOperacao.getFullYear(),
-				dataOperacao.getMonth(),
-				demanda.diabase,
-			),
-		);
+		if (!HAS(<string>cache_key, SAC._cache__diasPorParcela)) {
+			const dataOperacao = demanda.data_operacao;
+			let total_dias = 0;
 
-		let vencimentoBase = new Date(dataPrimeiroVenc);
-		while (diasCorridos(dataOperacao, vencimentoBase) < demanda.carenciaDias) {
-			vencimentoBase.setMonth(vencimentoBase.getMonth() + 1);
-			vencimentoBase = diaUtilOuProx(
+			const dataPrimeiroVenc = diaUtilOuProx(
 				new Date(
-					vencimentoBase.getFullYear(),
-					vencimentoBase.getMonth(),
+					dataOperacao.getFullYear(),
+					dataOperacao.getMonth(),
 					demanda.diabase,
 				),
 			);
+
+			let vencimentoBase = new Date(dataPrimeiroVenc);
+			while (
+				diasCorridos(dataOperacao, vencimentoBase) < demanda.carenciaDias
+			) {
+				vencimentoBase.setMonth(vencimentoBase.getMonth() + 1);
+				vencimentoBase = diaUtilOuProx(
+					new Date(
+						vencimentoBase.getFullYear(),
+						vencimentoBase.getMonth(),
+						demanda.diabase,
+					),
+				);
+			}
+
+			const diasPorParcela: TDiasCount = {
+				lista: [],
+				total: 0,
+			};
+
+			// Primeiro item: [data_operacao, 0]
+			diasPorParcela.lista.push([dataOperacao, 0]);
+
+			// Demais parcelas
+			for (let i = 0; i < demanda.prazoMeses; i++) {
+				const venc = diaUtilOuProx(
+					new Date(
+						vencimentoBase.getFullYear(),
+						vencimentoBase.getMonth() + i,
+						demanda.diabase,
+					),
+				);
+				const dias = diasCorridos(dataOperacao, venc);
+				diasPorParcela.lista.push([venc, dias]);
+				diasPorParcela.total += dias;
+			}
+
+			this._cache__diasPorParcela[cache_key] = diasPorParcela;
 		}
 
-		const diasPorParcela: [Date, number][] = [];
-
-		// Primeiro item: [data_operacao, 0]
-		diasPorParcela.push([dataOperacao, 0]);
-
-		// Demais parcelas
-		for (let i = 0; i < demanda.prazoMeses; i++) {
-			const venc = diaUtilOuProx(
-				new Date(
-					vencimentoBase.getFullYear(),
-					vencimentoBase.getMonth() + i,
-					demanda.diabase,
-				),
-			);
-			diasPorParcela.push([venc, diasCorridos(dataOperacao, venc)]);
-		}
-
-		return diasPorParcela;
+		return this._cache__diasPorParcela[cache_key];
 	}
 
 	// Estratégia de busca binária com estimativa inicial e margem adaptativa
 	// Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
 	public _calcularBrutoNecessario(tolerancia = 0.01, maxIter = 100): number {
-		const diasPorParcela: number[] = this._gerarDiasPorParcela();
+		return (this.constructor as typeof SAC).__calcularBrutoNecessario(
+			this._demanda,
+			tolerancia,
+			maxIter,
+		);
+	}
+
+	// Estratégia de busca binária com estimativa inicial e margem adaptativa
+	// Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
+	public static __calcularBrutoNecessario(
+		demanda: TDemandaCredito,
+		tolerancia = 0.01,
+		maxIter = 100,
+	): number {
+		const diasPorParcela: TDiasCount = SAC.__gerarDiasPorParcela(demanda);
 
 		if (
 			demanda.prazoMeses <= 0 ||
-			diasPorParcela.length !== demanda.prazoMeses
+			diasPorParcela.lista.length !== demanda.prazoMeses
 		) {
 			throw new Error(
 				'Parâmetros inválidos: número de parcelas e dias por parcela devem ser consistentes.',
@@ -295,20 +324,18 @@ export class SAC {
 		}
 
 		// Soma ponderada dos fatores diários
-		const somaFatorIOFdiario = diasPorParcela.reduce(
-			(soma, dias) => soma + dias * this._iof.diario.value,
-			0,
-		);
+		const somaFatorIOFdiario =
+			((demanda.iof.p.diario.value + 1) ^ diasPorParcela.total) - 1;
 
-		const liquidoDesejado = (<TLiberado>this._demanda).liquido.value;
+		const liquidoDesejado = (<TLiberado>demanda).liquido.value;
 
 		const estimativaInicial =
 			liquidoDesejado *
 			(1 +
-				this._demanda.custos.flat.v.value +
-				this._iof.diario.value +
-				this._demanda.custos.tac.v.value +
-				this._iof.adicional.value);
+				demanda.custos.flat.v.value +
+				demanda.iof.p.diario.value +
+				demanda.custos.tac.v.value +
+				demanda.iof.p.adicional.value);
 
 		let brutoMin = estimativaInicial * 0.9;
 		let brutoMax = estimativaInicial * 1.1;
@@ -317,7 +344,7 @@ export class SAC {
 
 		while (iter++ < maxIter) {
 			const bruto = (brutoMin + brutoMax) / 2;
-			const amortizacao = bruto / this._demanda.prazoMeses;
+			const amortizacao = bruto / demanda.prazoMeses;
 
 			let encargoIOFdiario = amortizacao * somaFatorIOFdiario;
 
