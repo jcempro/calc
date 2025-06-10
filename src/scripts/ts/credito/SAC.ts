@@ -80,7 +80,7 @@ export class SAC {
 		if (
 			!HAS(`financiado`, this._demanda) &&
 			!HAS(`liquido`, this._demanda)) {
-			throw `'Liquido' ou 'financiado' devem ser informado.`;
+			throw new Error(`SAC:__sac: É necessário informar 'liquido' ou 'financiado'.`);
 		}
 
 		return HAS(`financiado`, this._demanda)
@@ -178,7 +178,7 @@ export class SAC {
 			cmpt.i.menorParcela = Math.min(cmpt.i.menorParcela, p.pagamento.value);
 
 			const teto: number =
-				HAS('p', cmpt.iof) &&					
+				HAS('p', cmpt.iof) &&
 					HAS('teto', <TIOFP>cmpt.iof.p) &&
 					typeof cmpt.iof.p?.teto !== undefined &&
 					typeof cmpt.iof.p?.teto?.value === 'number'
@@ -388,7 +388,7 @@ export class SAC {
 
 			const clc: boolean | TRCredito = (this.constructor as typeof SAC).__sac(demanda, naoRepetirAmortiza);
 
-			if (!clc) throw 'Falha em executar calculo';
+			if (!clc) throw new Error('Falha em executar calculo');
 
 			const liquidoCalculado: number = (<TLiberado>clc).liquido.value;
 
