@@ -31,7 +31,7 @@ type TDiasCount = {
 };
 type AsString<T> = T extends string ? T : string;
 
-export class DiasCountCacheRecordkey extends PropertyStr<IDemandaCreditoDatas> {}
+export class DiasCountCacheRecordkey extends PropertyStr<IDemandaCreditoDatas> { }
 export type TDiasCountCacheRecord = Record<
 	AsString<DiasCountCacheRecordkey>,
 	TDiasCount
@@ -42,7 +42,7 @@ export type TDiasCountCacheRecord = Record<
 export class SAC {
 	private _demanda: TDemandaCredito;
 	private _iof: TIOFP;
-	private _diasPorParcela: TDiasCount = { lista: {}, total: 0 };
+	private _diasPorParcela: TDiasCount = { lista: [], total: 0 };
 	private static _cache__diasPorParcela: TDiasCountCacheRecord = {};
 
 	/*
@@ -171,8 +171,8 @@ export class SAC {
 				p.amortizacao.value = car
 					? 0
 					: naoRepetirAmortiza
-					? -1 // indica que o valor é o mesmo da parcela 1, evitando redundancia
-					: amortizacaoConstante;
+						? -1 // indica que o valor é o mesmo da parcela 1, evitando redundancia
+						: amortizacaoConstante;
 				p.juros.value = jrs ? sldAnterior * (jurosDiario * p.dias) : 0;
 
 				p.pagamento.value = amortizacaoConstante + p.juros.value;
@@ -188,10 +188,10 @@ export class SAC {
 
 			const teto: number =
 				HAS('p', cmpt.iof) &&
-				//@ts-ignore
-				HAS('teto', cmpt.iof.p) &&
-				typeof cmpt.iof.p?.teto !== undefined &&
-				typeof cmpt.iof.p?.teto?.value === 'number'
+					//@ts-ignore
+					HAS('teto', cmpt.iof.p) &&
+					typeof cmpt.iof.p?.teto !== undefined &&
+					typeof cmpt.iof.p?.teto?.value === 'number'
 					? cmpt.iof.p.teto?.value * (<TFinanciado>demanda).financiado.value
 					: -1;
 
@@ -208,7 +208,7 @@ export class SAC {
 				teto > 0 &&
 				cmpt.iof.c &&
 				cmpt.iof.c?.diario.value + p.iof.value + cmpt.iof.c?.adicional.value <
-					teto;
+				teto;
 				d++
 			) {
 				saldoDevedor_diario *= jurosDiario; // calcula o saldo devedor com base na taxa de juros diária
@@ -350,17 +350,21 @@ export class SAC {
 
 			// Aplica teto do IOF se definido
 			if (
-				'teto' in this._iof &&
-				typeof this._iof.teto !== undefined &&
-				typeof this._iof.teto?.value === 'number'
+				'teto' in demanda.iof &&
+				typeof demanda.iof.p.teto !== undefined &&
+				typeof demanda.iof.p.teto?.value === 'number'
 			) {
 				encargoIOFdiario = Math.min(
 					encargoIOFdiario,
-					bruto * this._iof.teto.value,
+					bruto * demanda.iof.p.teto.value,
 				);
 			}
 
-			const liquidoCalculado = this._simularDescontos(bruto, diasPorParcela);
+			const clc: boolean | TRCredito = (this.constructor as typeof SAC).__sac(demanda);
+
+			if (!clc) throw 'Falha em executar calculo';
+
+			const liquidoCalculado: number = (<TLiberado>clc).liquido.value;
 
 			const erro = liquidoCalculado - liquidoDesejado;
 			const toleranciaRelativa = Math.max(tolerancia, bruto * 0.0001);
