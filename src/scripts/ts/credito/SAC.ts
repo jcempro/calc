@@ -99,6 +99,22 @@ export class SAC {
 		return bruto - descontosTotais;
 	}
 
+	public _sac = (
+		naoRepetirAmortiza = true,
+	): boolean | TRCredito => {
+		if (
+			!HAS(`financiado`, this._demanda) &&
+			!HAS(`liquido`, this._demanda)) {
+			throw `'Liquido' ou 'financiado' devem ser informado.`;
+		}
+
+		return HAS(`financiado`, this._demanda)
+			? (this.constructor as typeof SAC).__sac(this._demanda, naoRepetirAmortiza)
+			: HAS(`liquido`, this._demanda)
+				? this._decobreBrutoNecessarioECalcula(naoRepetirAmortiza)
+				: false;
+	}
+
 	/*
 	 **/
 	protected static __sac = (
@@ -297,9 +313,10 @@ export class SAC {
 
 	// Estratégia de busca binária com estimativa inicial e margem adaptativa
 	// Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
-	public _calcularBrutoNecessario(tolerancia = 0.01, maxIter = 100): number {
-		return (this.constructor as typeof SAC).__calcularBrutoNecessario(
+	public _decobreBrutoNecessarioECalcula(naoRepetirAmortiza = true, tolerancia = 0.01, maxIter = 100): boolean | TRCredito {
+		return (this.constructor as typeof SAC).__decobreBrutoNecessarioECalcula(
 			this._demanda,
+			naoRepetirAmortiza,
 			tolerancia,
 			maxIter,
 		);
@@ -307,11 +324,12 @@ export class SAC {
 
 	// Estratégia de busca binária com estimativa inicial e margem adaptativa
 	// Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
-	public static __calcularBrutoNecessario(
+	public static __decobreBrutoNecessarioECalcula(
 		demanda: TDemandaCredito,
+		naoRepetirAmortiza = true,
 		tolerancia = 0.01,
 		maxIter = 100,
-	): number {
+	): boolean | TRCredito {
 		const diasPorParcela: TDiasCount = SAC.__gerarDiasPorParcela(demanda);
 
 		if (
@@ -360,7 +378,7 @@ export class SAC {
 				);
 			}
 
-			const clc: boolean | TRCredito = (this.constructor as typeof SAC).__sac(demanda);
+			const clc: boolean | TRCredito = (this.constructor as typeof SAC).__sac(demanda, naoRepetirAmortiza);
 
 			if (!clc) throw 'Falha em executar calculo';
 
@@ -370,7 +388,7 @@ export class SAC {
 			const toleranciaRelativa = Math.max(tolerancia, bruto * 0.0001);
 
 			if (Math.abs(erro) < toleranciaRelativa) {
-				return bruto;
+				return clc;
 			}
 
 			const margem = Math.max(
