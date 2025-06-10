@@ -178,9 +178,8 @@ export class SAC {
 			cmpt.i.menorParcela = Math.min(cmpt.i.menorParcela, p.pagamento.value);
 
 			const teto: number =
-				HAS('p', cmpt.iof) &&
-					//@ts-ignore
-					HAS('teto', cmpt.iof.p) &&
+				HAS('p', cmpt.iof) &&					
+					HAS('teto', <TIOFP>cmpt.iof.p) &&
 					typeof cmpt.iof.p?.teto !== undefined &&
 					typeof cmpt.iof.p?.teto?.value === 'number'
 					? cmpt.iof.p.teto?.value * (<TFinanciado>demanda).financiado.value
