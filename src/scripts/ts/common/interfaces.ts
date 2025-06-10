@@ -34,3 +34,7 @@ export type TIOF = {
 };
 
 export type T_get_nested = string | string[];
+
+// usando um alias de tipo e mapped type — a maneira mais flexível
+export type RecordT<T> = Record<PropertyKey, T>;
+export type TOBJ = RecordT<any>;

@@ -71,18 +71,22 @@ export type TCustos = {
 	tac: TFlatTAC;
 };
 
-export type TDemandaCredito = TCreditoAlvo & {
+export interface IDemandaCreditoDatas {
 	data_operacao: Date;
 	diabase: TDiaMes;
-	jurosAm: TPercent;
 	prazoMeses: number;
-	carenciaDias: number;
-	custos: TCustos;
-	tipo: TSacPrice;
-	jurosNaCarencia: boolean;
-	simplesn: boolean;
-	iof: TIOF;
-};
+}
+
+export type TDemandaCredito = TCreditoAlvo &
+	IDemandaCreditoDatas & {
+		jurosAm: TPercent;
+		carenciaDias: number;
+		custos: TCustos;
+		tipo: TSacPrice;
+		jurosNaCarencia: boolean;
+		simplesn: boolean;
+		iof: TIOF;
+	};
 
 export type TComputed = {
 	diasUteis: number;
