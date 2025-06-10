@@ -1,4 +1,4 @@
-import { validarBoolean } from '../common/generic.ts';
+import { HAS, validarBoolean } from '../common/generic.ts';
 
 import { TIOF, T_get_nested } from '../common/interfaces.ts';
 
@@ -9,6 +9,7 @@ import {
 	TCurrency,
 	TPercent,
 	TNumberTypes,
+	ENumberIs,
 } from '../common/numbers.ts';
 
 import { registerType } from '../common/evalTypes.ts';
@@ -209,4 +210,26 @@ export function inicializaDemandaCredito(data: any): TDemandaCredito {
 		jurosNaCarencia: validarBoolean(get<unknown>('jurosNaCarencia'), false),
 		simplesn: false,
 	};
+}
+
+
+export function calcFlatTAC(bruto: TNumberTypes, source: TFlatTAC, caller: string, tipo: `TAC` | `FLAT`): TCurrency {
+	let r: TCurrency = new TCurrency(
+		source.v.tipo === ENumberIs.currency
+			? source.v.value
+			: source.v.tipo === ENumberIs.percentual
+				? source.v.value * bruto.value
+				: ((): number => { throw `${caller}->calcFlatTAC: ${tipo} não é percentual nem moeda.` })()
+	);
+
+	if (HAS(`teto`, source)) {
+		const t: TNumberTypes = (<TFlatTAC_full>source).teto
+		if ((t.tipo === ENumberIs.currency) && r.value > t.value) {
+			r.value = t.value;
+		} else if ((t.tipo === ENumberIs.percentual) && (r.value > (t.value * bruto.value))) {
+			r.value = (t.value * bruto.value);
+		}
+	}
+
+	return r;
 }
