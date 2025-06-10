@@ -55,7 +55,7 @@ export class SAC {
 	}
 
 	protected _has(obj: any, key: string): boolean {
-		return HAS(key, obj);		
+		return HAS(key, obj);
 	}
 
 	/*
@@ -162,7 +162,7 @@ export class SAC {
 				p.amortizacao.value = car
 					? 0
 					: naoRepetirAmortiza
-						? -1 // indica que o valor é o mesmo da parcela 1, evitando redundancia
+						? -1 // indica que o valor é o mesmo da parcela 1, evitando replicação do mesmo valor
 						: amortizacaoConstante;
 				p.juros.value = jrs ? sldAnterior * (jurosDiario * p.dias) : 0;
 
@@ -201,10 +201,11 @@ export class SAC {
 				teto;
 				d++
 			) {
-				saldoDevedor_diario *= jurosDiario; // calcula o saldo devedor com base na taxa de juros diária
+				saldoDevedor_diario *= (jurosDiario + 1); // calcula o saldo devedor com base na taxa de juros diária
 				p.iof.value += saldoDevedor_diario * <number>cmpt.iof.p?.diario.value;
-				cmpt.iof.c.diario.value += p.iof.value;
 			}
+
+			(<TIOF_full>cmpt.iof).c.diario.value += p.iof.value;
 
 			/* adicionado */
 			cmpt.extrato.push(p);
