@@ -1,6 +1,6 @@
 import { HAS, validarBoolean } from '../common/generic.ts';
 
-import { TIOF, T_get_nested } from '../common/interfaces.ts';
+import { TIOF, TIOFP, TTeto, TTeto_full, T_get_nested } from '../common/interfaces.ts';
 
 import { toDate, TDiaMes } from '../common/datas.ts';
 import {
@@ -62,12 +62,11 @@ export type TFinanciado = {
 
 export type TCreditoAlvo = TFinanciado | TLiberado | (TFinanciado & TLiberado);
 
-export type TFlatTAC = {
+export type TFlatTAC = TTeto & {
 	v: TNumberTypes;
-	teto?: TCurrency;
 };
 
-export type TFlatTAC_full = {
+export type TFlatTAC_full = TTeto_full & {
 	v: TNumberTypes;
 	teto: TCurrency;
 };
@@ -213,12 +212,16 @@ export function inicializaDemandaCredito(data: any): TDemandaCredito {
 }
 
 
-export function calcFlatTAC(bruto: TNumberTypes, source: TFlatTAC, caller: string, tipo: `TAC` | `FLAT`): TCurrency {
+export function calcFlatTacIof(bruto: TNumberTypes, source: TFlatTAC | TIOFP, caller: string, tipo: `TAC` | `FLAT` | `IOF`): TCurrency {
+	const valor: TNumberTypes = HAS('v', source)
+		? (<TFlatTAC>source).v
+		: (<TIOFP>source).adicional as TNumberTypes
+
 	let r: TCurrency = new TCurrency(
-		source.v.tipo === ENumberIs.currency
-			? source.v.value
-			: source.v.tipo === ENumberIs.percentual
-				? source.v.value * bruto.value
+		valor.tipo === ENumberIs.currency
+			? valor.value
+			: valor.tipo === ENumberIs.percentual
+				? valor.value * bruto.value
 				: ((): number => { throw `${caller}->calcFlatTAC: ${tipo} não é percentual nem moeda.` })()
 	);
 
