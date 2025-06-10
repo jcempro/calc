@@ -66,6 +66,11 @@ export type TFlatTAC = {
 	teto?: TCurrency;
 };
 
+export type TFlatTAC_full = {
+	v: TNumberTypes;
+	teto: TCurrency;
+};
+
 export type TCustos = {
 	flat: TFlatTAC;
 	tac: TFlatTAC;
