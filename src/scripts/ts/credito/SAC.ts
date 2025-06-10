@@ -1,6 +1,6 @@
-import { IPercent, TIOFP } from '../common/interfaces.ts';
+import { IPercent, TIOF_full, TIOFP } from '../common/interfaces.ts';
 import { _PRMs_ } from '../common/params.ts';
-import { numberRange, TCurrency, TPercent } from '../common/numbers.ts';
+import { ENumberIs, numberRange, TCurrency, TNumberTypes, TPercent } from '../common/numbers.ts';
 import { HAS, PropertyStr } from '../common/generic.ts';
 
 import {
@@ -23,6 +23,8 @@ import {
 	inicializaIOF,
 	//	DemandaCreditoDatas,
 	IDemandaCreditoDatas,
+	TFlatTAC_full,
+	calcFlatTacIof,
 } from './credito.ts';
 
 type TDiasCount = {
@@ -71,34 +73,7 @@ export class SAC {
 
 		return args;
 	};
-
-	private _simularDescontos(bruto: number, diasPorParcela: number[]): number {
-		const amortizacao = bruto / this._demanda.prazoMeses;
-		const encargoFlat = bruto * this._demanda.custos.flat.v.value;
-
-		let encargoIOFdiario =
-			amortizacao *
-			diasPorParcela.reduce(
-				(soma, dias) => soma + dias * this._iof.diario.value,
-				0,
-			);
-
-		if ('teto' in this._iof && typeof this._iof.teto?.value === 'number') {
-			encargoIOFdiario = Math.min(
-				encargoIOFdiario,
-				bruto * this._iof.teto.value,
-			);
-		}
-
-		const descontosTotais =
-			this._demanda.custos.tac.v.value +
-			encargoFlat +
-			this._iof.adicional.value +
-			encargoIOFdiario;
-
-		return bruto - descontosTotais;
-	}
-
+	
 	public _sac = (
 		naoRepetirAmortiza = true,
 	): boolean | TRCredito => {
@@ -145,7 +120,7 @@ export class SAC {
 					teto: <IPercent>demanda.iof.p.teto
 						? <IPercent>demanda.iof.p.teto
 						: new TPercent(0),
-				},
+				}
 			}),
 			custos: {
 				flat: { v: new TCurrency(0) },
@@ -229,11 +204,45 @@ export class SAC {
 			) {
 				saldoDevedor_diario *= jurosDiario; // calcula o saldo devedor com base na taxa de juros diária
 				p.iof.value += saldoDevedor_diario * <number>cmpt.iof.p?.diario.value;
+				cmpt.iof.c.diario.value += p.iof.value;
 			}
 
 			/* adicionado */
 			cmpt.extrato.push(p);
 		}
+
+		/* aqui calculamos a tac */
+		cmpt.custos.tac.v = calcFlatTacIof(
+			demanda.financiado,
+			demanda.custos.tac,
+			`SAC::__sac`,
+			`TAC`
+		);
+
+		/* aqui calculamos a flat */
+		cmpt.custos.flat.v = calcFlatTacIof(
+			demanda.financiado,
+			demanda.custos.flat,
+			`SAC::__sac`,
+			`FLAT`
+		);
+
+		/* aqui calculamos a IOF */
+		(<TIOF_full>cmpt.iof).c.adicional = calcFlatTacIof(
+			demanda.financiado as TCurrency,
+			demanda.iof.p,
+			`SAC::__sac`,
+			`IOF`
+		);
+
+		/* aqui calculamos o valor líquido */
+		(<TLiberado>demanda).liquido.value =
+			demanda.financiado.value
+			- (<TIOF_full>cmpt.iof).c.diario.value
+			- (<TIOF_full>cmpt.iof).c.adicional.value
+			- cmpt.custos.flat.v.value
+			- cmpt.custos.tac.v.value
+			;
 
 		return { ...demanda, ...{ computed: cmpt } };
 	};
