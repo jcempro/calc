@@ -33,6 +33,11 @@ export type TIOF = {
 	c?: TIOFC;
 };
 
+export type TIOF_full = {
+	p: TIOFP;
+	c: TIOFC;
+};
+
 export type T_get_nested = string | string[];
 
 // usando um alias de tipo e mapped type — a maneira mais flexível
