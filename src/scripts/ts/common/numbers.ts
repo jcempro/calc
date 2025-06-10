@@ -157,6 +157,10 @@ export abstract class TNumberTypes implements INumberType {
 		);
 	}
 
+	public get tipo(): ENumberIs {
+		return this._tipo;
+	}
+
 	public get value(): number {
 		return this._value;
 	}
