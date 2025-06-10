@@ -73,7 +73,7 @@ export class SAC {
 
 		return args;
 	};
-	
+
 	public _sac = (
 		naoRepetirAmortiza = true,
 	): boolean | TRCredito => {
@@ -155,7 +155,7 @@ export class SAC {
 			/* calcula parcela */
 			if (j > 0) {
 				const sldAnterior =
-					j > 1
+					j === 1
 						? (<TFinanciado>demanda).financiado
 						: cmpt.extrato[cmpt.extrato.length - 1].saldoDevedor;
 
