@@ -28,7 +28,7 @@ import {
 export class SAC {
 	private _demanda: TDemandaCredito;
 	private _iof: TIOFP;
-	private _diasPorParcela: [Date, number] = [0, 0];
+	private _diasPorParcela: [Date, number][] = [];
 
 	/*
 	 **/
@@ -225,7 +225,7 @@ export class SAC {
 		return { ...demanda, ...{ computed: cmpt } };
 	};
 
-	protected _gerarDiasPorParcela(): [Date, number] {
+	protected _gerarDiasPorParcela(): [Date, number][] {
 		if (!this._diasPorParcela || this._diasPorParcela.length === 0) {
 			this._diasPorParcela = (
 				this.constructor as typeof SAC
