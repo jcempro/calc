@@ -117,8 +117,8 @@ export class SAC {
 				p: {
 					adicional: demanda.iof.p.adicional,
 					diario: demanda.iof.p.diario,
-					teto: <IPercent>demanda.iof.p.teto
-						? <IPercent>demanda.iof.p.teto
+					teto: <TPercent>demanda.iof.p.teto
+						? <TPercent>demanda.iof.p.teto
 						: new TPercent(0),
 				}
 			}),
