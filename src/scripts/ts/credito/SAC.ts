@@ -262,9 +262,7 @@ export class SAC {
 	}
 
 	protected static __gerarDiasPorParcela(demanda: TDemandaCredito): TDiasCount {
-		const cache_key: string = (<String>(
-			new DiasCountCacheRecordkey(<IDemandaCreditoDatas>demanda)
-		)) as string;
+		const cache_key = String(new DiasCountCacheRecordkey(demanda));
 
 		if (!HAS(<string>cache_key, SAC._cache__diasPorParcela)) {
 			const dataOperacao = demanda.data_operacao;
