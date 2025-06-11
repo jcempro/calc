@@ -1,12 +1,5 @@
 {
 	"editor.tabSize": 2,
 	"editor.insertSpaces": true,
-	"todo-tree.regex.regex": "(//|#|<!--|/\\*|^\\s*\\*)\\s*($TAGS)",
-	"recommendations": [
-		"dbaeumer.vscode-eslint",
-		"esbenp.prettier-vscode",
-		"gruntfuggly.todo-tree",
-		"esbenp.prettier-vscode",
-		"antfu.vite"
-	]
+	"todo-tree.regex.regex": "(//|#|<!--|/\\*|^\\s*\\*)\\s*($TAGS)"
 }
