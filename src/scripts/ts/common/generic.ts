@@ -15,7 +15,12 @@ export function validarBoolean(valor: any, padrao: boolean): boolean {
 }
 
 export const HAS = (key: string, f: object): boolean =>
-	Object.prototype.hasOwnProperty.call(f, key) || key in f;
+	(
+		(key in f) ||
+		Object.prototype.hasOwnProperty.call(f, key)
+	) &&
+	//@ts-ignore
+	(f[key] !== undefined);
 
 export const GET = <T>(
 	key: T_get_nested,
