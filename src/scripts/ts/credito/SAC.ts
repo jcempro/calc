@@ -134,7 +134,7 @@ export class SAC {
 
 		const datas = this.__gerarDiasPorParcela(demanda);
 
-		for (let j = 0; j <= datas.lista.length; j++) {
+		for (let j = 0; j < datas.lista.length; j++) {
 			let car: boolean = j <= demanda.carenciaDias;
 			let jrs: boolean = !car || demanda.jurosNaCarencia;
 
