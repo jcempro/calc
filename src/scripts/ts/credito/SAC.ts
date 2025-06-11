@@ -148,7 +148,17 @@ export class SAC {
 		};
 
 		let iofTetoAtingido: boolean = false;
-		let iofTotal: number = 0;
+
+		/* CALCULAMOS O IOF FIXO (ADICIONAL) */
+		(<TIOF_full>cmpt.iof).c.adicional = calcFlatTacIof(
+			demanda.financiado as TCurrency,
+			demanda.iof.p,
+			`SAC::__sac`,
+			`IOF`
+		);
+
+		/* INICIALIZAMOS A SOMA TOTAL PARA COMPARAÇÃO E CONTABILIZAÇ!AO LIMITE */
+		let iofTotal: number = (<TIOF_full>cmpt.iof).c.adicional.value;/* aqui calculamos a IOF adiciona fixo*/
 
 		const amortizacaoConstante =
 			(<TFinanciado>demanda).financiado.value / demanda.prazoMeses;
@@ -207,22 +217,14 @@ export class SAC {
 					? cmpt.iof.p.teto?.value * (<TFinanciado>demanda).financiado.value
 					: -1;
 
-			/* aqui calculamos a IOF adiciona fixo*/
-			(<TIOF_full>cmpt.iof).c.adicional = calcFlatTacIof(
-				demanda.financiado as TCurrency,
-				demanda.iof.p,
-				`SAC::__sac`,
-				`IOF`
-			);
-
-			/*
-			 * calcula o IOF diária, sobre o saldo devedor de cada dia
-			 * limitado ao teto máximo de IOF na operação (adiciona+diário)
-			 * se existir
-			 * 
-			 * IOF_total = saldoInicial × taxaIOF × ((1 + jurosDiario)^diasCorridos - 1) / jurosDiario
-			 */
 			if (!iofTetoAtingido) {
+				/*
+				 * calcula o IOF diária, sobre o saldo devedor de cada dia
+				 * limitado ao teto máximo de IOF na operação (adiciona+diário)
+				 * se existir
+				 * 
+				 * IOF_total = saldoInicial × taxaIOF × ((1 + jurosDiario)^diasCorridos - 1) / jurosDiario
+				 */
 				const iofDiario: number =
 					p.saldoDevedor.value
 					* <number>cmpt.iof.p?.diario.value
@@ -245,10 +247,11 @@ export class SAC {
 
 				p.iof.value =
 					(iofTetoAtingido)
-						? Math.abs(iofLimitado - iofTotal)
+						? Math.abs(iofLimitado - iofTotal)// a diferença entre o teto e o que tinhamos antes
 						: p.iof.value = iofDiario;
 
 				(<TIOF_full>cmpt.iof).c.diario.value += p.iof.value;
+				iofTotal += p.iof.value;
 			}
 
 			/* adicionado */
