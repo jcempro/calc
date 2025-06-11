@@ -1,5 +1,8 @@
 // Tipos utilitários
 
+import { getProp, HAS } from './generic';
+import { RecordT } from './interfaces';
+
 /**
  * Representa um construtor de classe.
  */
@@ -8,7 +11,7 @@ export type Constructor<T = any> = new (...args: any[]) => T;
 /**
  * Tipo primitivo ou classe instanciável.
  */
-export type TypeHint = Constructor | string | number | symbol;
+export type TypeHint = Constructor | PropertyKey;
 
 /**
  * Pode ser um tipo simples, um array homogêneo (ex: ['Pessoa']) ou uma tupla (ex: ['string', 'number']).
@@ -58,56 +61,64 @@ const _typeRegistry = new Map<string, TTypeDefs>();
  * });
  */
 type RegisterTypeArgs =
-	{ name: string; tipo: TypeHint; fieldTypes?: TFieldType } |
-	{ name: string; fieldTypes: TFieldType };
+	| {
+			name: string;
+			tipo: TypeHint | PropertyKey[];
+			fieldTypes?: TFieldType | TFieldType[];
+	  }
+	| { name: string; fieldTypes: TFieldType };
 
 export function registerType(
 	name_args: string | RegisterTypeArgs,
-	tipo?: TypeHint,
-	fieldTypes?: TFieldType
+	tipo?: TypeHint | PropertyKey[],
+	fieldTypes?: TFieldType | TFieldType[],
 ): void {
 	if (
-		(
-			(typeof name_args !== `string`) &&
-			(typeof name_args !== `object`)
-		) ||
-		(
-			(typeof name_args === `object`) &&
-			(!('tipo' in name_args)) &&
-			(!('fieldTypes' in name_args))
-		)
+		(typeof name_args !== `string` && typeof name_args !== `object`) ||
+		(typeof name_args === `object` &&
+			!('tipo' in name_args) &&
+			!('fieldTypes' in name_args))
 	) {
 		throw `error`;
 	}
 
-	const def: TTypeDefs =
-	{
-		...
-		{
-			name:
-				tipo
-					? tipo
-					: (typeof name_args === `object`) && ('tipo' in name_args)
-						? name_args.tipo
-						: typeof name_args === `string`
-							? name_args
-							: ((): string => {
-								throw `registerType: não foi possível definir o 'name' com o parametros ${name_args}.`;
-							})()
-		}
-		,
-		...(
-			(fieldTypes
-				|| (
-					'fieldTypes' in <RegisterTypeArgs>name_args
-					&& (<RegisterTypeArgs>name_args).fieldTypes)
-			)
-				? { detalhe: fieldTypes ? fieldTypes : (<RegisterTypeArgs>name_args).fieldTypes }
-				: {}
-		)
-	}
+	const _tipo: TypeHint[] = (() => {
+		const t = getProp<TypeHint | PropertyKey[]>(
+			'tipo',
+			<RecordT<any>>name_args,
+			<TypeHint | PropertyKey[]>tipo,
+		);
 
-	_typeRegistry.set(def.name as string, def);
+		return Array.isArray(t) ? t : [t];
+	})();
+
+	const _fieldTypes: TFieldType[] = (() => {
+		const t = getProp<TFieldType | TFieldType[]>(
+			'fieldTypes',
+			<RecordT<any>>name_args,
+			<TFieldType | TFieldType[]>fieldTypes,
+		);
+
+		return Array.isArray(t) ? t : [t];
+	})();
+
+	for (let k = 0; k < _tipo.length; k++) {
+		const def: TTypeDefs = {
+			...{
+				name: _tipo[k],
+			},
+			...(_fieldTypes && _fieldTypes.length > 0
+				? {
+						detalhe:
+							_fieldTypes.length === _tipo.length
+								? _fieldTypes[k]
+								: _fieldTypes[0],
+				  }
+				: {}),
+		};
+
+		_typeRegistry.set(def.name as string, def);
+	}
 }
 
 /**
@@ -126,7 +137,11 @@ function convertPrimitive(type: TypeHint | TypeHint[], value: any): any {
 		case 'number':
 			return Number(value);
 		case 'boolean':
-			return Boolean(value);
+			return (
+				`${value}`.trim().toLocaleLowerCase() === 'true' ||
+				value === true ||
+				value === 1
+			);
 		case 'Date':
 			return new Date(value);
 		case 'object':
