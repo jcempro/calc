@@ -74,7 +74,7 @@ export class SAC {
 		return args;
 	};
 
-	public _sac = (
+	public calc = (
 		naoRepetirAmortiza = true,
 	): boolean | TRCredito => {
 		if (
