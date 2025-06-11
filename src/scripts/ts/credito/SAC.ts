@@ -413,7 +413,7 @@ export class SAC {
 		}
 
 		throw new Error(
-			'Não convergiu para o valor bruto dentro das iterações máximas.',
+			`__decobreBrutoNecessarioECalcula: Não convergiu após ${maxIter} iterações.`
 		);
 	}
 }
