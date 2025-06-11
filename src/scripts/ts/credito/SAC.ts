@@ -180,7 +180,7 @@ export class SAC {
 			const teto: number =
 				HAS('p', cmpt.iof) &&
 					HAS('teto', <TIOFP>cmpt.iof.p) &&
-					typeof cmpt.iof.p?.teto !== undefined &&
+					typeof cmpt.iof.p?.teto !== 'undefined' &&
 					typeof cmpt.iof.p?.teto?.value === 'number'
 					? cmpt.iof.p.teto?.value * (<TFinanciado>demanda).financiado.value
 					: -1;
@@ -378,7 +378,7 @@ export class SAC {
 			// Aplica teto do IOF se definido
 			if (
 				'teto' in demanda.iof &&
-				typeof demanda.iof.p.teto !== undefined &&
+				typeof demanda.iof.p.teto !== 'undefined' &&
 				typeof demanda.iof.p.teto?.value === 'number'
 			) {
 				encargoIOFdiario = Math.min(
