@@ -3,52 +3,98 @@ import preact from '@preact/preset-vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
+import { transformWithEsbuild } from 'vite';
 
 // Resolve caminho para ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Executa script auxiliar antes do build/dev
-try {
-	execSync('ts-node --esm scripts/generate-type-metadata.ts', {
-		stdio: 'inherit',
-	});
-} catch (err) {
-	console.error(
-		'[vite.config.ts] Erro ao executar generate-type-metadata.ts:',
-		err,
-	);
+// Função para executar o script de geração de tipos
+const runTypeGeneration = (env = 'development') => {
+	try {
+		execSync('tsx ./scripts/generate-type-metadata.ts', {
+			stdio: 'inherit',
+			env: {
+				...process.env,
+				NODE_ENV: env,
+			},
+		});
+	} catch (err) {
+		console.error('❌ Erro ao gerar metadata:', err);
+		if (env === 'development') process.exit(1);
+		throw err; // Propaga o erro no buildStart
+	}
+};
+
+// Executa durante a configuração (apenas em dev)
+if (process.env.NODE_ENV !== 'production') {
+	runTypeGeneration('development');
 }
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
 	plugins: [
 		preact(),
 		{
 			name: 'generate-type-registry',
 			buildStart() {
-				console.log('🔄 Gerando typeRegistry.ts...');
-				execSync('node ./scripts/generate-type-metadata.ts', {
-					stdio: 'inherit',
-				});
+				if (mode === 'production') {
+					runTypeGeneration('production');
+				}
+			},
+			handleHotUpdate({ file }) {
+				if (file.includes('generate-type-metadata.ts')) {
+					runTypeGeneration('development');
+				}
+			},
+		},
+		{
+			name: 'file-line-transform',
+			enforce: 'pre',
+			async transform(code, id) {
+				if (!/node_modules/.test(id) && /\.(tsx?|jsx?)$/.test(id)) {
+					const originalFile = JSON.stringify(id);
+					const transformedCode = code.replace(
+						/__FILE_LINE__/g,
+						`{ file: ${originalFile}, line: new Error().stack?.split('\\n')[1]?.match(/:\\d+:\\d+\\)?$/)?.[0]?.replace(/[^\\d]/g, '') || '0' }`,
+					);
+
+					if (mode === 'production') {
+						return transformWithEsbuild(transformedCode, id, {
+							loader: 'ts',
+							minify: true,
+							keepNames: true,
+						});
+					}
+
+					return { code: transformedCode, map: null };
+				}
 			},
 		},
 	],
 	build: {
 		outDir: 'dist/www',
 		minify: 'esbuild',
+		sourcemap: true,
 		rollupOptions: {
 			input: 'src/index.html',
 		},
 	},
 	esbuild: {
-		drop: ['console', 'debugger'],
-		minifyIdentifiers: true,
-		minifySyntax: true,
-		minifyWhitespace: true,
+		drop: mode === 'production' ? ['console', 'debugger'] : [],
+		minifyIdentifiers: mode === 'production',
+		minifySyntax: mode === 'production',
+		minifyWhitespace: mode === 'production',
+	},
+	define: {
+		__DEV__: mode !== 'production',
+		__FILE_LINE__:
+			mode === 'production'
+				? '{ file: "production", line: "0" }'
+				: '{ file: import.meta.url, line: new Error().stack?.split("\\n")[1]?.match(/\\d+/)?.[0] || "0" }',
 	},
 	server: {
 		watch: {
-			ignored: ['!**/__generated__/typeRegistry.ts'], // não ignorar este arquivo
+			ignored: ['!**/__generated__/typeRegistry.ts'],
 		},
 	},
 	resolve: {
@@ -67,5 +113,15 @@ export default defineConfig({
 		environment: 'jsdom',
 		setupFiles: './test/.setup.ts',
 		include: ['test/**/*.{ts,tsx}', 'src/**/*.test.{ts,tsx}'],
+		coverage: {
+			provider: 'v8',
+			reporter: ['text', 'json', 'html'],
+		},
+		deps: {
+			inline: ['@preact/preset-vite'],
+		},
+		env: {
+			NODE_ENV: 'test',
+		},
 	},
-});
+}));
