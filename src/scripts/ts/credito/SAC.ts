@@ -208,7 +208,7 @@ export class SAC {
 			 * limitado ao teto máximo de IOF na operação (adiciona+diário)
 			 * se existir
 			 * 
-			 * IOF_total = saldoInicial × taxaIOF × ((1 + jurosDiario)^n - 1) / jurosDiario
+			 * IOF_total = saldoInicial × taxaIOF × ((1 + jurosDiario)^diasCorridos - 1) / jurosDiario
 			 */
 			p.iof.value =
 				p.saldoDevedor.value
