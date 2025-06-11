@@ -1,12 +1,14 @@
-type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+import { __DEV__ } from '../types/globals';
 
-interface LogContext {
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+
+export interface LogContext {
 	file: string;
 	line: string;
 	timestamp: number;
 }
 
-class Logger {
+export class Logger {
 	private static getCallerInfo(): LogContext {
 		const stack = new Error().stack?.split('\n') || [];
 		const callerLine = stack[3] || '';
@@ -21,14 +23,14 @@ class Logger {
 		};
 	}
 
-	static log(level: LogLevel, message: string, data?: any) {
+	static log(level: LogLevel, message: string, data?: any): string {
 		if (__DEV__) {
 			// Modo desenvolvimento - mostra informações detalhadas
 			const { file, line } = this.getCallerInfo();
-			console[level](
-				`[${level.toUpperCase()}] ${file}:${line} - ${message}`,
-				data || '',
-			);
+			const str = `[${level.toUpperCase()}] ${file}:${line} - ${message}`;
+			console[level](str, data || '');
+
+			return str;
 		} else {
 			// Modo produção - mensagem compacta com ID único
 			const errorId = Math.random().toString(36).substring(2, 8);
@@ -40,6 +42,8 @@ class Logger {
 				data,
 				...this.getCallerInfo(),
 			});
+
+			return message;
 		}
 	}
 
@@ -49,23 +53,26 @@ class Logger {
 		// fetch('/api/log', { method: 'POST', body: JSON.stringify({ id, ...payload }) });
 	}
 
-	static debug(message: string, data?: any) {
-		this.log('debug', message, data);
+	static debug(message: string, data?: any): string {
+		return this.log('debug', message, data);
 	}
 
-	static info(message: string, data?: any) {
-		this.log('info', message, data);
+	static info(message: string, data?: any): string {
+		return this.log('info', message, data);
 	}
 
-	static warn(message: string, data?: any) {
-		this.log('warn', message, data);
+	static warn(message: string, data?: any): string {
+		return this.log('warn', message, data);
 	}
 
-	static error(message: string | Error, data?: any) {
+	static error(message: string | Error, data?: any): string {
 		if (message instanceof Error) {
-			this.log('error', message.message, { ...data, stack: message.stack });
+			return this.log('error', message.message, {
+				...data,
+				stack: message.stack,
+			});
 		} else {
-			this.log('error', message, data);
+			return this.log('error', message, data);
 		}
 	}
 }
