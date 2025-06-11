@@ -318,8 +318,16 @@ export class SAC {
 		return this._cache__diasPorParcela[cache_key];
 	}
 
-	// Estratégia de busca binária com estimativa inicial e margem adaptativa
-	// Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
+	/**
+	 * Calcula o valor bruto necessário para atingir o valor líquido desejado.
+	 * Usa estratégia de busca binária com estimativa inicial e margem adaptativa
+	 * Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
+	 *
+	 * @param naoRepetirAmortiza - Se `true`, não repete a amortização se já foi feita.
+	 * @param tolerancia - Tolerância de erro entre valor líquido calculado e desejado.
+	 * @param maxIter - Número máximo de iterações para tentativa de convergência.
+	 * @returns Resultado do cálculo ou `false` em caso de falha.
+	 */
 	public _decobreBrutoNecessarioECalcula(naoRepetirAmortiza = true, tolerancia = 0.01, maxIter = 100): boolean | TRCredito {
 		return (this.constructor as typeof SAC).__decobreBrutoNecessarioECalcula(
 			this._demanda,
