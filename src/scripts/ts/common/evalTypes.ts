@@ -62,15 +62,18 @@ const _typeRegistry = new Map<string, TTypeDefs>();
  */
 type RegisterTypeArgs =
 	| {
-			name: string;
-			tipo: TypeHint | PropertyKey[];
+			name: string | string[];
+			tipo: TypeHint | TypeHint[];
 			fieldTypes?: TFieldType | TFieldType[];
 	  }
-	| { name: string; fieldTypes: TFieldType };
+	| {
+			name: string | string[];
+			fieldTypes: TFieldType | TFieldType[];
+	  };
 
 export function registerType(
 	name_args: string | RegisterTypeArgs,
-	tipo?: TypeHint | PropertyKey[],
+	tipo?: TypeHint | TypeHint[],
 	fieldTypes?: TFieldType | TFieldType[],
 ): void {
 	if (
@@ -79,16 +82,24 @@ export function registerType(
 			!('tipo' in name_args) &&
 			!('fieldTypes' in name_args))
 	) {
-		throw `error`;
+		throw new Error(`Parâmetros inválidos para registerType`);
 	}
 
+	const _names: string[] = (() => {
+		const n = getProp<string | string[]>(
+			'name',
+			<RecordT<any>>name_args,
+			<string | string[]>name_args,
+		);
+		return Array.isArray(n) ? n : [n];
+	})();
+
 	const _tipo: TypeHint[] = (() => {
-		const t = getProp<TypeHint | PropertyKey[]>(
+		const t = getProp<TypeHint | TypeHint[]>(
 			'tipo',
 			<RecordT<any>>name_args,
-			<TypeHint | PropertyKey[]>tipo,
+			<TypeHint | TypeHint[]>tipo,
 		);
-
 		return Array.isArray(t) ? t : [t];
 	})();
 
@@ -98,26 +109,22 @@ export function registerType(
 			<RecordT<any>>name_args,
 			<TFieldType | TFieldType[]>fieldTypes,
 		);
-
 		return Array.isArray(t) ? t : [t];
 	})();
 
-	for (let k = 0; k < _tipo.length; k++) {
+	const total = Math.max(_names.length, _tipo.length, _fieldTypes.length);
+
+	for (let k = 0; k < total; k++) {
+		const name = _names[k] ?? _names[0];
+		const tipoDef = _tipo[k] ?? _tipo[0];
+		const fieldDef = _fieldTypes[k] ?? _fieldTypes[0];
+
 		const def: TTypeDefs = {
-			...{
-				name: _tipo[k],
-			},
-			...(_fieldTypes && _fieldTypes.length > 0
-				? {
-						detalhe:
-							_fieldTypes.length === _tipo.length
-								? _fieldTypes[k]
-								: _fieldTypes[0],
-				  }
-				: {}),
+			name: tipoDef,
+			...(fieldDef ? { detalhe: fieldDef } : {}),
 		};
 
-		_typeRegistry.set(def.name as string, def);
+		_typeRegistry.set(name, def);
 	}
 }
 
