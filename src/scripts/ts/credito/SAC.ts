@@ -58,8 +58,14 @@ export class SAC {
 		return HAS(key, obj);
 	}
 
-	/*
-	 **/
+	/**
+	 * Inicializa os valores fundamentais para o cálculo SAC da instância,
+	 * incluindo parcelas, valores brutos, amortização mensal e ajustes de componentes.
+	 *
+	 * @param naoRepetirAmortiza - Se verdadeiro, impede a reexecução de cálculos já realizados.
+	 * @returns `true` se a inicialização foi bem-sucedida; `false` caso contrário.
+	 */
+
 	protected _sacInicializaValores = (
 		args: TDemandaCredito,
 	): null | TDemandaCredito => {
@@ -74,6 +80,12 @@ export class SAC {
 		return args;
 	};
 
+	/**
+	 * Alias for __sac
+	 *
+	 * @param naoRepetirAmortiza - Se verdadeiro, evita recalcular amortizações previamente feitas.
+	 * @returns Objeto de crédito (`TRCredito`) ou `false` se o cálculo não for realizado.
+	 */
 	public calc = (
 		naoRepetirAmortiza = true,
 	): boolean | TRCredito => {
@@ -90,8 +102,14 @@ export class SAC {
 				: false;
 	}
 
-	/*
-	 **/
+	/**
+	 * Executa o cálculo do crédito utilizando o sistema de amortização constante (SAC),
+	 * preenchendo as parcelas com valores como saldo devedor, amortização, juros, IOF, etc.
+	 *
+	 * @param demanda - A estrutura completa da demanda de crédito.
+	 * @param naoRepetirAmortiza - Se verdadeiro, evita recomputar a amortização já existente.
+	 * @returns Objeto de crédito resultante (`TRCredito`) ou `false` em caso de falha no cálculo.
+	 */
 	protected static __sac = (
 		demanda: TDemandaCredito,
 		naoRepetirAmortiza = true,
@@ -247,6 +265,11 @@ export class SAC {
 		return { ...demanda, ...{ computed: cmpt } };
 	};
 
+	/**
+	 * Alias for __gerarDiasPorParcela
+	 *
+	 * @returns Um objeto contendo a lista de datas e dias corridos por parcela, além do total acumulado.
+	 */
 	protected _gerarDiasPorParcela(): TDiasCount {
 		if (
 			!this._diasPorParcela ||
@@ -261,6 +284,13 @@ export class SAC {
 		return this._diasPorParcela;
 	}
 
+	/**
+	 * Gera uma estrutura com os dias corridos entre a data da operação e cada parcela,
+	 * considerando carência e datas ajustadas para dias úteis.
+	 *
+	 * @param demanda - A demanda de crédito contendo informações como data de operação, carência, diabase e prazo.
+	 * @returns Um objeto contendo a lista de datas e dias corridos por parcela, além do total acumulado.
+	 */
 	protected static __gerarDiasPorParcela(demanda: TDemandaCredito): TDiasCount {
 		const cache_key = String(new DiasCountCacheRecordkey(demanda));
 
@@ -319,9 +349,7 @@ export class SAC {
 	}
 
 	/**
-	 * Calcula o valor bruto necessário para atingir o valor líquido desejado.
-	 * Usa estratégia de busca binária com estimativa inicial e margem adaptativa
-	 * Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
+	 * alias for __decobreBrutoNecessarioECalcula
 	 *
 	 * @param naoRepetirAmortiza - Se `true`, não repete a amortização se já foi feita.
 	 * @param tolerancia - Tolerância de erro entre valor líquido calculado e desejado.
@@ -337,8 +365,20 @@ export class SAC {
 		);
 	}
 
-	// Estratégia de busca binária com estimativa inicial e margem adaptativa
-	// Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
+	/**
+	 * Calcula o valor bruto necessário para atingir o valor líquido desejado,
+	 * considerando encargos, IOF, custos e amortizações, usando estratégia de busca binária com margem adaptativa.
+	 * 
+	 * Usa estratégia de busca binária com estimativa inicial e margem adaptativa
+	 * Combina precisão com desempenho, ajustando dinamicamente o intervalo de busca
+	 * 
+	 * @param demanda - Demanda de crédito contendo todas as informações para o cálculo.
+	 * @param naoRepetirAmortiza - Se verdadeiro, evita recalcular amortizações desnecessariamente.
+	 * @param tolerancia - Tolerância permitida no erro do valor líquido, usada como critério de convergência.
+	 * @param maxIter - Limite máximo de iterações na busca binária.
+	 * @returns Objeto `TRCredito` se o cálculo for bem-sucedido, ou lança erro se não houver convergência ou inconsistência.
+	 * @throws Erro se os parâmetros forem inválidos ou se não houver convergência no número de iterações definido.
+	 */
 	public static __decobreBrutoNecessarioECalcula(
 		demanda: TDemandaCredito,
 		naoRepetirAmortiza = true,
