@@ -8,9 +8,13 @@ import {
 	inicializaDemandaCredito,
 	ExtratoCredito,
 	TComputed,
-} from '../src/scripts/ts/credito/pj/credito';
+} from '../src/scripts/ts/credito/credito';
 
-import { SAC } from '../src/scripts/ts/credito/pj/SAC'; // ajuste o caminho
+import { SAC } from '../src/scripts/ts/credito/SAC'; // ajuste o caminho
+
+/*
+ * TODO: Teste de SAC
+ */
 
 describe('SAC', () => {
 	const calc = new SAC();
