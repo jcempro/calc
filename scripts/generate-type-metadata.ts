@@ -43,9 +43,8 @@ const checker = project.getTypeChecker();
 const importLines: string[] = [
 	`import { registerType } from '../scripts/ts/common/evalTypes';`,
 ];
-const registerLines: string[] = [];
-
 const importMap = new Map<string, Set<string>>(); // arquivo => Set<nomes>
+const typeMap = new Map<string, { names: string[]; definitions: string[] }>(); // fieldTypes => nomes associados
 
 function serializeTypeHint(type: Type, depth = 0): string {
 	if (type.isString()) return `'string'`;
@@ -79,7 +78,7 @@ function serializeTypeHint(type: Type, depth = 0): string {
 
 		// Ignora tipos definidos fora do SRC_DIR (ex: node_modules, lib.es5.d.ts, etc.)
 		if (!filePath.startsWith(SRC_DIR)) {
-			return `'any'`; // ou: return `'${name}'` apenas se quiser preservar o nome, mas evitar o import
+			return `'any'`;
 		}
 
 		const rel = path
@@ -99,7 +98,7 @@ function serializeTypeHint(type: Type, depth = 0): string {
 			const propType = prop.getTypeAtLocation(valueDecl);
 			return `${prop.getName()}: ${serializeTypeHint(propType, depth + 1)}`;
 		});
-		return `{ ${entries.join(', ')} }`;
+		return `{ ${entries.filter(Boolean).join(', ')} }`;
 	}
 
 	return `'any'`;
@@ -118,28 +117,28 @@ function extractFieldTypes(
 		const propType = prop.getTypeAtLocation(valueDecl);
 		const serialized = serializeTypeHint(propType);
 
-		// 1. Ignora propriedades inválidas (como "__@iterator @78")
 		if (!/^[$A-Z_][0-9A-Z_$]*$/i.test(prop.getName())) continue;
-
-		// 2. Ignora métodos (propriedades que são funções)
-		if (propType.getCallSignatures().length > 0) {
-			continue;
-		}
-
-		// 3. Ignora classes (tipo declarado como class ou com construct signature)
-		if (propType.getConstructSignatures().length > 0) {
-			continue;
-		}
-
-		// 4. (Opcional) ignora símbolos com nome 'prototype'
-		if (prop.getName() === 'prototype') {
-			continue;
-		}
+		if (propType.getCallSignatures().length > 0) continue;
+		if (propType.getConstructSignatures().length > 0) continue;
+		if (prop.getName() === 'prototype') continue;
 
 		lines.push(`  ${prop.getName()}: ${serialized},`);
 	}
 
 	return `{\n${lines.join('\n')}\n}`;
+}
+
+function addToTypeMap(name: string, fields: string, isRuntimeValue: boolean) {
+	// elimina tipos vazio, exemplo {}, {   }
+	if (fields.trim().match(/\{[\s]*\}/g)) return;
+
+	const key = fields;
+	if (!typeMap.has(key)) {
+		typeMap.set(key, { names: [], definitions: [] });
+	}
+	const entry = typeMap.get(key)!;
+	entry.names.push(name);
+	if (isRuntimeValue) entry.definitions.push(name);
 }
 
 for (const file of sourceFiles) {
@@ -151,7 +150,7 @@ for (const file of sourceFiles) {
 		} else if (Node.isTypeAliasDeclaration(node)) {
 			decl = node;
 		} else {
-			continue; // ignora nós que não são interface ou type alias
+			continue;
 		}
 
 		if (!decl.isExported()) continue;
@@ -170,11 +169,7 @@ for (const file of sourceFiles) {
 				].includes(d.getKind()),
 			);
 
-		registerLines.push(
-			`registerType({name: "${name}", ${
-				isRuntimeValue ? `definition:${name},` : ''
-			} fieldTypes:${fields}});`,
-		);
+		addToTypeMap(name, fields, isRuntimeValue ?? false);
 
 		// Adiciona import
 		const filePath = file.getFilePath();
@@ -192,6 +187,19 @@ for (const [rel, names] of importMap.entries()) {
 	const sorted = Array.from(names).sort().join(', ');
 	importLines.push(
 		`import { ${sorted} } from '${rel.startsWith('.') ? rel : './' + rel}';`,
+	);
+}
+
+// Gera linhas de registro agrupadas
+const registerLines: string[] = [];
+
+for (const [fieldTypes, { names, definitions }] of typeMap.entries()) {
+	const namesStr = `[${names.map((n) => `"${n}"`).join(', ')}]`;
+	const defStr = definitions.length
+		? `definition: [${definitions.join(', ')}], `
+		: '';
+	registerLines.push(
+		`registerType({ name: ${namesStr}, ${defStr}fieldTypes: ${fieldTypes} });`,
 	);
 }
 
