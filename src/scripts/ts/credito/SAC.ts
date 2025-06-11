@@ -228,7 +228,7 @@ export class SAC {
 				const iofDiario: number =
 					p.saldoDevedor.value
 					* <number>cmpt.iof.p?.diario.value
-					* ((1 + jurosDiario) ^ p.dias - 1)
+					* (Math.pow((1 + jurosDiario), p.dias) - 1)
 					/ jurosDiario;
 
 				const novo_iof_total =
