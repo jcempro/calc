@@ -208,20 +208,11 @@ export class SAC {
 			 * limitado ao teto máximo de IOF na operação (adiciona+diário)
 			 * se existir
 			 */
-			let saldoDevedor_diario: number = p.saldoDevedor.value;
-			p.iof.value = 0;
-			for (
-				let d = 1;
-				d <= p.dias &&
-				teto > 0 &&
-				cmpt.iof.c &&
-				cmpt.iof.c?.diario.value + p.iof.value + cmpt.iof.c?.adicional.value <
-				teto;
-				d++
-			) {
-				saldoDevedor_diario *= (jurosDiario + 1); // calcula o saldo devedor com base na taxa de juros diária
-				p.iof.value += saldoDevedor_diario * <number>cmpt.iof.p?.diario.value;
-			}
+			p.iof.value =
+				p.saldoDevedor.value
+				* <number>cmpt.iof.p?.diario.value
+				* ((1 + jurosDiario) ^ p.dias - 1)
+				/ jurosDiario;
 
 			(<TIOF_full>cmpt.iof).c.diario.value += p.iof.value;
 
