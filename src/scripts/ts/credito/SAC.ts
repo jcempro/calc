@@ -160,11 +160,11 @@ export class SAC {
 		/* INICIALIZAMOS A SOMA TOTAL PARA COMPARAÇÃO E CONTABILIZAÇ!AO LIMITE */
 		let iofTotal: number = (<TIOF_full>cmpt.iof).c.adicional.value;/* aqui calculamos a IOF adiciona fixo*/
 
-		const amortizacaoConstante =
-			(<TFinanciado>demanda).financiado.value / demanda.prazoMeses;
-		const jurosDiario = demanda.jurosAm.value / 30; // simplificação: 30 dias no mês
-
 		const datas = this.__gerarDiasPorParcela(demanda);
+
+		const amortizacaoConstante =
+			(<TFinanciado>demanda).financiado.value / datas.lista.length;
+		const jurosDiario = demanda.jurosAm.value / 30; // simplificação: 30 dias no mês		
 
 		for (let j = 0; j < datas.lista.length; j++) {
 			let estaNaCarencia: boolean = j <= demanda.carenciaDias;
