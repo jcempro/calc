@@ -167,8 +167,8 @@ export class SAC {
 		const datas = this.__gerarDiasPorParcela(demanda);
 
 		for (let j = 0; j < datas.lista.length; j++) {
-			let car: boolean = j <= demanda.carenciaDias;
-			let jrs: boolean = !car || demanda.jurosNaCarencia;
+			let estaNaCarencia: boolean = j <= demanda.carenciaDias;
+			let jrs: boolean = !estaNaCarencia || demanda.jurosNaCarencia;
 
 			/* inicializa com os valores no padrão 0 meses */
 			let p: TParcelaRecord = {
@@ -191,7 +191,7 @@ export class SAC {
 						? (<TFinanciado>demanda).financiado
 						: cmpt.extrato[cmpt.extrato.length - 1].saldoDevedor;
 
-				p.amortizacao.value = car
+				p.amortizacao.value = estaNaCarencia
 					? 0
 					: naoRepetirAmortiza
 						? -1 // indica que o valor é o mesmo da parcela 1, evitando replicação do mesmo valor
