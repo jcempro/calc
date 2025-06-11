@@ -274,14 +274,20 @@ export class SAC {
 			`FLAT`
 		);
 
+		const custoTotal =
+			cmpt.custos.flat.v.value
+			+ cmpt.custos.tac.v.value
+			+ (<TIOF_full>cmpt.iof).c.adicional.value
+			+ (<TIOF_full>cmpt.iof).c.diario.value;
+
+		/* aqui, atualiza o primeiro indice do extrato 
+		 * para na coluna de amortização conter os custos
+		 * totais (IOF diário + IOF adicional + TAC + FLAT)
+		 */
+		(<TParcelaRecord>cmpt.extrato[0]).amortizacao = new TCurrency(custoTotal);
+
 		/* aqui calculamos o valor líquido */
-		(<TLiberado>demanda).liquido.value =
-			demanda.financiado.value
-			- (<TIOF_full>cmpt.iof).c.diario.value
-			- (<TIOF_full>cmpt.iof).c.adicional.value
-			- cmpt.custos.flat.v.value
-			- cmpt.custos.tac.v.value
-			;
+		(<TLiberado>demanda).liquido.value = demanda.financiado.value - custoTotal;
 
 		return { ...demanda, ...{ computed: cmpt } };
 	};
