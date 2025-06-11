@@ -100,7 +100,7 @@ export class SAC {
 				Logger.error(
 					`SAC:__sac: É necessário informar 'liquido' ou 'financiado'.`,
 					{
-						linha: __FILE_LINE__,
+						line: __FILE_LINE__,
 						demanda: this._demanda,
 						args: {
 							naoRepetirAmortiza: naoRepetirAmortiza,
@@ -451,7 +451,7 @@ export class SAC {
 					'Parâmetros inválidos: número de parcelas e dias por parcela devem ser consistentes.',
 					{
 						args: args__,
-						linha: __FILE_LINE__,
+						line: __FILE_LINE__,
 					},
 				),
 			);
@@ -503,6 +503,7 @@ export class SAC {
 					Logger.error('Falha em executar calculo', {
 						clc: clc,
 						args: args__,
+						line: __FILE_LINE__
 					}),
 				);
 
@@ -530,7 +531,7 @@ export class SAC {
 		throw new Error(
 			Logger.error(
 				`__decobreBrutoNecessarioECalcula: Não convergiu após ${maxIter} iterações.`,
-				{ args: args__ },
+				{ args: args__, line: __FILE_LINE__ },
 			),
 		);
 	}
