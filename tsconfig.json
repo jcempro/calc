@@ -8,6 +8,7 @@
 			"module": "ESNext"
 		}
 	},
+	"types": ["vite/client", "node"],
 	"compilerOptions": {
 		"target": "es2020",
 		"module": "ESNext",

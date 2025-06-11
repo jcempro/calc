@@ -1,5 +1,3 @@
-import { __DEV__ } from '../types/globals';
-
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 export interface LogContext {
@@ -24,7 +22,7 @@ export class Logger {
 	}
 
 	static log(level: LogLevel, message: string, data?: any): string {
-		if (__DEV__) {
+		if (import.meta.env.DEV) {
 			// Modo desenvolvimento - mostra informações detalhadas
 			const { file, line } = this.getCallerInfo();
 			const str = `[${level.toUpperCase()}] ${file}:${line} - ${message}`;

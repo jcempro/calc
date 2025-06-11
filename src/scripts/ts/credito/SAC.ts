@@ -1,4 +1,4 @@
-import { __DEV__, __FILE_LINE__ } from '../types/globals.d';
+import { __DEV__, __FILE_LINE__ } from '../types/globals';
 import { Logger } from '../utils/logger.ts';
 import { IPercent, TIOF_full, TIOFP } from '../common/interfaces.ts';
 import { _PRMs_ } from '../common/params.ts';
