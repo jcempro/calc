@@ -1,3 +1,5 @@
+import { __FILE_LINE__ } from '../types/env.ts';
+import { Logger } from '../utils/logger.ts';
 import { RecordT, T_get_nested, TOBJ } from './interfaces.ts';
 
 export type TupleFromObjectOrdered<T, Keys extends readonly (keyof T)[]> = {
@@ -14,7 +16,7 @@ export function validarBoolean(valor: any, padrao: boolean): boolean {
 	return typeof valor === 'boolean' ? valor : padrao;
 }
 
-export const HAS = (key: string, f: object): boolean =>
+export const HAS = (key: PropertyKey, f: object): boolean =>
 	(
 		(key in f) ||
 		Object.prototype.hasOwnProperty.call(f, key)
@@ -117,4 +119,27 @@ export class PropertyStr<T extends Record<PropertyKey, any>> extends String {
 	[Symbol.toPrimitive](hint: string) {
 		return this.toString();
 	}
+}
+
+export function getProp<T>(key: PropertyKey, from: RecordT<any>, fallback: T, fail?: () => {}): T {
+	(typeof from === `object`) && HAS(key, from)
+		? from[key]
+		: fallback !== undefined
+			? fallback
+			: (() => {
+				if (fail) {
+					fail();
+				} else
+					throw new Error(
+						Logger.error(
+							`getProp: não foi possível definir o 'name' com o parametros ${key}.`,
+							{
+								args: {
+									key: key, from: from, fallback: fallback
+								},
+								linha: __FILE_LINE__
+							}
+						)
+					);
+			})();
 }

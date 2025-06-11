@@ -53,22 +53,36 @@ export default defineConfig(({ mode }) => ({
 			async transform(code, id) {
 				if (!/node_modules/.test(id) && /\.(tsx?|jsx?)$/.test(id)) {
 					const originalFile = JSON.stringify(id);
+
+					// Expressão regular melhorada para capturar linha/coluna
+					const lineReplacement = mode === 'production'
+						? '"{ file: \\"production\\", line: \\"0\\" }"'
+						: `{ 
+            file: ${originalFile}, 
+            line: ((new Error().stack || '').split('\\n')[1]
+              ?.match(/:\\d+:\\d+/)?.[0]
+              ?.replace(/[^\\d]/g, '') || '0'
+          }`;
+
 					const transformedCode = code.replace(
 						/__FILE_LINE__/g,
-						`{ file: ${originalFile}, line: new Error().stack?.split('\\n')[1]?.match(/:\\d+:\\d+\\)?$/)?.[0]?.replace(/[^\\d]/g, '') || '0' }`,
+						lineReplacement
 					);
 
 					if (mode === 'production') {
 						return transformWithEsbuild(transformedCode, id, {
 							loader: 'ts',
 							minify: true,
-							keepNames: true,
+							keepNames: true
 						});
 					}
 
-					return { code: transformedCode, map: null };
+					return {
+						code: transformedCode,
+						map: null
+					};
 				}
-			},
+			}
 		},
 	],
 	build: {
@@ -77,6 +91,11 @@ export default defineConfig(({ mode }) => ({
 		sourcemap: true,
 		rollupOptions: {
 			input: 'src/index.html',
+			output: {
+				compact: true,
+				// Garante que __FILE_LINE__ seja removido em produção
+				banner: `const __FILE_LINE__ = { file: 'prod', line: '0' };`,
+			}
 		},
 	},
 	esbuild: {
@@ -86,11 +105,7 @@ export default defineConfig(({ mode }) => ({
 		minifyWhitespace: mode === 'production',
 	},
 	define: {
-		__DEV__: mode !== 'production',
-		__FILE_LINE__:
-			mode === 'production'
-				? '{ file: "production", line: "0" }'
-				: '{ file: import.meta.url, line: new Error().stack?.split("\\n")[1]?.match(/\\d+/)?.[0] || "0" }',
+		__DEV__: mode !== 'production'
 	},
 	server: {
 		watch: {

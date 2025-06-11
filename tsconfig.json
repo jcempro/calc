@@ -8,7 +8,7 @@
 			"module": "ESNext"
 		}
 	},
-	"types": ["vite/client", "node"],
+	"types": ["vite/client", "vitest/client", "node"],
 	"compilerOptions": {
 		"target": "es2020",
 		"module": "ESNext",
@@ -40,7 +40,7 @@
 		}
 	},
 	"include": [
-		"src/scripts/type/ts/env.d.ts",
+		"src/scripts/ts/types/env.d.ts",
 		"src",
 		"scripts",
 		"src/scripts",
