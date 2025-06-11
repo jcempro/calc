@@ -38,5 +38,11 @@
 			"@css/*": ["src/assets/css/*"]
 		}
 	},
-	"include": ["src", "scripts", "src/scripts", "src/scripts/ts"]
+	"include": [
+		"src/scripts/type/ts/env.d.ts",
+		"src",
+		"scripts",
+		"src/scripts",
+		"src/scripts/ts"
+	]
 }
