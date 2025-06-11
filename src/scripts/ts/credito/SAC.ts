@@ -450,8 +450,7 @@ export class SAC {
 
 			// Aplica teto do IOF se definido
 			if (
-				'teto' in demanda.iof &&
-				typeof demanda.iof.p.teto !== 'undefined' &&
+				HAS('teto', demanda.iof) &&
 				typeof demanda.iof.p.teto?.value === 'number'
 			) {
 				encargoIOFdiario = Math.min(
