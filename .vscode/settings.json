@@ -1,4 +1,5 @@
 {
 	"editor.tabSize": 2,
-	"editor.insertSpaces": true
+	"editor.insertSpaces": true,
+	"todo-tree.regex.regex": "(//|#|<!--|/\\*|^\\s*\\*)\\s*($TAGS)"
 }
