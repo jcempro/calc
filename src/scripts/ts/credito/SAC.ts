@@ -352,7 +352,7 @@ export class SAC {
 
 		// Soma ponderada dos fatores diários
 		const somaFatorIOFdiario =
-			((demanda.iof.p.diario.value + 1) ^ diasPorParcela.total) - 1;
+			Math.pow(demanda.iof.p.diario.value + 1, diasPorParcela.total) - 1;
 
 		const liquidoDesejado = (<TLiberado>demanda).liquido.value;
 
