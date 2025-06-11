@@ -211,28 +211,48 @@ export function inicializaDemandaCredito(data: any): TDemandaCredito {
 	};
 }
 
+export function limitTeto<T extends number | TCurrency = TCurrency>(
+	bruto: T,
+	source: TFlatTAC | TIOFP,
+	acumulado: number,
+	atingiuCall?: (limite: number) => void
+): T {
+	const b: number = (typeof bruto === `number`) ? bruto : bruto.value;
+	let r = acumulado;
 
-export function calcFlatTacIof(bruto: TNumberTypes, source: TFlatTAC | TIOFP, caller: string, tipo: `TAC` | `FLAT` | `IOF`): TCurrency {
+	if (HAS(`teto`, source)) {
+		const t: TNumberTypes = (<TFlatTAC_full>source).teto
+		if ((t.tipo === ENumberIs.currency) && r > t.value) {
+			r = t.value;
+		} else if ((t.tipo === ENumberIs.percentual) && (r > (t.value * b))) {
+			r = (t.value * b);
+
+			if (atingiuCall) {
+				atingiuCall(b);
+			}
+		}
+	}
+
+	if (typeof bruto === `number`) {
+		return <T>r;
+	}
+
+	return <T>new TCurrency(r);
+}
+
+export function calcFlatTacIof<T extends number | TCurrency = TCurrency>(bruto: T, source: TFlatTAC | TIOFP, caller: string, tipo: `TAC` | `FLAT` | `IOF`): T {
 	const valor: TNumberTypes = HAS('v', source)
 		? (<TFlatTAC>source).v
 		: (<TIOFP>source).adicional as TNumberTypes
 
-	let r: TCurrency = new TCurrency(
+	const b: number = (typeof bruto === `number`) ? bruto : bruto.value;
+
+	let r: number =
 		valor.tipo === ENumberIs.currency
 			? valor.value
 			: valor.tipo === ENumberIs.percentual
-				? valor.value * bruto.value
-				: ((): number => { throw `${caller}->calcFlatTAC: ${tipo} não é percentual nem moeda.` })()
-	);
+				? valor.value * b
+				: ((): number => { throw `${caller}->calcFlatTAC: ${tipo} não é percentual nem moeda.` })();
 
-	if (HAS(`teto`, source)) {
-		const t: TNumberTypes = (<TFlatTAC_full>source).teto
-		if ((t.tipo === ENumberIs.currency) && r.value > t.value) {
-			r.value = t.value;
-		} else if ((t.tipo === ENumberIs.percentual) && (r.value > (t.value * bruto.value))) {
-			r.value = (t.value * bruto.value);
-		}
-	}
-
-	return r;
+	return limitTeto<T>(bruto, source, r);
 }
