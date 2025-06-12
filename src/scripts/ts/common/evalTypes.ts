@@ -1,3 +1,7 @@
+/*
+ *  * TODO: implementar serialize compatível com deserialize
+ */
+
 // Tipos utilitários
 
 import { getProp, HAS } from './generic';
@@ -173,6 +177,9 @@ function findDefinitionByConstructor(type: Constructor): TTypeDefs | undefined {
 /**
  * Desserializa qualquer estrutura JSON em instâncias do tipo fornecido.
  * Suporta tipos primitivos, arrays, tuplas, objetos aninhados e classes.
+ * 
+ * TODO: deserialize, ao identificar tuple, priorize usar a classe MetaTurple caso seja compatível
+ * TODO: deserialize, para classes priorize usar o método static deserialize, caso ele exista
  *
  * @param type Tipo esperado do objeto resultante (string, class ou array/tupla de tipos)
  * @param data Valor bruto a ser desserializado
