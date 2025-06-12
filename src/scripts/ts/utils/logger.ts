@@ -45,6 +45,9 @@ export class Logger {
 		}
 	}
 
+	/*
+	 * TODO: monitoramento de erros
+	 */
 	private static sendToMonitoring(id: string, payload: any) {
 		// Implemente o envio serviço de monitoramento (Sentry, LogRocket, etc.)
 		// Exemplo:
