@@ -15,17 +15,26 @@ try {
 		stdio: 'inherit',
 	});
 } catch (err) {
-	console.error('[vite.config.ts] Erro ao executar generate-type-metadata.ts:', err);
+	console.error(
+		'[vite.config.ts] Erro ao executar generate-type-metadata.ts:',
+		err,
+	);
 }
 
 export default defineConfig({
-	plugins: [preact(), viteSingleFile(), {
-		name: 'generate-type-registry',
-		buildStart() {
-			console.log('🔄 Gerando typeRegistry.ts...');
-			execSync('node ./scripts/generate-type-metadata.ts', { stdio: 'inherit' });
-		}
-	}],	
+	plugins: [
+		preact(),
+		viteSingleFile(),
+		{
+			name: 'generate-type-registry',
+			buildStart() {
+				console.log('🔄 Gerando typeRegistry.ts...');
+				execSync('node ./scripts/generate-type-metadata.ts', {
+					stdio: 'inherit',
+				});
+			},
+		},
+	],
 	build: {
 		outDir: 'dist/merged',
 		minify: 'esbuild',

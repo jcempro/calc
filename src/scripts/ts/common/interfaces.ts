@@ -14,16 +14,16 @@ export interface INumberType extends Number {
 	valueOf(): number;
 }
 
-export interface IPercent extends INumberType { }
-export interface Icurrency extends INumberType { }
+export interface IPercent extends INumberType {}
+export interface Icurrency extends INumberType {}
 
 export type TTeto = {
 	teto?: IPercent;
-}
+};
 
 export type TTeto_full = {
 	teto?: IPercent;
-}
+};
 
 export type TIOFP = TTeto & {
 	diario: IPercent;

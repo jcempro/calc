@@ -19,13 +19,21 @@ console.log('tsxDir:', tsxDir);
 const tsFiles = await fg('**/*.ts', { cwd: tsDir });
 const tsxFiles = await fg('**/*.tsx', { cwd: tsxDir });
 
-console.log(`Encontrados: ${tsFiles.length} .ts e ${tsxFiles.length} .tsx`);
+console.log(
+	`Encontrados: ${tsFiles.length} .ts e ${tsxFiles.length} .tsx`,
+);
 
 const importMap = {
-  imports: Object.fromEntries([
-    ...tsFiles.map(f => [`/ts/${f.replace(/\.ts$/, '')}`, `/src/scripts/ts/${f}`]),
-    ...tsxFiles.map(f => [`/tsx/${f.replace(/\.tsx$/, '')}`, `/src/scrtips/tsx/${f}`])
-  ])
+	imports: Object.fromEntries([
+		...tsFiles.map((f) => [
+			`/ts/${f.replace(/\.ts$/, '')}`,
+			`/src/scripts/ts/${f}`,
+		]),
+		...tsxFiles.map((f) => [
+			`/tsx/${f.replace(/\.tsx$/, '')}`,
+			`/src/scrtips/tsx/${f}`,
+		]),
+	]),
 };
 
 // Garante que pasta existe
@@ -33,4 +41,6 @@ mkdirSync(resolve(__dirname, '../dist'), { recursive: true });
 
 writeFileSync(outputFile, JSON.stringify(importMap, null, 2));
 
-console.log(`[genImportMap] Import map gerado com sucesso em: ${outputFile}`);
+console.log(
+	`[genImportMap] Import map gerado com sucesso em: ${outputFile}`,
+);

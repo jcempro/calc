@@ -15,13 +15,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const SRC_DIR = path.resolve(__dirname, '../src/scripts/ts');
-const TSCONFIG_PATH = await findUp('tsconfig.json', { cwd: __dirname });
+const TSCONFIG_PATH = await findUp('tsconfig.json', {
+	cwd: __dirname,
+});
 const OUTPUT_PATH = path.resolve(
 	__dirname,
 	'../src/__generated__/typeRegistry.ts',
 );
 
-const SRC_CORINGA = path.posix.join(SRC_DIR.replace(/\\/g, '/'), '**/*.ts?(x)');
+const SRC_CORINGA = path.posix.join(
+	SRC_DIR.replace(/\\/g, '/'),
+	'**/*.ts?(x)',
+);
 const project = new Project({ tsConfigFilePath: TSCONFIG_PATH });
 project.addSourceFilesAtPaths(SRC_CORINGA);
 const sourceFiles = project.getSourceFiles(SRC_CORINGA);
@@ -44,7 +49,10 @@ const importLines: string[] = [
 	`import { registerType } from '../scripts/ts/common/evalTypes';`,
 ];
 const importMap = new Map<string, Set<string>>(); // arquivo => Set<nomes>
-const typeMap = new Map<string, { names: string[]; definitions: string[] }>(); // fieldTypes => nomes associados
+const typeMap = new Map<
+	string,
+	{ names: string[]; definitions: string[] }
+>(); // fieldTypes => nomes associados
 
 function serializeTypeHint(type: Type, depth = 0): string {
 	if (type.isString()) return `'string'`;
@@ -57,7 +65,9 @@ function serializeTypeHint(type: Type, depth = 0): string {
 	if (type.isArray()) {
 		const elementType = type.getArrayElementType();
 		return `[${
-			elementType ? serializeTypeHint(elementType, depth + 1) : `'any'`
+			elementType ?
+				serializeTypeHint(elementType, depth + 1)
+			:	`'any'`
 		}]`;
 	}
 
@@ -128,7 +138,11 @@ function extractFieldTypes(
 	return `{\n${lines.join('\n')}\n}`;
 }
 
-function addToTypeMap(name: string, fields: string, isRuntimeValue: boolean) {
+function addToTypeMap(
+	name: string,
+	fields: string,
+	isRuntimeValue: boolean,
+) {
 	// elimina tipos vazio, exemplo {}, {   }
 	if (fields.trim().match(/\{[\s]*\}/g)) return;
 
@@ -193,11 +207,15 @@ for (const [rel, names] of importMap.entries()) {
 // Gera linhas de registro agrupadas
 const registerLines: string[] = [];
 
-for (const [fieldTypes, { names, definitions }] of typeMap.entries()) {
+for (const [
+	fieldTypes,
+	{ names, definitions },
+] of typeMap.entries()) {
 	const namesStr = `[${names.map((n) => `"${n}"`).join(', ')}]`;
-	const defStr = definitions.length
-		? `definition: [${definitions.join(', ')}], `
-		: '';
+	const defStr =
+		definitions.length ?
+			`definition: [${definitions.join(', ')}], `
+		:	'';
 	registerLines.push(
 		`registerType({ name: ${namesStr}, ${defStr}fieldTypes: ${fieldTypes} });`,
 	);
@@ -211,5 +229,7 @@ fs.writeFileSync(
 	'utf8',
 );
 
-console.log(`✅ Tipos registrados com sucesso: ${registerLines.length}`);
+console.log(
+	`✅ Tipos registrados com sucesso: ${registerLines.length}`,
+);
 console.log(`📄 Arquivo gerado: ${OUTPUT_PATH}`);

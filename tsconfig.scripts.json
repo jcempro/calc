@@ -1,45 +1,41 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "./.temp-scripts",                // saída dos scripts compilados (caso use tsc diretamente)
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "target": "ES2022",
-    "allowJs": false,
-    "checkJs": false,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": false,                            // permite compilar arquivos
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "types": ["node"],
-    "baseUrl": ".",
-    "paths": {
-      "@ext/*": ["src/scripts/components/*"],
-      "@scss/*": ["src/scss/*"],
-      "@css/*": ["src/assets/css/*"],
-      "@tsx/*": ["src/scripts/tsx/*"],
-      "@ts/*": ["src/scripts/ts/*"],
-      "@js/*": ["src/assets/js/*"],
-      "@s/*": ["src/assets/s/*"]
-    }
-  },
-  "include": [
-    "src/scripts/ts",
-    "src/scripts/tsx",
-    "src/scripts",    
-    "scripts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    ".temp-scripts"
-  ],
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
-  }
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./.temp-scripts", // saída dos scripts compilados (caso use tsc diretamente)
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"target": "ES2022",
+		"allowJs": false,
+		"checkJs": false,
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
+		"allowImportingTsExtensions": true,
+		"noEmit": false, // permite compilar arquivos
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"types": ["node"],
+		"baseUrl": ".",
+		"paths": {
+			"@ext/*": ["src/scripts/components/*"],
+			"@scss/*": ["src/scss/*"],
+			"@css/*": ["src/assets/css/*"],
+			"@tsx/*": ["src/scripts/tsx/*"],
+			"@ts/*": ["src/scripts/ts/*"],
+			"@js/*": ["src/assets/js/*"],
+			"@s/*": ["src/assets/s/*"]
+		}
+	},
+	"include": [
+		"src/scripts/ts",
+		"src/scripts/tsx",
+		"src/scripts",
+		"scripts"
+	],
+	"exclude": ["node_modules", "dist", ".temp-scripts"],
+	"ts-node": {
+		"esm": true,
+		"experimentalSpecifierResolution": "node"
+	}
 }

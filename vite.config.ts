@@ -55,9 +55,10 @@ export default defineConfig(({ mode }) => ({
 					const originalFile = JSON.stringify(id);
 
 					// Expressão regular melhorada para capturar linha/coluna
-					const lineReplacement = mode === 'production'
-						? '"{ file: \\"production\\", line: \\"0\\" }"'
-						: `{ 
+					const lineReplacement =
+						mode === 'production' ?
+							'"{ file: \\"production\\", line: \\"0\\" }"'
+						:	`{ 
             file: ${originalFile}, 
             line: ((new Error().stack || '').split('\\n')[1]
               ?.match(/:\\d+:\\d+/)?.[0]
@@ -66,23 +67,23 @@ export default defineConfig(({ mode }) => ({
 
 					const transformedCode = code.replace(
 						/__FILE_LINE__/g,
-						lineReplacement
+						lineReplacement,
 					);
 
 					if (mode === 'production') {
 						return transformWithEsbuild(transformedCode, id, {
 							loader: 'ts',
 							minify: true,
-							keepNames: true
+							keepNames: true,
 						});
 					}
 
 					return {
 						code: transformedCode,
-						map: null
+						map: null,
 					};
 				}
-			}
+			},
 		},
 	],
 	build: {
@@ -95,7 +96,7 @@ export default defineConfig(({ mode }) => ({
 				compact: true,
 				// Garante que __FILE_LINE__ seja removido em produção
 				banner: `const __FILE_LINE__ = { file: 'prod', line: '0' };`,
-			}
+			},
 		},
 	},
 	esbuild: {
@@ -105,7 +106,7 @@ export default defineConfig(({ mode }) => ({
 		minifyWhitespace: mode === 'production',
 	},
 	define: {
-		__DEV__: mode !== 'production'
+		__DEV__: mode !== 'production',
 	},
 	server: {
 		watch: {

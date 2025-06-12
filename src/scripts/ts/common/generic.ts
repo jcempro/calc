@@ -2,7 +2,10 @@ import { __FILE_LINE__ } from '../types/env.ts';
 import { Logger } from '../utils/logger.ts';
 import { RecordT, T_get_nested, TOBJ } from './interfaces.ts';
 
-export type TupleFromObjectOrdered<T, Keys extends readonly (keyof T)[]> = {
+export type TupleFromObjectOrdered<
+	T,
+	Keys extends readonly (keyof T)[],
+> = {
 	[I in keyof Keys]: Keys[I] extends keyof T ? T[Keys[I]] : never;
 };
 
@@ -17,12 +20,9 @@ export function validarBoolean(valor: any, padrao: boolean): boolean {
 }
 
 export const HAS = (key: PropertyKey, f: object): boolean =>
-	(
-		(key in f) ||
-		Object.prototype.hasOwnProperty.call(f, key)
-	) &&
+	(key in f || Object.prototype.hasOwnProperty.call(f, key)) &&
 	//@ts-ignore
-	(f[key] !== undefined);
+	f[key] !== undefined;
 
 export const GET = <T>(
 	key: T_get_nested,
@@ -44,7 +44,9 @@ export const GET = <T>(
 	return undefined;
 };
 
-export class PropertyStr<T extends Record<PropertyKey, any>> extends String {
+export class PropertyStr<
+	T extends Record<PropertyKey, any>,
+> extends String {
 	private _data: T;
 
 	constructor(data: T) {
@@ -56,7 +58,8 @@ export class PropertyStr<T extends Record<PropertyKey, any>> extends String {
 	private static stringify(data: Record<string, any>): string {
 		return Object.entries(data)
 			.map(
-				([k, v]) => `${k}=${v instanceof Date ? v.toISOString() : String(v)}`,
+				([k, v]) =>
+					`${k}=${v instanceof Date ? v.toISOString() : String(v)}`,
 			)
 			.join('|');
 	}
@@ -121,25 +124,30 @@ export class PropertyStr<T extends Record<PropertyKey, any>> extends String {
 	}
 }
 
-export function getProp<T>(key: PropertyKey, from: RecordT<any>, fallback: T, fail?: () => {}): T {
-	(typeof from === `object`) && HAS(key, from)
-		? from[key]
-		: fallback !== undefined
-			? fallback
-			: (() => {
-				if (fail) {
-					fail();
-				} else
-					throw new Error(
-						Logger.error(
-							`getProp: não foi possível definir o 'name' com o parametros ${key}.`,
-							{
-								args: {
-									key: key, from: from, fallback: fallback
-								},
-								linha: __FILE_LINE__
-							}
-						)
-					);
-			})();
+export function getProp<T>(
+	key: PropertyKey,
+	from: RecordT<any>,
+	fallback: T,
+	fail?: () => {},
+): T {
+	typeof from === `object` && HAS(key, from) ? from[key]
+	: fallback !== undefined ? fallback
+	: (() => {
+			if (fail) {
+				fail();
+			} else
+				throw new Error(
+					Logger.error(
+						`getProp: não foi possível definir o 'name' com o parametros ${key}.`,
+						{
+							args: {
+								key: key,
+								from: from,
+								fallback: fallback,
+							},
+							linha: __FILE_LINE__,
+						},
+					),
+				);
+		})();
 }

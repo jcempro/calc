@@ -1,19 +1,18 @@
 import '@scss/main.scss';
 
 export default function MainContent() {
-  return (
-    <>
-      <section className="main-content">        
-        
-        <main className="main-content">
-          <p>Conteúdo principal da página.</p>
-          {[...Array(60)].map((_, i) => (
-            <p key={i}>Linha de conteúdo {i + 1}</p>
-          ))}
-        </main>
+	return (
+		<>
+			<section className="main-content">
+				<main className="main-content">
+					<p>Conteúdo principal da página.</p>
+					{[...Array(60)].map((_, i) => (
+						<p key={i}>Linha de conteúdo {i + 1}</p>
+					))}
+				</main>
 
-        {/* Conteúdo principal */}        
-      </section>
-    </>
-  );
+				{/* Conteúdo principal */}
+			</section>
+		</>
+	);
 }

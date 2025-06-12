@@ -1,4 +1,7 @@
-import { TypeHintNested, deserialize as parseValue } from './evalTypes';
+import {
+	TypeHintNested,
+	deserialize as parseValue,
+} from './evalTypes';
 
 export type Meta<T> = [keyof T, TypeHintNested][];
 
@@ -13,12 +16,13 @@ export class MetaTupleBase<T extends Record<string, any>> {
 		this.meta = meta;
 
 		// Se for array, converte para objeto com base na meta
-		this.data = Array.isArray(value)
-			? meta.reduce((acc, [key, type], i) => {
+		this.data =
+			Array.isArray(value) ?
+				meta.reduce((acc, [key, type], i) => {
 					acc[key] = parseValue(type, value[i]);
 					return acc;
-			  }, {} as T)
-			: (value as T);
+				}, {} as T)
+			:	(value as T);
 	}
 
 	/** Acesso ao campo pelo nome */
@@ -27,7 +31,9 @@ export class MetaTupleBase<T extends Record<string, any>> {
 	}
 
 	/** Exporta para JSON em array ou objeto com metadados */
-	toJSON(full: boolean = true): any[] | { '@meta': Meta<T>; value: any[] } {
+	toJSON(
+		full: boolean = true,
+	): any[] | { '@meta': Meta<T>; value: any[] } {
 		const values = this.meta.map(([key]) => this.data[key]);
 
 		if (full) {
@@ -159,7 +165,9 @@ export class MetaTuple<T extends Record<string, any>> {
 	}
 
 	/** Funções estilo array */
-	map<U>(callback: (value: MetaTupleBase<T>, index: number) => U): U[] {
+	map<U>(
+		callback: (value: MetaTupleBase<T>, index: number) => U,
+	): U[] {
 		return this.entries.map(callback);
 	}
 
@@ -175,7 +183,9 @@ export class MetaTuple<T extends Record<string, any>> {
 		return this.entries.find(predicate);
 	}
 
-	forEach(callback: (value: MetaTupleBase<T>, index: number) => void): void {
+	forEach(
+		callback: (value: MetaTupleBase<T>, index: number) => void,
+	): void {
 		this.entries.forEach(callback);
 	}
 }

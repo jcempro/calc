@@ -8,7 +8,12 @@ interface INavIcon extends JSX.HTMLAttributes<HTMLElement> {
 	btbs?: IButton[];
 }
 
-export default function NavIcon({ menuId, escopo, btbs, ...props }: INavIcon) {
+export default function NavIcon({
+	menuId,
+	escopo,
+	btbs,
+	...props
+}: INavIcon) {
 	props.className = `inav-${escopo}${
 		props.className ? ' ' + props.className : ''
 	}`;

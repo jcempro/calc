@@ -75,12 +75,17 @@ export class SAC {
 		args: TDemandaCredito,
 	): null | TDemandaCredito => {
 		args.data_operacao = diaUtilOuProx(
-			this._has(args, 'data_operacao') ? args.data_operacao : new Date(),
+			this._has(args, 'data_operacao') ?
+				args.data_operacao
+			:	new Date(),
 		);
 
-		args.diabase = this._has(args, 'diabase')
-			? args.diabase
-			: <numberRange<1, 28>>diaBaseUtilOuProx(args.data_operacao).getDate();
+		args.diabase =
+			this._has(args, 'diabase') ?
+				args.diabase
+			:	<numberRange<1, 28>>(
+					diaBaseUtilOuProx(args.data_operacao).getDate()
+				);
 
 		return args;
 	};
@@ -92,7 +97,10 @@ export class SAC {
 	 * @returns Objeto de crédito (`TRCredito`) ou `false` se o cálculo não for realizado.
 	 */
 	public calc = (naoRepetirAmortiza = true): boolean | TRCredito => {
-		if (!HAS(`financiado`, this._demanda) && !HAS(`liquido`, this._demanda)) {
+		if (
+			!HAS(`financiado`, this._demanda) &&
+			!HAS(`liquido`, this._demanda)
+		) {
 			throw new Error(
 				Logger.error(
 					`SAC:__sac: É necessário informar 'liquido' ou 'financiado'.`,
@@ -107,14 +115,16 @@ export class SAC {
 			);
 		}
 
-		return HAS(`financiado`, this._demanda)
-			? (this.constructor as typeof SAC).__sac(
+		return (
+			HAS(`financiado`, this._demanda) ?
+				(this.constructor as typeof SAC).__sac(
 					this._demanda,
 					naoRepetirAmortiza,
-			  )
-			: HAS(`liquido`, this._demanda)
-			? this._decobreBrutoNecessarioECalcula(naoRepetirAmortiza)
-			: false;
+				)
+			: HAS(`liquido`, this._demanda) ?
+				this._decobreBrutoNecessarioECalcula(naoRepetirAmortiza)
+			:	false
+		);
 	};
 
 	/**
@@ -150,9 +160,10 @@ export class SAC {
 				p: {
 					adicional: demanda.iof.p.adicional,
 					diario: demanda.iof.p.diario,
-					teto: <TPercent>demanda.iof.p.teto
-						? <TPercent>demanda.iof.p.teto
-						: new TPercent(0),
+					teto:
+						<TPercent>demanda.iof.p.teto ?
+							<TPercent>demanda.iof.p.teto
+						:	new TPercent(0),
 				},
 			}),
 			custos: {
@@ -202,16 +213,17 @@ export class SAC {
 			/* calcula parcela */
 			if (j > 0) {
 				const sldAnterior =
-					j === 1
-						? (<TFinanciado>demanda).financiado
-						: cmpt.extrato[cmpt.extrato.length - 1].saldoDevedor;
+					j === 1 ?
+						(<TFinanciado>demanda).financiado
+					:	cmpt.extrato[cmpt.extrato.length - 1].saldoDevedor;
 
-				p.amortizacao.value = estaNaCarencia
-					? 0
-					: naoRepetirAmortiza
-					? -1 // indica que o valor é o mesmo da parcela 1, evitando replicação do mesmo valor
-					: amortizacaoConstante;
-				p.juros.value = jrs ? sldAnterior * (jurosDiario * p.dias) : 0;
+				p.amortizacao.value =
+					estaNaCarencia ? 0
+					: naoRepetirAmortiza ?
+						-1 // indica que o valor é o mesmo da parcela 1, evitando replicação do mesmo valor
+					:	amortizacaoConstante;
+				p.juros.value =
+					jrs ? sldAnterior * (jurosDiario * p.dias) : 0;
 
 				p.pagamento.value = amortizacaoConstante + p.juros.value;
 				p.saldoDevedor.value = sldAnterior - p.amortizacao.value;
@@ -221,16 +233,25 @@ export class SAC {
 			cmpt.i.pgtoTotal += p.pagamento.value;
 
 			/* calcula a maior e menor parcela */
-			cmpt.i.maiorParcela = Math.max(cmpt.i.maiorParcela, p.pagamento.value);
-			cmpt.i.menorParcela = Math.min(cmpt.i.menorParcela, p.pagamento.value);
+			cmpt.i.maiorParcela = Math.max(
+				cmpt.i.maiorParcela,
+				p.pagamento.value,
+			);
+			cmpt.i.menorParcela = Math.min(
+				cmpt.i.menorParcela,
+				p.pagamento.value,
+			);
 
 			const teto: number =
-				HAS('p', cmpt.iof) &&
-				HAS('teto', <TIOFP>cmpt.iof.p) &&
-				typeof cmpt.iof.p?.teto !== 'undefined' &&
-				typeof cmpt.iof.p?.teto?.value === 'number'
-					? cmpt.iof.p.teto?.value * (<TFinanciado>demanda).financiado.value
-					: -1;
+				(
+					HAS('p', cmpt.iof) &&
+					HAS('teto', <TIOFP>cmpt.iof.p) &&
+					typeof cmpt.iof.p?.teto !== 'undefined' &&
+					typeof cmpt.iof.p?.teto?.value === 'number'
+				) ?
+					cmpt.iof.p.teto?.value *
+					(<TFinanciado>demanda).financiado.value
+				:	-1;
 
 			if (!iofTetoAtingido) {
 				/*
@@ -260,9 +281,10 @@ export class SAC {
 					},
 				);
 
-				p.iof.value = iofTetoAtingido
-					? Math.abs(iofLimitado - iofTotal) // a diferença entre o teto e o que tinhamos antes
-					: (p.iof.value = iofDiario);
+				p.iof.value =
+					iofTetoAtingido ?
+						Math.abs(iofLimitado - iofTotal) // a diferença entre o teto e o que tinhamos antes
+					:	(p.iof.value = iofDiario);
 
 				(<TIOF_full>cmpt.iof).c.diario.value += p.iof.value;
 				iofTotal += p.iof.value;
@@ -298,10 +320,13 @@ export class SAC {
 		 * para na coluna de amortização conter os custos
 		 * totais (IOF diário + IOF adicional + TAC + FLAT)
 		 */
-		(<TParcelaRecord>cmpt.extrato[0]).amortizacao = new TCurrency(custoTotal);
+		(<TParcelaRecord>cmpt.extrato[0]).amortizacao = new TCurrency(
+			custoTotal,
+		);
 
 		/* aqui calculamos o valor líquido */
-		(<TLiberado>demanda).liquido.value = demanda.financiado.value - custoTotal;
+		(<TLiberado>demanda).liquido.value =
+			demanda.financiado.value - custoTotal;
 
 		return { ...demanda, ...{ computed: cmpt } };
 	};
@@ -332,7 +357,9 @@ export class SAC {
 	 * @param demanda - A demanda de crédito contendo informações como data de operação, carência, diabase e prazo.
 	 * @returns Um objeto contendo a lista de datas e dias corridos por parcela, além do total acumulado.
 	 */
-	protected static __gerarDiasPorParcela(demanda: TDemandaCredito): TDiasCount {
+	protected static __gerarDiasPorParcela(
+		demanda: TDemandaCredito,
+	): TDiasCount {
 		const cache_key = String(new DiasCountCacheRecordkey(demanda));
 
 		if (!HAS(<string>cache_key, SAC._cache__diasPorParcela)) {
@@ -349,7 +376,8 @@ export class SAC {
 
 			let vencimentoBase = new Date(dataPrimeiroVenc);
 			while (
-				diasCorridos(dataOperacao, vencimentoBase) < demanda.carenciaDias
+				diasCorridos(dataOperacao, vencimentoBase) <
+				demanda.carenciaDias
 			) {
 				vencimentoBase.setMonth(vencimentoBase.getMonth() + 1);
 				vencimentoBase = diaUtilOuProx(
@@ -402,7 +430,9 @@ export class SAC {
 		tolerancia = 0.01,
 		maxIter = 100,
 	): boolean | TRCredito {
-		return (this.constructor as typeof SAC).__decobreBrutoNecessarioECalcula(
+		return (
+			this.constructor as typeof SAC
+		).__decobreBrutoNecessarioECalcula(
 			this._demanda,
 			naoRepetirAmortiza,
 			tolerancia,
@@ -437,7 +467,8 @@ export class SAC {
 			maxIter: maxIter,
 		};
 
-		const diasPorParcela: TDiasCount = SAC.__gerarDiasPorParcela(demanda);
+		const diasPorParcela: TDiasCount =
+			SAC.__gerarDiasPorParcela(demanda);
 
 		if (
 			demanda.prazoMeses <= 0 ||
@@ -456,7 +487,8 @@ export class SAC {
 
 		// Soma ponderada dos fatores diários
 		const somaFatorIOFdiario =
-			Math.pow(demanda.iof.p.diario.value + 1, diasPorParcela.total) - 1;
+			Math.pow(demanda.iof.p.diario.value + 1, diasPorParcela.total) -
+			1;
 
 		const liquidoDesejado = (<TLiberado>demanda).liquido.value;
 
@@ -490,10 +522,9 @@ export class SAC {
 				);
 			}
 
-			const clc: boolean | TRCredito = (this.constructor as typeof SAC).__sac(
-				demanda,
-				naoRepetirAmortiza,
-			);
+			const clc: boolean | TRCredito = (
+				this.constructor as typeof SAC
+			).__sac(demanda, naoRepetirAmortiza);
 
 			if (!clc)
 				throw new Error(

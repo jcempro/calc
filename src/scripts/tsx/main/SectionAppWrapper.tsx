@@ -1,24 +1,24 @@
 import '@scss/main/SectionAppWrapper.scss';
-import MainContent from './MainContent'
-import NavIcon from '@ext/NavIcon'
-import HeaderTer from './HeaderTer'
+import MainContent from './MainContent';
+import NavIcon from '@ext/NavIcon';
+import HeaderTer from './HeaderTer';
 
 export default function SectionAppWrapper() {
-  return (
-    <>
-      <section className='app-wrapper'>
-        {/* Header Terciário */}
-        <HeaderTer />
+	return (
+		<>
+			<section className="app-wrapper">
+				{/* Header Terciário */}
+				<HeaderTer />
 
-        <section className='app-main'>
-          <NavIcon escopo='left-app' />
+				<section className="app-main">
+					<NavIcon escopo="left-app" />
 
-          {/* Conteúdo principal */}
-          <MainContent />
+					{/* Conteúdo principal */}
+					<MainContent />
 
-          <NavIcon escopo='right-app' />
-        </section>
-      </section>
-    </>
-  );
+					<NavIcon escopo="right-app" />
+				</section>
+			</section>
+		</>
+	);
 }

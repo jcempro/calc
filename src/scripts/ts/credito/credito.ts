@@ -67,7 +67,10 @@ export type TFinanciado = {
 	financiado: TCurrency;
 };
 
-export type TCreditoAlvo = TFinanciado | TLiberado | (TFinanciado & TLiberado);
+export type TCreditoAlvo =
+	| TFinanciado
+	| TLiberado
+	| (TFinanciado & TLiberado);
 
 export type TFlatTAC = TTeto & {
 	v: TNumberTypes;
@@ -148,9 +151,13 @@ export abstract class credito {
 		return credito._default;
 	}
 
-	public static inicializaIOF(data: any, tipo: 'pf' | 'pj' = 'pj'): TIOF {
+	public static inicializaIOF(
+		data: any,
+		tipo: 'pf' | 'pj' = 'pj',
+	): TIOF {
 		const obj = typeof data === 'object' && data !== null ? data : {};
-		const get = <T>(key: T_get_nested): T | undefined => GET(key, obj);
+		const get = <T>(key: T_get_nested): T | undefined =>
+			GET(key, obj);
 
 		return {
 			p: {
@@ -184,7 +191,9 @@ export abstract class credito {
 					new TPercent(validarNumero(get<number>(['c', 'diario']), 0))
 				),
 				adicional: <TNumberTypes>(
-					new TPercent(validarNumero(get<number>(['c', 'adicional']), 0))
+					new TPercent(
+						validarNumero(get<number>(['c', 'adicional']), 0),
+					)
 				),
 			},
 		};
@@ -222,31 +231,56 @@ export abstract class credito {
 	): TDemandaCredito {
 		const obj = typeof data === 'object' && data !== null ? data : {};
 
-		const get = <T>(key: T_get_nested): T | undefined => GET(key, obj);
+		const get = <T>(key: T_get_nested): T | undefined =>
+			GET(key, obj);
 
 		return {
 			// TCreditoAlvo
 			financiado: new TCurrency(get<number>('financiado'), (v) =>
 				validarNumero(v, 0),
 			),
-			liquido: new TCurrency(validarNumero(get<number>('liquido'), 0)),
+			liquido: new TCurrency(
+				validarNumero(get<number>('liquido'), 0),
+			),
 
 			// TDemandaCredito
-			data_operacao: toDate(get<unknown>('data_operacao'), new Date()),
+			data_operacao: toDate(
+				get<unknown>('data_operacao'),
+				new Date(),
+			),
 
-			diabase: validarNumero(get<number>('diabase'), 30, 1, 28) as TDiaMes,
+			diabase: validarNumero(
+				get<number>('diabase'),
+				30,
+				1,
+				28,
+			) as TDiaMes,
 			jurosAm: new TPercent(
 				validarNumero(get<number>('jurosAm'), 0.01, 0.0, 1.0),
 			),
-			prazoMeses: validarNumero(get<number>('prazoMeses'), 12, 1, 460),
-			carenciaDias: validarNumero(get<number>('carenciaDias'), 0, 0, 360),
+			prazoMeses: validarNumero(
+				get<number>('prazoMeses'),
+				12,
+				1,
+				460,
+			),
+			carenciaDias: validarNumero(
+				get<number>('carenciaDias'),
+				0,
+				0,
+				360,
+			),
 
 			custos: {
 				tac: {
-					v: <TNumberTypes>new TPercent(validarNumero(get<number>('tac'), 0)),
+					v: <TNumberTypes>(
+						new TPercent(validarNumero(get<number>('tac'), 0))
+					),
 				},
 				flat: {
-					v: <TNumberTypes>new TPercent(validarNumero(get<number>('flat'), 0)),
+					v: <TNumberTypes>(
+						new TPercent(validarNumero(get<number>('flat'), 0))
+					),
 				},
 			},
 
@@ -258,7 +292,10 @@ export abstract class credito {
 				TSacPrice.SAC,
 			),
 
-			jurosNaCarencia: validarBoolean(get<unknown>('jurosNaCarencia'), false),
+			jurosNaCarencia: validarBoolean(
+				get<unknown>('jurosNaCarencia'),
+				false,
+			),
 			simplesn: false,
 		};
 	}
@@ -292,26 +329,27 @@ export abstract class credito {
 		return <T>new TCurrency(r);
 	}
 
-	public static calcFlatTacIof<T extends number | TCurrency = TCurrency>(
+	public static calcFlatTacIof<
+		T extends number | TCurrency = TCurrency,
+	>(
 		bruto: T,
 		source: TFlatTAC | TIOFP,
 		caller: string,
 		tipo: `TAC` | `FLAT` | `IOF`,
 	): T {
-		const valor: TNumberTypes = HAS('v', source)
-			? (<TFlatTAC>source).v
-			: ((<TIOFP>source).adicional as TNumberTypes);
+		const valor: TNumberTypes =
+			HAS('v', source) ?
+				(<TFlatTAC>source).v
+			:	((<TIOFP>source).adicional as TNumberTypes);
 
 		const b: number = typeof bruto === `number` ? bruto : bruto.value;
 
 		let r: number =
-			valor.tipo === ENumberIs.currency
-				? valor.value
-				: valor.tipo === ENumberIs.percentual
-				? valor.value * b
-				: ((): number => {
-						throw `${caller}->calcFlatTAC: ${tipo} não é percentual nem moeda.`;
-				  })();
+			valor.tipo === ENumberIs.currency ? valor.value
+			: valor.tipo === ENumberIs.percentual ? valor.value * b
+			: ((): number => {
+					throw `${caller}->calcFlatTAC: ${tipo} não é percentual nem moeda.`;
+				})();
 
 		return credito.limitTeto<T>(bruto, source, r);
 	}

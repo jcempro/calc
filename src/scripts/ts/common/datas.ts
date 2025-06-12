@@ -13,11 +13,17 @@ export function isValidDateInput(value: any): boolean {
 	return false;
 }
 
-export function toDate(value: any, fallback: Date = new Date()): Date {
+export function toDate(
+	value: any,
+	fallback: Date = new Date(),
+): Date {
 	return parseDate(value, fallback);
 }
 
-export function parseDate(raw: any, fallback: Date = new Date()): Date {
+export function parseDate(
+	raw: any,
+	fallback: Date = new Date(),
+): Date {
 	if (raw instanceof Date) return raw;
 	if (typeof raw === 'string' || typeof raw === 'number') {
 		const parsed = isValidDateInput(raw) ? new Date(raw) : null;
@@ -193,7 +199,10 @@ export function diaUtilOuProx(data: TDate): Date {
 	return isDiaUtil(data) ? new Date(data) : proxDiaUtil(data);
 }
 
-export function diaBaseUtilOuProx(data: TDate, max: number = 28): Date {
+export function diaBaseUtilOuProx(
+	data: TDate,
+	max: number = 28,
+): Date {
 	let n: number;
 	let tentativas = 0;
 	const MAX_TENTATIVAS = 100;

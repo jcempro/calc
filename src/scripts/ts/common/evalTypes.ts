@@ -81,7 +81,8 @@ export function registerType(
 	fieldTypes?: TFieldType | TFieldType[],
 ): void {
 	if (
-		(typeof name_args !== `string` && typeof name_args !== `object`) ||
+		(typeof name_args !== `string` &&
+			typeof name_args !== `object`) ||
 		(typeof name_args === `object` &&
 			!('tipo' in name_args) &&
 			!('fieldTypes' in name_args))
@@ -116,7 +117,11 @@ export function registerType(
 		return Array.isArray(t) ? t : [t];
 	})();
 
-	const total = Math.max(_names.length, _tipo.length, _fieldTypes.length);
+	const total = Math.max(
+		_names.length,
+		_tipo.length,
+		_fieldTypes.length,
+	);
 
 	for (let k = 0; k < total; k++) {
 		const name = _names[k] ?? _names[0];
@@ -137,7 +142,10 @@ export function registerType(
  * @param type Tipo a ser convertido ('string', 'number', etc.)
  * @param value Valor bruto
  */
-function convertPrimitive(type: TypeHint | TypeHint[], value: any): any {
+function convertPrimitive(
+	type: TypeHint | TypeHint[],
+	value: any,
+): any {
 	if (Array.isArray(type)) {
 		return value; // Tuplas ou arrays já são tratados antes
 	}
@@ -167,7 +175,9 @@ function convertPrimitive(type: TypeHint | TypeHint[], value: any): any {
  * @param type Classe
  * @returns Definição registrada (se houver)
  */
-function findDefinitionByConstructor(type: Constructor): TTypeDefs | undefined {
+function findDefinitionByConstructor(
+	type: Constructor,
+): TTypeDefs | undefined {
 	for (const [, def] of _typeRegistry.entries()) {
 		if (def.name === type) return def;
 	}
@@ -177,7 +187,7 @@ function findDefinitionByConstructor(type: Constructor): TTypeDefs | undefined {
 /**
  * Desserializa qualquer estrutura JSON em instâncias do tipo fornecido.
  * Suporta tipos primitivos, arrays, tuplas, objetos aninhados e classes.
- * 
+ *
  * TODO: deserialize, ao identificar tuple, priorize usar a classe MetaTurple caso seja compatível
  * TODO: deserialize, para classes priorize usar o método static deserialize, caso ele exista
  *
@@ -206,7 +216,8 @@ export function deserialize<T>(type: TypeHintNested, data: any): T {
 			// Tupla heterogênea (ex: ['string', 'number'])
 			const isTuple =
 				type.length > 1 ||
-				(typeof type[0] !== 'string' && typeof type[0] !== 'function');
+				(typeof type[0] !== 'string' &&
+					typeof type[0] !== 'function');
 
 			if (isTuple) {
 				return data.map((item, index) => {
@@ -219,7 +230,9 @@ export function deserialize<T>(type: TypeHintNested, data: any): T {
 			return data.map((item) => deserialize(type[0], item)) as any;
 		}
 
-		throw new Error('Tipo array ou tupla não especificado corretamente.');
+		throw new Error(
+			'Tipo array ou tupla não especificado corretamente.',
+		);
 	}
 
 	// Instância de classe

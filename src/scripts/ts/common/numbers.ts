@@ -3,12 +3,9 @@ import { HAS, MatchWithGroups } from './generic';
 import { INumberType } from './interfaces';
 
 // WARNING: Não use com valores > 100 para evitar erros de recursão no TS
-export type Enumerate<
-	N extends number,
-	Acc extends number[] = [],
-> = Acc['length'] extends N
-	? Acc[number]
-	: Enumerate<N, [...Acc, Acc['length']]>;
+export type Enumerate<N extends number, Acc extends number[] = []> =
+	Acc['length'] extends N ? Acc[number]
+	:	Enumerate<N, [...Acc, Acc['length']]>;
 
 export type numberRange<F extends number, T extends number> = Exclude<
 	Enumerate<T>,
@@ -35,7 +32,11 @@ export function validarNumero(
 	return num;
 }
 
-export function validarEnum<T>(valor: any, valoresValidos: T[], padrao: T): T {
+export function validarEnum<T>(
+	valor: any,
+	valoresValidos: T[],
+	padrao: T,
+): T {
 	return valoresValidos.includes(valor) ? valor : padrao;
 }
 
@@ -52,14 +53,24 @@ export function teto(
 	max: number,
 	def: undefined | number = undefined,
 ): number {
-	return valor > max ? (def === undefined ? max : def) : valor;
+	return (
+		valor > max ?
+			def === undefined ?
+				max
+			:	def
+		:	valor
+	);
 }
 
 export function piso(valor: number, min: number): number {
 	return valor < min ? min : valor;
 }
 
-export function tetoPiso(valor: number, min: number, max: number): number {
+export function tetoPiso(
+	valor: number,
+	min: number,
+	max: number,
+): number {
 	return teto(piso(valor, min), max);
 }
 
@@ -88,9 +99,9 @@ export abstract class TNumberTypes implements INumberType {
 
 		/* processa a entrada, e converte se for o caso */
 		this.value =
-			(input === undefined || input === null) && valida
-				? valida(input)
-				: <number>input;
+			(input === undefined || input === null) && valida ?
+				valida(input)
+			:	<number>input;
 
 		/* valida a entrada */
 		this.value = valida ? valida(this.value) : this.value;
@@ -138,8 +149,9 @@ export abstract class TNumberTypes implements INumberType {
 	}
 
 	toString(): string {
-		return `${this._markpre}${this._value.toFixed(this.__decimais)}${this._markpos
-			}`;
+		return `${this._markpre}${this._value.toFixed(this.__decimais)}${
+			this._markpos
+		}`;
 	}
 
 	protected s(regex: string): string {
@@ -149,10 +161,10 @@ export abstract class TNumberTypes implements INumberType {
 	protected getRegex(): RegExp {
 		return new RegExp(
 			'^' +
-			(this._markpre ? `(?<pre>${this.s(this._markpre)})` : '') +
-			`(?<value>[\\d]+([,\\.][\\d]{0,${this.__decimais}})?)` +
-			(this._markpos ? `(?<pos>${this.s(this._markpos)})` : '') +
-			'$',
+				(this._markpre ? `(?<pre>${this.s(this._markpre)})` : '') +
+				`(?<value>[\\d]+([,\\.][\\d]{0,${this.__decimais}})?)` +
+				(this._markpos ? `(?<pos>${this.s(this._markpos)})` : '') +
+				'$',
 			'd',
 		);
 	}
@@ -171,7 +183,9 @@ export abstract class TNumberTypes implements INumberType {
 		if (isNum(v)) {
 			this._value = parseFloat((<number>v).toFixed(this.__decimais));
 		} else if (typeof v === 'string') {
-			const m: RegExpMatchArray | null = `${v}`.match(this.getRegex());
+			const m: RegExpMatchArray | null = `${v}`.match(
+				this.getRegex(),
+			);
 
 			if (
 				!m ||
@@ -183,32 +197,32 @@ export abstract class TNumberTypes implements INumberType {
 				throw `'${n}': valor não é válido, '${v}'.`;
 			}
 
-			this._markpre = this._markpre.length > 0
-				? this._markpre
-				: HAS('pre', (<MatchWithGroups>m).groups)
+			this._markpre =
+				this._markpre.length > 0 ? this._markpre
+				: HAS('pre', (<MatchWithGroups>m).groups) ?
 					//@ts-ignore
-					? (<MatchWithGroups>m).groups['pre'].trim()
-					: '';
+					(<MatchWithGroups>m).groups['pre'].trim()
+				:	'';
 
-			this._markpos = this._markpos.length > 0
-				? this._markpos
-				: HAS('pos', (<MatchWithGroups>m).groups)
+			this._markpos =
+				this._markpos.length > 0 ? this._markpos
+				: HAS('pos', (<MatchWithGroups>m).groups) ?
 					//@ts-ignore
-					? (<MatchWithGroups>m).groups['pos'].trim()
-					: '';
+					(<MatchWithGroups>m).groups['pos'].trim()
+				:	'';
 
 			const mark: string = `${this._markpre},${this._markpre}`;
 
-			this._tipo = this._tipo
-				? this._tipo
-				: (mark.match(/[\%]/))
-					? ENumberIs.percentual
-					: (mark.match(/[\$]/))
-						? ENumberIs.currency
-						: ENumberIs.generic;
+			this._tipo =
+				this._tipo ? this._tipo
+				: mark.match(/[\%]/) ? ENumberIs.percentual
+				: mark.match(/[\$]/) ? ENumberIs.currency
+				: ENumberIs.generic;
 
 			this._value = parseFloat(
-				(<MatchWithGroups>m).groups['value'].trim().replace(/,/g, '.'),
+				(<MatchWithGroups>m).groups['value']
+					.trim()
+					.replace(/,/g, '.'),
 			);
 		} else {
 			throw `'${n}': valor não é válido, '${v}'.`;

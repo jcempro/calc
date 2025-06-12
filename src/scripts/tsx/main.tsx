@@ -1,7 +1,8 @@
 import { render } from 'preact';
-import HeaderSectionTop from './main/HeaderSectionTop'
-import SectionWrapper from './main/SectionWrapper'
-import Footer from './main/Footer'
+import HeaderSectionTop from './main/HeaderSectionTop';
+import SectionWrapper from './main/SectionWrapper';
+import Footer from './main/Footer';
+import '../../assets/css/tailwind.css'; // 👈 Importação do CSS
 
 export default function Master() {
 	return (

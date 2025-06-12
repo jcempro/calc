@@ -1,19 +1,19 @@
 @use '@scss/_variables' as *;
 
 // Cabeçalho principal
-header.header-primary {    
-  z-index: 1000;
-  background-color: var(--color-header-primary);
-  height: $header-height;
-  font-size: 1.125rem;
+header.header-primary {
+	z-index: 1000;
+	background-color: var(--color-header-primary);
+	height: $header-height;
+	font-size: 1.125rem;
 
-  .btb {
-    width: 2.25rem;
-    height: 2.25rem;
-    font-size: 1.125rem;
+	.btb {
+		width: 2.25rem;
+		height: 2.25rem;
+		font-size: 1.125rem;
 
-    span {
-      display: none;
-    }
-  }
+		span {
+			display: none;
+		}
+	}
 }

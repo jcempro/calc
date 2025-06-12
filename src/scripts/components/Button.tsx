@@ -1,7 +1,8 @@
 import { JSX } from 'preact';
 import './Button.scss';
 
-export interface IButton extends JSX.HTMLAttributes<HTMLLabelElement> {
+export interface IButton
+	extends JSX.HTMLAttributes<HTMLLabelElement> {
 	htmlFor?: string;
 	caption?: string;
 	ariaLabel?: string;
@@ -9,7 +10,12 @@ export interface IButton extends JSX.HTMLAttributes<HTMLLabelElement> {
 	escopo?: string;
 }
 
-export function Button({ icone, caption, escopo, ...props }: IButton) {
+export function Button({
+	icone,
+	caption,
+	escopo,
+	...props
+}: IButton) {
 	props.className = `btb-${escopo ?? `btb`} ${
 		props.className ? ' ' + props.className : ''
 	}`;

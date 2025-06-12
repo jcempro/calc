@@ -16,7 +16,9 @@ export function Menu({
 	checked,
 	...props
 }: IMenu) {
-	const id = useRef(`menu-${Math.random().toString(36).slice(2, 18)}`);
+	const id = useRef(
+		`menu-${Math.random().toString(36).slice(2, 18)}`,
+	);
 
 	// Contador para sincronização automática
 	const menuIndex = useRef(
@@ -54,12 +56,15 @@ export function Menu({
 		};
 	}, [escopo, checked]);
 */
-	props.className = props.className?.toString().match(/menu_component/i)
-		? props.className
-		: `${props.className} menu_component`;
+	props.className =
+		props.className?.toString().match(/menu_component/i) ?
+			props.className
+		:	`${props.className} menu_component`;
 
 	return (
-		<div className={`menu-wrapper-${escopo} ${props.className || ''}`}>
+		<div
+			className={`menu-wrapper-${escopo} ${props.className || ''}`}
+		>
 			<input
 				type="radio"
 				name={escopo}

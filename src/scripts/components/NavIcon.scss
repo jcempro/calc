@@ -3,15 +3,15 @@
 // Cabeçalho principal
 nav[class^='inav-'],
 nav[class*=' inav-'] {
-  display: flex;
-  
-  ul {
-    text-decoration: none;
-    list-style: none;
+	display: flex;
 
-    li {
-      min-width: 1rem;
-      min-height: 1rem;
-    }
-  }
+	ul {
+		text-decoration: none;
+		list-style: none;
+
+		li {
+			min-width: 1rem;
+			min-height: 1rem;
+		}
+	}
 }

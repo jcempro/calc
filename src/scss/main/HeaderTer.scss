@@ -2,17 +2,17 @@
 
 // Cabeçalho terciário
 header.header-tertiary {
-  top: 0;
-  left: 0;
-  right: 0;
-  height: $header2-height;
-  background-color: var(--color-header-secondary);
-  color: var(--color-header-secondary-text);
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0 1rem;
-  user-select: none;
-  z-index: 999;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);  
+	top: 0;
+	left: 0;
+	right: 0;
+	height: $header2-height;
+	background-color: var(--color-header-secondary);
+	color: var(--color-header-secondary-text);
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 0 1rem;
+	user-select: none;
+	z-index: 999;
+	box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
 }
