@@ -24,15 +24,12 @@ import {
 	TFinanciado,
 	TParcelaRecord,
 	TDemandaCredito,
-	inicializaDemandaCredito,
+	credito,
 	ExtratoCredito,
 	TComputed,
-	inicializaIOF,
+
 	//	DemandaCreditoDatas,
 	IDemandaCreditoDatas,
-	TFlatTAC_full,
-	calcFlatTacIof,
-	limitTeto,
 } from './credito.ts';
 
 type TDiasCount = {
@@ -57,8 +54,8 @@ export class SAC {
 
 	/*
 	 **/
-	constructor(input: any, iof: TIOFP) {
-		this._demanda = inicializaDemandaCredito(input);
+	constructor(input: TDemandaCredito, iof: TIOFP) {
+		this._demanda = credito.inicializaDemandaCredito(input);
 		this._iof = iof;
 	}
 
@@ -149,7 +146,7 @@ export class SAC {
 				},
 			},
 			diasUteis: 0,
-			iof: inicializaIOF({
+			iof: credito.inicializaIOF({
 				p: {
 					adicional: demanda.iof.p.adicional,
 					diario: demanda.iof.p.diario,
@@ -167,7 +164,7 @@ export class SAC {
 		let iofTetoAtingido: boolean = false;
 
 		/* CALCULAMOS O IOF FIXO (ADICIONAL) */
-		(<TIOF_full>cmpt.iof).c.adicional = calcFlatTacIof(
+		(<TIOF_full>cmpt.iof).c.adicional = credito.calcFlatTacIof(
 			demanda.financiado as TCurrency,
 			demanda.iof.p,
 			`SAC::__sac`,
@@ -254,7 +251,7 @@ export class SAC {
 					(<TIOF_full>cmpt.iof).c.diario.value +
 					p.iof.value;
 
-				const iofLimitado = limitTeto(
+				const iofLimitado = credito.limitTeto(
 					demanda.financiado.value,
 					demanda.iof.p,
 					novo_iof_total,
@@ -276,7 +273,7 @@ export class SAC {
 		}
 
 		/* aqui calculamos a tac */
-		cmpt.custos.tac.v = calcFlatTacIof(
+		cmpt.custos.tac.v = credito.calcFlatTacIof(
 			demanda.financiado,
 			demanda.custos.tac,
 			`SAC::__sac`,
@@ -284,7 +281,7 @@ export class SAC {
 		);
 
 		/* aqui calculamos a flat */
-		cmpt.custos.flat.v = calcFlatTacIof(
+		cmpt.custos.flat.v = credito.calcFlatTacIof(
 			demanda.financiado,
 			demanda.custos.flat,
 			`SAC::__sac`,
@@ -503,7 +500,7 @@ export class SAC {
 					Logger.error('Falha em executar calculo', {
 						clc: clc,
 						args: args__,
-						line: __FILE_LINE__
+						line: __FILE_LINE__,
 					}),
 				);
 
