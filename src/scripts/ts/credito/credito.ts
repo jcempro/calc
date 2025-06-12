@@ -23,6 +23,7 @@ import { registerType } from '../common/evalTypes.ts';
 import { Meta, MetaTuple } from '../common/MetaTurple.ts';
 
 import { GET } from '../common/generic.ts';
+import { Logger } from '../utils/logger.ts';
 
 //MetaTuple
 registerType('TCurrency', TCurrency);
@@ -120,7 +121,33 @@ export type TRCredito = TDemandaCredito & {
 	computed: TComputed;
 };
 
+export type TcreditoDefault = {
+	iof: {
+		pf: TIOFP;
+		pj: TIOFP;
+	};
+};
+
 export abstract class credito {
+	protected static _default: TcreditoDefault;
+
+	static def(input?: TcreditoDefault): TcreditoDefault {
+		if (input) {
+			credito._default = input;
+		}
+
+		if (!credito._default) {
+			throw new Error(
+				Logger.error(`credito.default ainda não foi inicializado.`, {
+					_defaut: credito._default,
+					line: __FILE_LINE__,
+				}),
+			);
+		}
+
+		return credito._default;
+	}
+
 	public static inicializaIOF(data: any, tipo: 'pf' | 'pj' = 'pj'): TIOF {
 		const obj = typeof data === 'object' && data !== null ? data : {};
 		const get = <T>(key: T_get_nested): T | undefined => GET(key, obj);
@@ -128,13 +155,28 @@ export abstract class credito {
 		return {
 			p: {
 				diario: <TNumberTypes>(
-					new TPercent(validarNumero(get<number>(['p', 'diario']), 0))
+					new TPercent(
+						validarNumero(
+							get<number>(['p', 'diario']),
+							credito.def().iof[tipo].diario.value,
+						),
+					)
 				),
 				adicional: <TNumberTypes>(
-					new TPercent(validarNumero(get<number>(['p', 'adicional']), 0))
+					new TPercent(
+						validarNumero(
+							get<number>(['p', 'adicional']),
+							credito.def().iof[tipo].adicional.value,
+						),
+					)
 				),
 				teto: <TNumberTypes>(
-					new TPercent(validarNumero(get<number>(['p', 'teto']), 0))
+					new TPercent(
+						validarNumero(
+							get<number>(['p', 'teto']),
+							credito.def().iof[tipo].teto?.value ?? 0,
+						),
+					)
 				),
 			},
 			c: {
