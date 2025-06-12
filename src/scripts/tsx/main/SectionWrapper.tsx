@@ -6,7 +6,7 @@ export default function SectionWrapper() {
   return (
     <>
       <section className='outer-app'>
-        <NavIcon classPart='left-wrapper'
+        <NavIcon escopo='left-wrapper'
           btbs={[
             {
               htmlFor: "menu-toggle",
@@ -19,7 +19,7 @@ export default function SectionWrapper() {
 
         <SectionAppWrapper />
 
-        <NavIcon classPart='right-wrapper' />
+        <NavIcon escopo='right-wrapper' />
       </section>
     </>
   );

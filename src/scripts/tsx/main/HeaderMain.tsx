@@ -12,7 +12,7 @@ export default function HeaderMain() {
           {
             className: "menu-button",
             ariaLabel: "Abrir menu",
-            icone: "fas fa-bars",
+            icone: "fa-solid fa-bars",
             itens:
               [
                 {

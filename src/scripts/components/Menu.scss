@@ -1,53 +1,58 @@
 @use '../../scss/variables' as *;
 @use '../../scss/common' as *;
 
-div.menu {
-  >input {
-    opacity: 0;
-    position: fixed;
-    left: -100vw;
-    top: -100vh;
-  }
+*[class*='menu-wrapper-'] {
+	> *[class*='inav-'] {
+		position: absolute;
+		min-width: 12rem;
+		background-color: var(--color-sidenav-bg);
+		box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+		padding-top: calc($header-height + $header2-height);
+		transform: translateX(-100%);
+		transition: transform 0.25s ease-in-out;
+		z-index: 1000;
+		overflow-y: auto;
+		list-style: none;
+		padding: 0;
+		margin: 0;
 
-  >label {
-    display: block;
-  }
+		li {
+			border-bottom: 1px solid var(--color-border);
 
-  >nav {
-    position: absolute;
-    min-width: 12rem;
-    background-color: var(--color-sidenav-bg);
-    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
-    padding-top: calc($header-height + $header2-height);
-    transform: translateX(-100%);
-    transition: transform 0.25s ease-in-out;
-    z-index: 1000;
-    overflow-y: auto;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+			label {
+				display: block;
+				padding: 1rem;
+				color: var(--color-sidenav-text);
+				text-decoration: none;
+				font-weight: 500;
+				transition: background 0.2s;
 
-    li {
-      border-bottom: 1px solid var(--color-border);
-    }
+				&:hover {
+					background-color: var(--color-hover);
+				}
+			}
+		}
+	}
 
-    label {
-      display: block;
-      padding: 1rem;
-      color: var(--color-sidenav-text);
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.2s;
+	> label {
+		display: inline-block;
+	}
 
-      &:hover {
-        background-color: var(--color-hover);
-      }
-    }
-  }
+	> input[type='radio'].menu_component.acionador {
+		position: fixed !important;
+		z-index: -1000 !important;
+		left: -50vw !important;
+		top: -50vh !important;
+		opacity: 0 !important;
 
-  >input:checked {
-    ~nav.menu {
-      transform: translateX(0);
-    }
-  }
+		&:checked {
+			~ *[class*='inav-'] {
+				transform: translateX(0) !important;
+			}
+
+			~ label {
+				background: red;
+			}
+		}
+	}
 }

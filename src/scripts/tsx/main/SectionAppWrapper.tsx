@@ -11,12 +11,12 @@ export default function SectionAppWrapper() {
         <HeaderTer />
 
         <section className='app-main'>
-          <NavIcon classPart='left-app' />
+          <NavIcon escopo='left-app' />
 
           {/* Conteúdo principal */}
           <MainContent />
 
-          <NavIcon classPart='right-app' />
+          <NavIcon escopo='right-app' />
         </section>
       </section>
     </>
