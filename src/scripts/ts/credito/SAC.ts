@@ -1,5 +1,10 @@
 import { Logger } from '../utils/logger.ts';
-import { IPercent, TIOF_full, TIOFP } from '../common/interfaces.ts';
+import {
+	IPercent,
+	TIOF_full,
+	TIOFP,
+	TOBJ,
+} from '../common/interfaces.ts';
 import { _PRMs_ } from '../common/params.ts';
 import {
 	ENumberIs,
@@ -54,7 +59,7 @@ export class SAC {
 
 	/*
 	 **/
-	constructor(input: any | TDemandaCredito, iof: TIOFP) {
+	constructor(input: TOBJ | TDemandaCredito, iof: TIOFP) {
 		this._demanda = credito.inicializaDemandaCredito(input);
 		this._iof = iof;
 	}
