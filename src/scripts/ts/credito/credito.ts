@@ -233,11 +233,14 @@ export abstract class credito {
 	): TDemandaCredito {
 		const obj = typeof data === 'object' && data !== null ? data : {};
 
-		const get = <T>(key: T_get_nested): T | undefined =>
+		const get = <T>(
+			key: T_get_nested,
+			gera_erro: boolean = true,
+		): T | undefined =>
 			GET(
 				key,
 				obj,
-				emit_error ?
+				emit_error && gera_erro ?
 					(k: PropertyKey) => {
 						throw new Error(
 							Logger.error(
@@ -255,6 +258,10 @@ export abstract class credito {
 					}
 				:	undefined,
 			);
+		const dt_op = toDate(
+			get<unknown>('data_operacao', false),
+			new Date(),
+		);
 
 		return {
 			// TCreditoAlvo
@@ -266,16 +273,13 @@ export abstract class credito {
 			),
 
 			// TDemandaCredito
-			data_operacao: toDate(
-				get<unknown>('data_operacao'),
-				new Date(),
-			),
+			data_operacao: dt_op,
 
 			diabase: validarNumero(
-				get<number>('diabase'),
+				get<number>('diabase', false),
 				30,
 				1,
-				28,
+				dt_op.getDate(),
 			) as TDiaMes,
 			jurosAm: new TPercent(
 				validarNumero(get<number>('jurosAm'), 0.01, 0.0, 1.0),
