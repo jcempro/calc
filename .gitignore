@@ -1,3 +1,4 @@
 node_modules
 .*/
 !.vscode
+src/__generated__
