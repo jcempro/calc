@@ -3,6 +3,7 @@ import { HAS, validarBoolean } from '../common/generic.ts';
 import {
 	TIOF,
 	TIOFP,
+	TOBJ,
 	TTeto,
 	TTeto_full,
 	T_get_nested,
@@ -258,20 +259,51 @@ export abstract class credito {
 					}
 				:	undefined,
 			);
-		const dt_op = toDate(
+
+		const getDef = (k: PropertyKey, def: number = 0): any => {
+			let rr = get<number>(k as string, false);
+
+			rr = rr !== undefined ? validarNumero(rr, def) : def;
+			return rr;
+		};
+
+		const dt_op: Date = toDate(
 			get<unknown>('data_operacao', false),
 			new Date(),
 		);
 
 		return {
-			// TCreditoAlvo
-			financiado: new TCurrency(get<number>('financiado'), (v) =>
-				validarNumero(v, 0),
-			),
-			liquido: new TCurrency(
-				validarNumero(get<number>('liquido'), 0),
-			),
+			...((): TCreditoAlvo => {
+				let financiado = getDef('financiado', 0);
+				let liquido = getDef('liquido', 0);
 
+				if (!financiado && !liquido) {
+					throw new Error(
+						Logger.error(
+							`inicializaDemandaCredito: propriedade 'financiado' ou 'liquido' devm existir em TDemandaCredito.`,
+							{
+								ags: {
+									data: data,
+									tipo: tipo,
+									emit_error: emit_error,
+								},
+								line: __FILE_LINE__,
+							},
+						),
+					);
+				}
+
+				let r: TOBJ = {};
+				if (financiado) {
+					r['financiado'] = new TCurrency(financiado);
+				}
+
+				if (liquido) {
+					r['liquido'] = new TCurrency(liquido);
+				}
+
+				return <TCreditoAlvo>r;
+			})(),
 			// TDemandaCredito
 			data_operacao: dt_op,
 
