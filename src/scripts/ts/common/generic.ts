@@ -27,9 +27,15 @@ export const HAS = (key: PropertyKey, f: object): boolean =>
 export const GET = <T>(
 	key: T_get_nested,
 	from: Record<string, any>,
+	inexist?: (x: PropertyKey) => {},
 ): T | undefined => {
+	const unk = (k: string): any => {
+		if (inexist) inexist(k);
+		return undefined;
+	};
+
 	if (typeof key === 'string') {
-		return HAS(key, from) ? (from[key] as T) : undefined;
+		return HAS(key, from) ? (from[key] as T) : unk(key);
 	}
 
 	if (Array.isArray(key)) {
@@ -37,7 +43,7 @@ export const GET = <T>(
 			if (f && typeof f === 'object' && HAS(k, f)) {
 				return f[k];
 			}
-			return undefined;
+			return unk(k);
 		}, from) as T;
 	}
 
