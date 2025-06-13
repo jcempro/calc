@@ -54,7 +54,7 @@ export class SAC {
 
 	/*
 	 **/
-	constructor(input: TDemandaCredito, iof: TIOFP) {
+	constructor(input: any | TDemandaCredito, iof: TIOFP) {
 		this._demanda = credito.inicializaDemandaCredito(input);
 		this._iof = iof;
 	}
