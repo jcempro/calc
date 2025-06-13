@@ -1,4 +1,5 @@
 import type env from '../types/env.d.ts';
+import { __FILE_LINE__ } from '../types/env.d';
 import { Logger } from '../utils/logger.ts';
 import { RecordT, T_get_nested, TOBJ } from './interfaces.ts';
 
@@ -27,7 +28,7 @@ export const HAS = (key: PropertyKey, f: object): boolean =>
 export const GET = <T>(
 	key: T_get_nested,
 	from: Record<string, any>,
-	inexist?: (x: PropertyKey) => {},
+	inexist?: (x: PropertyKey) => void,
 ): T | undefined => {
 	const unk = (k: string): any => {
 		if (inexist) inexist(k);
@@ -152,7 +153,7 @@ export function getProp<T>(
 									from: from,
 									fallback: fallback,
 								},
-								linha: env.__FILE_LINE__,
+								linha: __FILE_LINE__,
 							},
 						),
 					);
