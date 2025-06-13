@@ -1,17 +1,13 @@
-@use '../../scss/variables' as *;
+/* Mostra/Esconde a sidebar no mobile via checkbox */
+#sidebar-toggle:checked ~ div > .fixed {
+	transform: translateX(0);
+}
 
-// Cabeçalho principal
-nav[class^='inav-'],
-nav[class*=' inav-'] {
-	display: flex;
+#sidebar-toggle:not(:checked) ~ div > .fixed {
+	transform: translateX(-100%);
+}
 
-	ul {
-		text-decoration: none;
-		list-style: none;
-
-		li {
-			min-width: 1rem;
-			min-height: 1rem;
-		}
-	}
+/* Transição suave */
+.fixed {
+	transition: transform 0.3s ease;
 }

@@ -73,7 +73,7 @@ export function Menu({
 			/>
 			<Button htmlFor={id.current} escopo={escopo} {...props} />
 			<NavIcon
-				menuId={menuIndex.current}
+				menuId={id.current}
 				escopo={escopo ?? 'global_menu'}
 				btbs={itens}
 			/>

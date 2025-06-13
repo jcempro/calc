@@ -6,21 +6,11 @@ export default function SectionWrapper() {
 	return (
 		<>
 			<section className="outer-app">
-				<NavIcon
-					escopo="left-wrapper"
-					btbs={[
-						{
-							htmlFor: 'menu-toggle',
-							className: 'menu-button',
-							ariaLabel: 'Abrir menu',
-							icone: 'fas fa-bars',
-						},
-					]}
-				/>
+				<NavIcon />
 
 				<SectionAppWrapper />
 
-				<NavIcon escopo="right-wrapper" />
+				<NavIcon />
 			</section>
 		</>
 	);

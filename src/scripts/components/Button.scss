@@ -1,6 +1,32 @@
 @use '../../scss/variables' as *;
 @use '../../scss/common' as *;
 
-label[class*='btb-'] {
-	@include btb(var(--color-icon), rgba(255, 255, 255, 0.2));
+label[class*='btb-jcem-'] {
+	//@include btb(var(--color-icon), rgba(255, 255, 255, 0.2));
+	/* Estilo para modo compacto (mostrar apenas ícone ou texto) */
+	&.btb-jcem-center,
+	&.btb-compact-icon,
+	&.btb-compact-text {
+		// Esconde elementos não principais quando em modo compacto
+		span:not(.btb-compact-text),
+		div:not(.btb-compact-icon) {
+			display: none !important;
+		}
+	}
+	/* Garante centralização no modo center */
+	&.btb-jcem-center {
+		justify-content: center;
+
+		> * {
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+
+	/* Adaptação para telas pequenas */
+	@media (max-width: 639px) {
+		&.btb-jcem-ricon + span {
+			display: none;
+		}
+	}
 }

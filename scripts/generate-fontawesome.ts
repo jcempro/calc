@@ -10,7 +10,10 @@ const ICON_PACKAGES = {
 };
 
 const PROJECT_ROOT = process.cwd();
-const OUTPUT_FILE = join(PROJECT_ROOT, 'src/utils/fontawesome.ts');
+const OUTPUT_FILE = join(
+	PROJECT_ROOT,
+	'src/__generated__/fontawesome.ts',
+);
 
 // 2. Mapeia prefixos (ex: 'faHome' -> 'solid', 'faGithub' -> 'brands')
 function detectIconPackage(

@@ -1,4 +1,4 @@
-import { __FILE_LINE__ } from '../types/env.ts';
+import type env from '../types/env.d.ts';
 import { Logger } from '../utils/logger.ts';
 import { RecordT, T_get_nested, TOBJ } from './interfaces.ts';
 
@@ -130,24 +130,26 @@ export function getProp<T>(
 	fallback: T,
 	fail?: () => {},
 ): T {
-	typeof from === `object` && HAS(key, from) ? from[key]
-	: fallback !== undefined ? fallback
-	: (() => {
-			if (fail) {
-				fail();
-			} else
-				throw new Error(
-					Logger.error(
-						`getProp: não foi possível definir o 'name' com o parametros ${key}.`,
-						{
-							args: {
-								key: key,
-								from: from,
-								fallback: fallback,
+	return (
+		typeof from === `object` && HAS(key, from) ? from[key]
+		: fallback !== undefined ? fallback
+		: ((): T => {
+				if (fail) {
+					return <T>fail();
+				} else
+					throw new Error(
+						Logger.error(
+							`getProp: não foi possível definir o 'name' com o parametros ${key as string}.`,
+							{
+								args: {
+									key: key,
+									from: from,
+									fallback: fallback,
+								},
+								linha: env.__FILE_LINE__,
 							},
-							linha: __FILE_LINE__,
-						},
-					),
-				);
-		})();
+						),
+					);
+			})()
+	);
 }
