@@ -24,6 +24,7 @@ import { Meta, MetaTuple } from '../common/MetaTurple.ts';
 
 import { GET } from '../common/generic.ts';
 import { Logger } from '../utils/logger.ts';
+import { __FILE_LINE__ } from '../types/env';
 
 //MetaTuple
 registerType('TCurrency', TCurrency);
@@ -228,11 +229,32 @@ export abstract class credito {
 	public static inicializaDemandaCredito(
 		data: any,
 		tipo: 'pf' | 'pj' = 'pj',
+		emit_error: boolean = true,
 	): TDemandaCredito {
 		const obj = typeof data === 'object' && data !== null ? data : {};
 
 		const get = <T>(key: T_get_nested): T | undefined =>
-			GET(key, obj);
+			GET(
+				key,
+				obj,
+				emit_error ?
+					(k: PropertyKey) => {
+						throw new Error(
+							Logger.error(
+								`inicializaDemandaCredito: Propriedade obrigatória '${key}' inexistente, esperado TDemandaCredito.`,
+								{
+									ags: {
+										data: data,
+										tipo: tipo,
+										emit_error: emit_error,
+									},
+									line: __FILE_LINE__,
+								},
+							),
+						);
+					}
+				:	undefined,
+			);
 
 		return {
 			// TCreditoAlvo
