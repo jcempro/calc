@@ -4,11 +4,12 @@
 	"type": "module",
 	"scripts": {
 		"test": "vitest run",
+		"fa:gen": "tsx ./scripts/generate-fontawesome.ts",
 		"test:watch": "vitest",
 		"dev": "npm run generate-types && vite",
 		"generate-types": "tsx ./scripts/generate-type-metadata.ts",
 		"scss": "sass src/assets/scss:src/assets/css --no-source-map --style=compressed --watch",
-		"build": "npm run generate-types && npm run build:bundle && vite build && vite build:importmap",
+		"build": "npm run generate-types && npm run fontawesome && npm run build:bundle && vite build && vite build:importmap",
 		"build:bundle": "vite build --config vite.merged.config.ts && shx mv dist/merged/index.html dist/merged/calc.bundle.html",
 		"build:importmap": "tsx ./scripts/genImportMap.ts",
 		"build:meta": "ts-node --esm ./scripts/generate-type-metadata.ts",
@@ -17,6 +18,11 @@
 		"pretty": "prettier --write \"./**/*.{httml,js,jsx,tsx,mjs,cjs,ts,tsx,json,scss,css}\""
 	},
 	"devDependencies": {
+		"@fortawesome/fontawesome-svg-core": "^6.7.2",
+		"@fortawesome/free-brands-svg-icons": "^6.7.2",
+		"@fortawesome/free-regular-svg-icons": "^6.7.2",
+		"@fortawesome/free-solid-svg-icons": "^6.7.2",
+		"@fortawesome/react-fontawesome": "^0.2.2",
 		"@preact/preset-vite": "^2.10.1",
 		"@tailwindcss/postcss": "^4.1.10",
 		"@testing-library/jest-dom": "^6.6.3",

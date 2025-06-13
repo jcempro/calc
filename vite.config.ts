@@ -35,6 +35,16 @@ export default defineConfig(({ mode }) => ({
 	plugins: [
 		preact(),
 		{
+			name: 'fontawesome-watcher',
+			configureServer(server) {
+				server.watcher.on('change', (path) => {
+					if (path.endsWith('.tsx')) {
+						execSync('npm run fa:gen', { stdio: 'inherit' });
+					}
+				});
+			},
+		},
+		{
 			name: 'generate-type-registry',
 			buildStart() {
 				if (mode === 'production') {
