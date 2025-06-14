@@ -145,11 +145,13 @@ export abstract class credito {
 		}
 
 		if (!credito._default) {
-			throw new Error(
-				Logger.error(`credito.default ainda não foi inicializado.`, {
+			Logger.error(
+				`credito.default ainda não foi inicializado.`,
+				{
 					_defaut: credito._default,
 					line: __FILE_LINE__,
-				}),
+				},
+				true,
 			);
 		}
 
@@ -247,18 +249,17 @@ export abstract class credito {
 				obj,
 				emit_error && gera_erro ?
 					(k: PropertyKey) => {
-						throw new Error(
-							Logger.error(
-								`inicializaDemandaCredito: Propriedade obrigatória '${key}' inexistente, esperado TDemandaCredito.`,
-								{
-									ags: {
-										data: data,
-										tipo: tipo,
-										emit_error: emit_error,
-									},
-									line: __FILE_LINE__,
+						Logger.error(
+							`inicializaDemandaCredito: Propriedade obrigatória '${key}' inexistente, esperado TDemandaCredito.`,
+							{
+								ags: {
+									data: data,
+									tipo: tipo,
+									emit_error: emit_error,
 								},
-							),
+								line: __FILE_LINE__,
+							},
+							true,
 						);
 					}
 				:	undefined,
@@ -282,18 +283,17 @@ export abstract class credito {
 				let liquido = getDef('liquido', 0);
 
 				if (!financiado && !liquido) {
-					throw new Error(
-						Logger.error(
-							`inicializaDemandaCredito: propriedade 'financiado' ou 'liquido' devm existir em TDemandaCredito.`,
-							{
-								ags: {
-									data: data,
-									tipo: tipo,
-									emit_error: emit_error,
-								},
-								line: __FILE_LINE__,
+					Logger.error(
+						`inicializaDemandaCredito: propriedade 'financiado' ou 'liquido' devm existir em TDemandaCredito.`,
+						{
+							ags: {
+								data: data,
+								tipo: tipo,
+								emit_error: emit_error,
 							},
-						),
+							line: __FILE_LINE__,
+						},
+						true,
 					);
 				}
 

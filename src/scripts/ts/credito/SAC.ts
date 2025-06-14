@@ -107,17 +107,16 @@ export class SAC {
 			!HAS(`financiado`, this._demanda) &&
 			!HAS(`liquido`, this._demanda)
 		) {
-			throw new Error(
-				Logger.error(
-					`SAC:__sac: É necessário informar 'liquido' ou 'financiado'.`,
-					{
-						line: __FILE_LINE__,
-						demanda: this._demanda,
-						args: {
-							naoRepetirAmortiza: naoRepetirAmortiza,
-						},
+			Logger.error(
+				`SAC:__sac: É necessário informar 'liquido' ou 'financiado'.`,
+				{
+					line: __FILE_LINE__,
+					demanda: this._demanda,
+					args: {
+						naoRepetirAmortiza: naoRepetirAmortiza,
 					},
-				),
+				},
+				true,
 			);
 		}
 
@@ -482,14 +481,13 @@ export class SAC {
 			demanda.prazoMeses <= 0 ||
 			diasPorParcela.lista.length !== demanda.prazoMeses
 		) {
-			throw new Error(
-				Logger.error(
-					'Parâmetros inválidos: número de parcelas e dias por parcela devem ser consistentes.',
-					{
-						args: args__,
-						line: __FILE_LINE__,
-					},
-				),
+			Logger.error(
+				'Parâmetros inválidos: número de parcelas e dias por parcela devem ser consistentes.',
+				{
+					args: args__,
+					line: __FILE_LINE__,
+				},
+				true,
 			);
 		}
 
@@ -536,12 +534,14 @@ export class SAC {
 			).__sac(demanda, naoRepetirAmortiza);
 
 			if (!clc)
-				throw new Error(
-					Logger.error('Falha em executar calculo', {
+				Logger.error(
+					'Falha em executar calculo',
+					{
 						clc: clc,
 						args: args__,
 						line: __FILE_LINE__,
-					}),
+					},
+					true,
 				);
 
 			const liquidoCalculado: number = (<Required<TDemandaCredito>>(
@@ -567,11 +567,12 @@ export class SAC {
 			}
 		}
 
-		throw new Error(
-			Logger.error(
-				`__decobreBrutoNecessarioECalcula: Não convergiu após ${maxIter} iterações.`,
-				{ args: args__, line: __FILE_LINE__ },
-			),
+		Logger.error(
+			`__decobreBrutoNecessarioECalcula: Não convergiu após ${maxIter} iterações.`,
+			{ args: args__, line: __FILE_LINE__ },
+			true,
 		);
+
+		return false;
 	}
 }

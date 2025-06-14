@@ -143,20 +143,20 @@ export function getProp<T>(
 		: ((): T => {
 				if (fail) {
 					return <T>fail();
-				} else
-					throw new Error(
-						Logger.error(
-							`getProp: não foi possível definir o 'name' com o parametros ${key as string}.`,
-							{
-								args: {
-									key: key,
-									from: from,
-									fallback: fallback,
-								},
-								linha: __FILE_LINE__,
+				} else {
+					return <T>Logger.error(
+						`getProp: não foi possível definir o 'name' com o parametros ${key as string}.`,
+						{
+							args: {
+								key: key,
+								from: from,
+								fallback: fallback,
 							},
-						),
+							linha: __FILE_LINE__,
+						},
+						true,
 					);
+				}
 			})()
 	);
 }
