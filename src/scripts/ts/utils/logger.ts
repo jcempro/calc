@@ -1,3 +1,7 @@
+import { Exception } from 'sass';
+import { TOBJ } from '../common/interfaces';
+import { __DEV__ } from '../types/env';
+
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 export interface LogContext {
@@ -29,29 +33,34 @@ export class Logger {
 		};
 	}
 
-	static log(level: LogLevel, message: string, data?: any): string {
+	static log(
+		level: LogLevel,
+		message: string,
+		data?: any,
+	): [string, TOBJ, LogContext] {
 		const context = this.getCallerInfo(); // Pega o contexto com stack trace
+		const dados = {
+			message: message,
+			data: data,
+			stackTrace: context.stackTrace,
+		};
 
-		if (import.meta.env.DEV) {
+		if (__DEV__) {
 			// Modo desenvolvimento - mostra informações detalhadas
-			const { file, line } = this.getCallerInfo();
+			const { file, line } = context;
 			const str = `[${level.toUpperCase()}] ${file}:${line} - ${message}`;
-			console[level](str, { ...data, stack: context.stackTrace });
+			console[level](str, dados);
 
-			return str;
+			return [str, data, context];
 		} else {
 			// Modo produção - mensagem compacta com ID único
 			const errorId = Math.random().toString(36).substring(2, 8);
 			console[level](`[${errorId}] ${message}`);
 
 			// Envia os detalhes completos para o serviço de monitoramento
-			this.sendToMonitoring(errorId, {
-				message,
-				data: { ...data, stack: context.stackTrace },
-				...this.getCallerInfo(),
-			});
+			this.sendToMonitoring(errorId, dados);
 
-			return message;
+			return [message, data, context];
 		}
 	}
 
@@ -65,26 +74,34 @@ export class Logger {
 	}
 
 	static debug(message: string, data?: any): string {
-		return this.log('debug', message, data);
+		return this.log('debug', message, data)[0];
 	}
 
 	static info(message: string, data?: any): string {
-		return this.log('info', message, data);
+		return this.log('info', message, data)[0];
 	}
 
 	static warn(message: string, data?: any): string {
-		return this.log('warn', message, data);
+		return this.log('warn', message, data)[0];
 	}
 
-	static error(message: string | Error, data?: any): string {
-		if (message instanceof Error) {
-			return this.log('error', message.message, {
-				...data,
-				stack: message.stack,
-			});
-		} else {
-			return this.log('error', message, data);
-		}
+	static error(
+		message: string | Error,
+		data?: any,
+		throws: boolean = false,
+	): [string, TOBJ, LogContext] {
+		const e: [string, TOBJ, LogContext] =
+			message instanceof Error ?
+				this.log('error', message.message, {
+					...data,
+					stackOriginal: message.stack,
+				})
+			:	this.log('error', message, data);
+
+		if (throws)
+			throw message instanceof Error ? message : new Error(message);
+
+		return e;
 	}
 }
 
