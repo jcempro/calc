@@ -1,6 +1,7 @@
 import { HAS, validarBoolean } from '../common/generic.ts';
 
 import {
+	ParcialKeys,
 	TIOF,
 	TIOFP,
 	TOBJ,
@@ -61,18 +62,10 @@ export class ExtratoCredito extends MetaTuple<TParcelaRecord> {
 	}
 }
 
-export type TLiberado = {
-	liquido: TCurrency;
+export type TCreditoAlvo = {
+	financiado?: TCurrency;
+	liquido?: TCurrency;
 };
-
-export type TFinanciado = {
-	financiado: TCurrency;
-};
-
-export type TCreditoAlvo =
-	| TFinanciado
-	| TLiberado
-	| (TFinanciado & TLiberado);
 
 export type TFlatTAC = TTeto & {
 	v: TNumberTypes;
@@ -88,14 +81,14 @@ export type TCustos = {
 	tac: TFlatTAC;
 };
 
-export interface IDemandaCreditoDatas {
+export type TDemandaCreditoDatas = {
 	data_operacao: Date;
 	diabase: TDiaMes;
 	prazoMeses: number;
-}
+};
 
-export type TDemandaCredito = TCreditoAlvo &
-	IDemandaCreditoDatas & {
+export type TDemandaCredito = TDemandaCreditoDatas &
+	TCreditoAlvo & {
 		jurosAm: TPercent;
 		carenciaDias: number;
 		custos: TCustos;
@@ -104,6 +97,16 @@ export type TDemandaCredito = TCreditoAlvo &
 		simplesn: boolean;
 		iof: TIOF;
 	};
+
+export type TDemandaCreditoMinimo = ParcialKeys<
+	Required<TDemandaCredito>,
+	'data_operacao' | 'diabase' | 'financiado' | 'liquido'
+>;
+
+export type TDemandaCreditoAceitavel = ParcialKeys<
+	TDemandaCredito,
+	'data_operacao' | 'diabase' | 'liquido' | 'financiado'
+>;
 
 export type TComputed = {
 	diasUteis: number;
@@ -228,11 +231,12 @@ export abstract class credito {
 	 */
 
 	public static inicializaDemandaCredito(
-		data: any,
+		data: TDemandaCreditoMinimo,
 		tipo: 'pf' | 'pj' = 'pj',
 		emit_error: boolean = true,
 	): TDemandaCredito {
-		const obj = typeof data === 'object' && data !== null ? data : {};
+		const obj: TOBJ =
+			typeof data === 'object' && data !== null ? data : {};
 
 		const get = <T>(
 			key: T_get_nested,

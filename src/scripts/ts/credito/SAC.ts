@@ -1,4 +1,5 @@
 import { Logger } from '../utils/logger.ts';
+import { ParcialKeys } from '../common/interfaces.ts';
 import {
 	IPercent,
 	TIOF_full,
@@ -25,17 +26,17 @@ import {
 
 import {
 	TRCredito,
-	TLiberado,
-	TFinanciado,
 	TParcelaRecord,
 	TDemandaCredito,
 	credito,
 	ExtratoCredito,
 	TComputed,
-
 	//	DemandaCreditoDatas,
-	IDemandaCreditoDatas,
+	TDemandaCreditoDatas,
+	TDemandaCreditoMinimo,
 } from './credito.ts';
+
+import { __FILE_LINE__ } from '../types/env';
 
 type TDiasCount = {
 	lista: [Date, number][];
@@ -43,7 +44,7 @@ type TDiasCount = {
 };
 type AsString<T> = T extends string ? T : string;
 
-export class DiasCountCacheRecordkey extends PropertyStr<IDemandaCreditoDatas> {}
+export class DiasCountCacheRecordkey extends PropertyStr<TDemandaCreditoDatas> {}
 export type TDiasCountCacheRecord = Record<
 	AsString<DiasCountCacheRecordkey>,
 	TDiasCount
@@ -59,7 +60,7 @@ export class SAC {
 
 	/*
 	 **/
-	constructor(input: TOBJ | TDemandaCredito, iof: TIOFP) {
+	constructor(input: TDemandaCreditoMinimo, iof: TIOFP) {
 		this._demanda = credito.inicializaDemandaCredito(input);
 		this._iof = iof;
 	}
@@ -194,7 +195,8 @@ export class SAC {
 		const datas = this.__gerarDiasPorParcela(demanda);
 
 		const amortizacaoConstante =
-			(<TFinanciado>demanda).financiado.value / datas.lista.length;
+			(<Required<TDemandaCredito>>demanda).financiado.value /
+			datas.lista.length;
 		const jurosDiario = demanda.jurosAm.value / 30; // simplificação: 30 dias no mês
 
 		for (let j = 0; j < datas.lista.length; j++) {
@@ -206,7 +208,7 @@ export class SAC {
 				amortizacao: 0,
 				juros: 0,
 				pagamento: 0,
-				saldoDevedor: (<TFinanciado>demanda).financiado,
+				saldoDevedor: (<Required<TDemandaCredito>>demanda).financiado,
 			} as unknown as TParcelaRecord;
 
 			/* calcula a data desta parcela */
@@ -219,7 +221,7 @@ export class SAC {
 			if (j > 0) {
 				const sldAnterior =
 					j === 1 ?
-						(<TFinanciado>demanda).financiado
+						(<Required<TDemandaCredito>>demanda).financiado
 					:	cmpt.extrato[cmpt.extrato.length - 1].saldoDevedor;
 
 				p.amortizacao.value =
@@ -255,7 +257,7 @@ export class SAC {
 					typeof cmpt.iof.p?.teto?.value === 'number'
 				) ?
 					cmpt.iof.p.teto?.value *
-					(<TFinanciado>demanda).financiado.value
+					(<Required<TDemandaCredito>>demanda).financiado.value
 				:	-1;
 
 			if (!iofTetoAtingido) {
@@ -278,7 +280,7 @@ export class SAC {
 					p.iof.value;
 
 				const iofLimitado = credito.limitTeto(
-					demanda.financiado.value,
+					(<Required<TDemandaCredito>>demanda).financiado.value,
 					demanda.iof.p,
 					novo_iof_total,
 					(teto: number) => {
@@ -301,7 +303,7 @@ export class SAC {
 
 		/* aqui calculamos a tac */
 		cmpt.custos.tac.v = credito.calcFlatTacIof(
-			demanda.financiado,
+			(<Required<TDemandaCredito>>demanda).financiado,
 			demanda.custos.tac,
 			`SAC::__sac`,
 			`TAC`,
@@ -309,7 +311,7 @@ export class SAC {
 
 		/* aqui calculamos a flat */
 		cmpt.custos.flat.v = credito.calcFlatTacIof(
-			demanda.financiado,
+			(<Required<TDemandaCredito>>demanda).financiado,
 			demanda.custos.flat,
 			`SAC::__sac`,
 			`FLAT`,
@@ -330,8 +332,9 @@ export class SAC {
 		);
 
 		/* aqui calculamos o valor líquido */
-		(<TLiberado>demanda).liquido.value =
-			demanda.financiado.value - custoTotal;
+		(<Required<TDemandaCredito>>demanda).liquido.value =
+			(<Required<TDemandaCredito>>demanda).financiado.value -
+			custoTotal;
 
 		return { ...demanda, ...{ computed: cmpt } };
 	};
@@ -495,7 +498,8 @@ export class SAC {
 			Math.pow(demanda.iof.p.diario.value + 1, diasPorParcela.total) -
 			1;
 
-		const liquidoDesejado = (<TLiberado>demanda).liquido.value;
+		const liquidoDesejado = (<Required<TDemandaCredito>>demanda)
+			.liquido.value;
 
 		const estimativaInicial =
 			liquidoDesejado *
@@ -540,7 +544,9 @@ export class SAC {
 					}),
 				);
 
-			const liquidoCalculado: number = (<TLiberado>clc).liquido.value;
+			const liquidoCalculado: number = (<Required<TDemandaCredito>>(
+				clc
+			)).liquido.value;
 
 			const erro = liquidoCalculado - liquidoDesejado;
 			const toleranciaRelativa = Math.max(tolerancia, bruto * 0.0001);

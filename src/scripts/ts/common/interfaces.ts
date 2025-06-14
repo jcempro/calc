@@ -50,3 +50,9 @@ export type T_get_nested = string | string[];
 // usando um alias de tipo e mapped type — a maneira mais flexível
 export type RecordT<T> = Record<PropertyKey, T>;
 export type TOBJ = RecordT<any>;
+
+export type ParcialKeys<T, K extends keyof T> = Omit<T, K> &
+	Partial<Pick<T, K>>;
+
+export type RequiredKeys<T, K extends keyof T> = Omit<T, K> &
+	Required<Pick<T, K>>;
