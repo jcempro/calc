@@ -108,6 +108,9 @@ export default defineConfig(({ mode }) => ({
 				banner: `const __FILE_LINE__ = { file: 'prod', line: '0' };`,
 			},
 		},
+		// Habilita renomeação/mangle agressiva de identificadores
+		terserOptions: undefined, // não usamos
+		emptyOutDir: true,
 	},
 	esbuild: {
 		drop: mode === 'production' ? ['console', 'debugger'] : [],
