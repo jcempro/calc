@@ -47,6 +47,10 @@ export function isEmpty<T = any>(v: T): boolean {
 	return !noEmpty(v);
 }
 
+export function isTrue(v: any): boolean {
+	return isEmpty(v) || v === false ? false : true;
+}
+
 export function validarBoolean(v: any, padrao: boolean): boolean {
 	return typeof v === 'boolean' ? v : padrao;
 }
