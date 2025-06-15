@@ -210,3 +210,9 @@ export function getProp<T>(
 			})()
 	);
 }
+
+export function guid(size: number = 18) {
+	return `i${Math.random()
+		.toString(size * 2)
+		.slice(2, size)}`;
+}
