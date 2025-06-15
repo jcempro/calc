@@ -45,6 +45,7 @@
 		"sass": "^1.89.0",
 		"sass-embedded": "^1.89.0",
 		"shx": "^0.4.0",
+		"tailwind-variants": "^1.0.0",
 		"tailwindcss": "^4.1.10",
 		"ts-morph": "^13.0.3",
 		"ts-node": "^10.9.2",
