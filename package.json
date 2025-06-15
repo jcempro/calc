@@ -9,7 +9,7 @@
 		"dev": "npm run generate-types && vite",
 		"generate-types": "tsx ./scripts/generate-type-metadata.ts",
 		"scss": "sass src/assets/scss:src/assets/css --no-source-map --style=compressed --watch",
-		"build": "npm run generate-types && npm run fontawesome && npm run build:bundle && vite build && vite build:importmap",
+		"build": "npm run generate-types && npm run fa:gen && npm run build:bundle && vite build && vite build:importmap",
 		"build:bundle": "vite build --config vite.merged.config.ts && shx mv dist/merged/index.html dist/merged/calc.bundle.html",
 		"build:importmap": "tsx ./scripts/genImportMap.ts",
 		"build:meta": "ts-node --esm ./scripts/generate-type-metadata.ts",
