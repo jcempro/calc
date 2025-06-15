@@ -12,15 +12,19 @@ export interface LogContext {
 
 export class Logger {
 	private static getCallerInfo(): LogContext {
+		Error.stackTraceLimit = 36;
 		const error = new Error();
-		const stack = error.stack?.split('\n') || [];
+		const stack =
+			error.stack
+				?.split('\n')
+				.filter((item) => !item.includes(`node_modules`)) || [];
 
 		// Pega a linha do chamador direto
 		const callerLine = stack[4].trim() || '';
 
 		// Novo: Pega até 5 níveis de stack
 		const deepStack = stack
-			.slice(4, 10)
+			.slice(4, 16)
 			.join('\n')
 			.replace(/((file|https?|ftps?):\/\/[^\/]+|[ ]{2,50})/gi, ``); // Pega linhas 2 a 6 (excluindo "Error" e o próprio getCallerInfo)
 
