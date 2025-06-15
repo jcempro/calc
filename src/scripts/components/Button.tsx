@@ -3,14 +3,17 @@ import './Button.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { HAS } from '../ts/common/generic';
+import { TOBJ } from '../ts/common/interfaces';
+
+export type TBTBIcon = {
+	left?: IconProp;
+	right?: IconProp;
+};
 
 export interface IButton
 	extends JSX.HTMLAttributes<HTMLLabelElement> {
 	caption?: string;
-	icone?: Partial<{
-		left: IconProp;
-		right: IconProp;
-	}>;
+	icone?: string | Partial<TBTBIcon>;
 	ariaLabel?: string;
 	htmlFor?: string;
 	escopo?: string;
@@ -32,8 +35,14 @@ export function Button({
 		props.className ? ' ' + props.className : ''
 	}`;
 
-	const has_licon = icone && HAS('left', icone);
-	const has_ricon = icone && HAS('right', icone) && !center; // Não mostra ícone direito se center=true
+	const icon: TBTBIcon =
+		typeof icone === `string` && icone.trim().length > 0 ?
+			({ left: icone.trim() } as TOBJ)
+		: !icone ? {}
+		: (icone as TBTBIcon);
+
+	const has_licon = icone && HAS('left', icon);
+	const has_ricon = icone && HAS('right', icon) && !center; // Não mostra ícone direito se center=true
 	const has_cap = caption && caption.trim().length > 0;
 
 	// Classes condicionais
@@ -61,7 +70,7 @@ export function Button({
           `}
 				>
 					<FontAwesomeIcon
-						icon={icone.left as IconProp}
+						icon={icon.left as IconProp}
 						class="h-4 w-4"
 					/>
 				</div>
@@ -86,7 +95,7 @@ export function Button({
 			{has_ricon && (
 				<div class="ml-auto hidden sm:flex flex-shrink-0">
 					<FontAwesomeIcon
-						icon={icone.right as IconProp}
+						icon={icon.right as IconProp}
 						class="h-4 w-4"
 					/>
 				</div>
