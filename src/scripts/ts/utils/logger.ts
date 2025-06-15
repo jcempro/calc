@@ -1,6 +1,5 @@
 import { Exception } from 'sass';
 import { TOBJ } from '../common/interfaces';
-import { __DEV__ } from '../types/env';
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
@@ -8,7 +7,7 @@ export interface LogContext {
 	file: string;
 	line: string;
 	timestamp: number;
-	stackTrace?: string; // Adicionando stack trace ao contexto
+	stackTrace?: string[]; // Adicionando stack trace ao contexto
 }
 
 export class Logger {
@@ -16,20 +15,25 @@ export class Logger {
 		const error = new Error();
 		const stack = error.stack?.split('\n') || [];
 
-		// Pega a linha do chamador direto (como antes)
-		const callerLine = stack[3] || '';
+		// Pega a linha do chamador direto
+		const callerLine = stack[4].trim() || '';
 
-		// Novo: Pega até 5 níveis de stack (personalizável)
-		const deepStack = stack.slice(2, 10).join('\n'); // Pega linhas 2 a 6 (excluindo "Error" e o próprio getCallerInfo)
+		// Novo: Pega até 5 níveis de stack
+		const deepStack = stack
+			.slice(4, 10)
+			.join('\n')
+			.replace(/((file|https?|ftps?):\/\/[^\/]+|[ ]{2,50})/gi, ``); // Pega linhas 2 a 6 (excluindo "Error" e o próprio getCallerInfo)
 
 		return {
 			file:
-				callerLine.match(
-					/(\/|\\|@)([^\/\\]+)(\/|\\|:)([^\/\\:]+)(:\d+:\d+)/,
-				)?.[0] || 'unknown',
+				callerLine
+					.match(
+						/(\/|\\|@)([^\/\\]+)(\/|\\|:)([^\/\\:]+)(:\d+:\d+)/,
+					)?.[0]
+					.replace(/:[\d]+:?/, ``) || 'unknown',
 			line: callerLine.match(/:(\d+):(\d+)/)?.[1] || '0',
 			timestamp: Date.now(),
-			stackTrace: deepStack, // Stack com mais profundidade
+			stackTrace: deepStack.trim().split(`\n`), // Stack com mais profundidade
 		};
 	}
 
@@ -48,7 +52,7 @@ export class Logger {
 		if (__DEV__) {
 			// Modo desenvolvimento - mostra informações detalhadas
 			const { file, line } = context;
-			const str = `[${level.toUpperCase()}] ${file}:${line} - ${message}`;
+			const str = `[${level.toUpperCase()}] ${message} - ${file}:${line}`;
 			console[level](str, dados);
 
 			return [str, data, context];
