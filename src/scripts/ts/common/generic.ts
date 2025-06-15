@@ -1,5 +1,3 @@
-import type env from '../types/env.d.ts';
-import { __FILE_LINE__ } from '../types/env.d';
 import { Logger } from '../utils/logger.ts';
 import { RecordT, T_get_nested, TOBJ } from './interfaces.ts';
 
@@ -21,9 +19,24 @@ export function validarBoolean(valor: any, padrao: boolean): boolean {
 }
 
 export const HAS = (key: PropertyKey, f: object): boolean =>
-	(key in f || Object.prototype.hasOwnProperty.call(f, key)) &&
-	//@ts-ignore
-	f[key] !== undefined;
+	typeof f !== 'object' ?
+		((): boolean => {
+			return !(
+				Logger.error(
+					`HAS: Parâmetro 'f' não é um objeto ou array; f='${f}'.`,
+					{
+						args: {
+							key: key,
+							f: f,
+						},
+					},
+					true,
+				) ?? false
+			);
+		})()
+	:	(key in f || Object.prototype.hasOwnProperty.call(f, key)) &&
+		//@ts-ignore
+		f[key] !== undefined;
 
 export const GET = <T>(
 	key: T_get_nested,
