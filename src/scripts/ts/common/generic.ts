@@ -14,8 +14,41 @@ export interface MatchWithGroups extends RegExpMatchArray {
 	};
 }
 
-export function validarBoolean(valor: any, padrao: boolean): boolean {
-	return typeof valor === 'boolean' ? valor : padrao;
+export function noEmpty<T = any>(v: T): boolean {
+	// Se for undefined, consideramos como vazio
+	if (v === undefined) return true;
+
+	// Verifica se é uma string vazia
+	if (typeof v === 'string' && `${v}`.trim().length === 0)
+		return true;
+
+	// Verifica se é um array vazio
+	if (Array.isArray(v) && v.length === 0) return true;
+
+	// Verifica se é um objeto "realmente vazio" (sem propriedades próprias nem herdadas)
+	if (typeof v === 'object') {
+		// Verifica se o objeto tem propriedades próprias
+		const keys = Object.getOwnPropertyNames(v);
+
+		// Se não tiver propriedades próprias e o protótipo for Object.prototype (sem propriedades herdadas), considera vazio
+		if (
+			keys.length === 0 &&
+			Object.getPrototypeOf(v) === Object.prototype
+		) {
+			return true;
+		}
+	}
+
+	// Se não for nenhuma das situações acima, o valor não é vazio
+	return false;
+}
+
+export function isEmpty<T = any>(v: T): boolean {
+	return !noEmpty(v);
+}
+
+export function validarBoolean(v: any, padrao: boolean): boolean {
+	return typeof v === 'boolean' ? v : padrao;
 }
 
 export const HAS = (key: PropertyKey, f: object): boolean =>
