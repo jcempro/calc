@@ -61,20 +61,29 @@ export default defineConfig(({ mode }) => ({
 			name: 'file-line-transform',
 			enforce: 'pre',
 			async transform(code, id) {
+				// Função auxiliar para extração da linha (evita repetição de código)
 				if (!/node_modules/.test(id) && /\.(tsx?|jsx?)$/.test(id)) {
 					const originalFile = JSON.stringify(id);
 
 					// Expressão regular melhorada para capturar linha/coluna
 					const lineReplacement =
 						mode === 'production' ?
-							'"{ file: \\"production\\", line: \\"0\\" }"'
-						:	`{ 
-            file: ${originalFile}, 
-            line: ((new Error().stack || '').split('\\n')[1]
-              ?.match(/:\\d+:\\d+/)?.[0]
-              ?.replace(/[^\\d]/g, '') || '0'
-          }`;
-
+							JSON.stringify({ file: 'production', line: '0' })
+						:	`(() => {
+        try {
+          const stackLine = new Error().stack.split('\\n')[2];
+          const match = stackLine.match(/:(\d+):\\d+/);
+          return {
+            file: ${JSON.stringify(originalFile)},
+            line: match ? match[1] : '0'
+          };
+        } catch {
+          return {
+            file: ${JSON.stringify(originalFile)},
+            line: '0'
+          };
+        }
+      })()`;
 					const transformedCode = code.replace(
 						/__FILE_LINE__/g,
 						lineReplacement,
