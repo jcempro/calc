@@ -1,6 +1,7 @@
 import { Project } from 'ts-morph';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
+import chokidar from 'chokidar';
 
 // Configurações
 const ICON_PACKAGES = {
@@ -121,7 +122,7 @@ library.add(
 }
 
 // 5. Execução principal
-(async () => {
+async function run() {
 	try {
 		const usedIcons = await findUsedIcons();
 		if (usedIcons.size === 0) {
@@ -135,4 +136,21 @@ library.add(
 		console.error('❌ Erro ao gerar fontawesome.ts:', error);
 		process.exit(1);
 	}
-})();
+}
+
+// Verifica se o modo --watch está ativo
+if (process.argv.includes('--watch')) {
+	console.log('👀 Assistindo alterações em arquivos .tsx/.jsx...');
+	const watcher = chokidar.watch('src/**/*.{tsx,jsx}', {
+		ignoreInitial: true,
+		ignored: ['**/node_modules/**', '**/*.stories.{tsx,jsx}'],
+	});
+
+	watcher.on('all', async (event, path) => {
+		console.log(`📦 Arquivo alterado: ${path} (${event})`);
+		await run();
+	});
+} else {
+	// Execução normal
+	run();
+}
