@@ -212,9 +212,11 @@ async function run() {
 	console.log(`📄 Arquivo gerado: ${OUTPUT_PATH}`);
 }
 
+await run();
+
 // Executa diretamente ou entra em modo watch
 if (process.argv.includes('--watch')) {
-	console.log('👀 Assistindo alterações em arquivos TS...');
+	console.log('👀 types: Assistindo alterações em arquivos TS...');
 	const watcher = chokidar.watch(SRC_CORINGA, {
 		ignoreInitial: true,
 		ignored: ['**/node_modules/**', '**/__generated__/**'],
@@ -223,6 +225,4 @@ if (process.argv.includes('--watch')) {
 		console.log(`🔁 Alteração detectada: ${event} → ${path}`);
 		await run();
 	});
-} else {
-	run();
 }

@@ -3,7 +3,8 @@
 	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "concurrently \"npm run types:gen:watch\" && \"npm run fa:gen:watch\" && \"npx vite\"",
+		"dev": "concurrently \"npm run types:gen:watch\" \"npm run fa:gen:watch\" \"npm run live\"",
+		"live": "vite",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"fa:gen": "tsx ./scripts/generate-fontawesome.ts",

@@ -138,9 +138,13 @@ async function run() {
 	}
 }
 
+run();
+
 // Verifica se o modo --watch está ativo
 if (process.argv.includes('--watch')) {
-	console.log('👀 Assistindo alterações em arquivos .tsx/.jsx...');
+	console.log(
+		'👀 fontawesome: Assistindo alterações em arquivos .tsx/.jsx...',
+	);
 	const watcher = chokidar.watch('src/**/*.{tsx,jsx}', {
 		ignoreInitial: true,
 		ignored: ['**/node_modules/**', '**/*.stories.{tsx,jsx}'],
@@ -150,7 +154,4 @@ if (process.argv.includes('--watch')) {
 		console.log(`📦 Arquivo alterado: ${path} (${event})`);
 		await run();
 	});
-} else {
-	// Execução normal
-	run();
 }
