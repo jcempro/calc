@@ -19,7 +19,7 @@ export interface MatchWithGroups extends RegExpMatchArray {
  *
  * @template T - Tipo genérico do valor a ser verificado
  * @param {T} v - Valor a ser verificado
- * @param {string} [true_vazio_se_tipo_diferente] - Se fornecido, retorna true quando o tipo do valor
+ * @param {string} [false_se_tipo_diferente] - Se fornecido, retorna true quando o tipo do valor
  *                                                 não corresponde ao tipo especificado
  * @returns {boolean} Retorna true se o valor for considerado vazio, false caso contrário
  *
@@ -41,37 +41,38 @@ export interface MatchWithGroups extends RegExpMatchArray {
  */
 export function isEmpty<T = any>(
 	v: T,
-	true_vazio_se_tipo_diferente?: string,
+	false_se_tipo_diferente?: string,
 ): boolean {
 	// Apenas undefined é considerado vazio imediatamente
 	if (v === undefined) return true;
 
 	// Verificação segura contra exceções para o parâmetro de tipo
-	if (true_vazio_se_tipo_diferente) {
-		const typeCheck = (typeStr: string): boolean => {
+	if (false_se_tipo_diferente) {
+		const isTipo = (typeStr: string): boolean => {
 			try {
 				const t = typeStr.trim().toLowerCase();
 
 				// Verificação segura para tipos primitivos
-				const primitiveTypes = [
-					'string',
-					'number',
-					'bigint',
-					'boolean',
-					'symbol',
-					'function',
-				];
-				if (primitiveTypes.includes(t)) {
-					return typeof v !== t;
+				if (
+					[
+						'string',
+						'number',
+						'bigint',
+						'boolean',
+						'symbol',
+						'function',
+					].includes(t)
+				) {
+					return typeof v === t;
 				}
 
 				// Verificação ultra-segura para construtores
-				const globalObj = (
-					typeof window !== 'undefined' ? window : globalThis) as any;
-				const _constructor = globalObj[t];
+				const _constructor = (
+					(typeof window !== 'undefined' ? window : globalThis) as any
+				)[t];
 
 				if (typeof _constructor === 'function') {
-					return !(v instanceof _constructor);
+					return v instanceof _constructor;
 				}
 			} catch {
 				return false;
@@ -79,8 +80,8 @@ export function isEmpty<T = any>(
 			return false;
 		};
 
-		if (typeCheck(true_vazio_se_tipo_diferente)) {
-			return true;
+		if (!isTipo(false_se_tipo_diferente)) {
+			return false;
 		}
 	}
 
@@ -113,7 +114,7 @@ export function noEmpty<T = any>(
 	v: T,
 	true_vazio_se_tipo_diferente?: string,
 ): boolean {
-	return !noEmpty(v, true_vazio_se_tipo_diferente);
+	return !isEmpty(v, true_vazio_se_tipo_diferente);
 }
 
 export function isTrue(v: any): boolean {
