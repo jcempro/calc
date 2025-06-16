@@ -36,8 +36,6 @@ import {
 	TDemandaCreditoMinimo,
 } from './credito.ts';
 
-import { __FILE_LINE__ } from '../types/env';
-
 type TDiasCount = {
 	lista: [Date, number][];
 	total: number;

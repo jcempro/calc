@@ -26,7 +26,6 @@ import { Meta, MetaTuple } from '../common/MetaTurple.ts';
 
 import { GET } from '../common/generic.ts';
 import { Logger } from '../utils/logger.ts';
-import { __FILE_LINE__ } from '../types/env';
 
 //MetaTuple
 registerType('TCurrency', TCurrency);
