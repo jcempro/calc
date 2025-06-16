@@ -6,12 +6,52 @@ import {
 	IconPrefix,
 } from '@fortawesome/fontawesome-svg-core';
 import { tv, VariantProps } from 'tailwind-variants';
+import { noEmpty } from '../../ts/common/generic';
 
 // 1. Tipos e Constantes
 export type TBTBIcon = {
 	left?: IconProp;
 	right?: IconProp;
 };
+
+// 7. Variantes do Tailwind (mantido igual)
+const buttonVariants = tv({
+	base: [
+		`btn btn-dash btn-accent`,
+		'cursor-pointer', // Garantindo cursor pointer
+		'shadow-none hover:shadow-none',
+		'rounded-lg',
+	],
+	variants: {
+		size: {
+			xs: 'btn-xs w-72',
+			sm: 'btn-sm w-72',
+			md: 'btn-md w-72',
+			lg: 'btn-lg w-72',
+		},
+		compact: {
+			true: 'w-auto',
+		},
+		center: {
+			true: 'btb-jcem-center',
+		},
+		hasLeftIcon: {
+			true: 'btb-jcem-licon',
+		},
+		hasRightIcon: {
+			true: 'btb-jcem-ricon',
+		},
+		hasCaption: {
+			true: 'btb-jcem-caption',
+		},
+	},
+	defaultVariants: {
+		size: 'md',
+		center: true,
+	},
+});
+
+type ButtonVariants = VariantProps<typeof buttonVariants>;
 
 export interface IButton
 	extends JSX.HTMLAttributes<HTMLLabelElement>,
@@ -59,8 +99,8 @@ export function Button({
 		}
 
 		// Caso 2: String (formato "fas fa-ellipsis-v")
-		if (typeof icone === 'string') {
-			const [prefix, iconName] = icone.split(' ') as [
+		if (noEmpty(icone, 'string')) {
+			const [prefix, iconName] = `${icone}`.split(' ') as [
 				IconPrefix,
 				string,
 			];
@@ -151,37 +191,3 @@ export function Button({
 		</label>
 	);
 }
-
-// 7. Variantes do Tailwind (mantido igual)
-const buttonVariants = tv({
-	base: 'btn btn-accent flex items-center',
-	variants: {
-		size: {
-			xs: 'btn-xs w-72',
-			sm: 'btn-sm w-72',
-			md: 'btn-md w-72',
-			lg: 'btn-lg w-72',
-		},
-		compact: {
-			true: 'w-auto',
-		},
-		center: {
-			true: 'btb-jcem-center',
-		},
-		hasLeftIcon: {
-			true: 'btb-jcem-licon',
-		},
-		hasRightIcon: {
-			true: 'btb-jcem-ricon',
-		},
-		hasCaption: {
-			true: 'btb-jcem-caption',
-		},
-	},
-	defaultVariants: {
-		size: 'md',
-		center: true,
-	},
-});
-
-type ButtonVariants = VariantProps<typeof buttonVariants>;

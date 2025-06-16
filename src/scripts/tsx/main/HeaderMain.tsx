@@ -1,36 +1,38 @@
 import '@scss/main.scss';
 import '@scss/main/HeaderMain.scss';
-import Headers from '@ext/Headers/Headers';
+import Headers, { TItem } from '@ext/Headers/Headers';
+import {
+	faEllipsisV,
+	faMapPin,
+	faTeletype,
+} from '@fortawesome/free-solid-svg-icons';
 
 export default function HeaderMain() {
+	const btbs: TItem[] = [
+		{ icone: { left: faEllipsisV }, caption: `teste` },
+		{
+			icone: { left: faMapPin },
+			caption: `menu`,
+			itens: [
+				{
+					icone: { left: faEllipsisV },
+					caption: `teste3`,
+				},
+				{
+					icone: { left: faEllipsisV },
+					caption: `test4`,
+				},
+				{
+					icone: { left: faEllipsisV },
+					caption: `test5`,
+				},
+			],
+		},
+	];
+
 	return (
 		<>
-			<Headers
-				classPart="primary"
-				LeftBtbs={[
-					{
-						className: 'menu-button',
-						ariaLabel: 'Abrir menu',
-						icone: 'fa-solid fa-bars',
-						itens: [
-							{
-								htmlFor: 'right-main-toggle',
-								className: 'menu-button',
-								ariaLabel: 'Menu direito',
-								icone: 'fas fa-ellipsis-v',
-							},
-						],
-					},
-				]}
-				RightBtbs={[
-					{
-						htmlFor: 'right-main-toggle',
-						className: 'menu-button',
-						ariaLabel: 'Menu direito',
-						icone: 'fas fa-ellipsis-v',
-					},
-				]}
-			/>
+			<Headers LeftBtbs={btbs} />
 		</>
 	);
 }
