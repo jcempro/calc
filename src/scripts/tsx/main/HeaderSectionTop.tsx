@@ -13,6 +13,7 @@ export default function HeaderSectionTop() {
 				{/* Cabeçalho principal */}
 				<HeaderMain />
 
+				{/* Cabeçalho Secundário */}
 				<HeaderSec />
 			</section>
 		</>
