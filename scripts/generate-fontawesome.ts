@@ -2,12 +2,12 @@ import { Project } from 'ts-morph';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 
-// 1. Configurações - TODOS os pacotes free
+// Configurações
 const ICON_PACKAGES = {
 	solid: '@fortawesome/free-solid-svg-icons',
 	regular: '@fortawesome/free-regular-svg-icons',
 	brands: '@fortawesome/free-brands-svg-icons',
-};
+} as const;
 
 const PROJECT_ROOT = process.cwd();
 const OUTPUT_FILE = join(
@@ -15,47 +15,75 @@ const OUTPUT_FILE = join(
 	'src/__generated__/fontawesome.ts',
 );
 
-// 2. Mapeia prefixos (ex: 'faHome' -> 'solid', 'faGithub' -> 'brands')
+// Mapeamento mais completo de ícones
+const BRAND_ICONS = new Set([
+	'github',
+	'twitter',
+	'facebook',
+	'instagram',
+	'linkedin',
+	'youtube',
+	'whatsapp',
+	'discord',
+]);
+
+const REGULAR_ICONS = new Set([
+	'circle',
+	'square',
+	'file',
+	'clock',
+	'calendar',
+	'envelope',
+	'star',
+]);
+
 function detectIconPackage(
 	iconName: string,
 ): keyof typeof ICON_PACKAGES {
-	// Ícones de marcas (ex: faGithub, faTwitter) -> brands
-	if (
-		/fa(Github|Twitter|Facebook|Instagram|Linkedin)/.test(iconName)
-	) {
-		return 'brands';
-	}
-	// Ícones regulares (ex: faCircle[x], faSquare[x]) -> regular
-	if (/fa(Circle|Square)[A-Z]/.test(iconName)) {
-		return 'regular';
-	}
-	// Padrão: solid
-	return 'solid';
+	const baseName = iconName.replace(/^fa/, '').toLowerCase();
+
+	if (BRAND_ICONS.has(baseName)) return 'brands';
+	if (REGULAR_ICONS.has(baseName)) return 'regular';
+	return 'solid'; // Padrão
 }
 
-// 3. Encontra ícones usados
+// Padrões de busca mais abrangentes
 async function findUsedIcons() {
 	const project = new Project();
-	const files = project.addSourceFilesAtPaths('src/**/*.tsx');
+	const files = project.addSourceFilesAtPaths([
+		'src/**/*.{tsx,jsx}',
+		'!**/node_modules/**',
+		'!**/*.stories.{tsx,jsx}',
+	]);
 
 	const usedIcons = new Map<string, keyof typeof ICON_PACKAGES>();
 
 	files.forEach((file) => {
 		file.forEachDescendant((node) => {
-			// Caso 1: <FontAwesomeIcon icon="home" /> (assume solid por padrão)
-			if (node.getText().includes('icon="')) {
-				const match = node.getText().match(/icon="([^"]+)"/);
-				if (match?.[1]) usedIcons.set(match[1], 'solid');
+			const text = node.getText();
+
+			// Padrão 1: icon={faIcon}
+			const directUsage = text.match(/icon=\{fa([A-Za-z0-9]+)\}/);
+			if (directUsage?.[1]) {
+				const iconName = directUsage[1];
+				usedIcons.set(iconName, detectIconPackage(`fa${iconName}`));
 			}
 
-			// Caso 2: <FontAwesomeIcon icon={faHome} />
-			if (node.getText().includes('icon={fa')) {
-				const match = node.getText().match(/icon=\{fa([^}]+)\}/);
-				if (match?.[1]) {
-					const packageType = detectIconPackage(`fa${match[1]}`);
-					usedIcons.set(match[1], packageType);
-				}
+			// Padrão 2: icon="icon-name"
+			const stringUsage = text.match(/icon=["']([a-z-]+)["']/);
+			if (stringUsage?.[1]) {
+				const iconName = stringUsage[1].replace(/-/g, '');
+				usedIcons.set(iconName, detectIconPackage(`fa${iconName}`));
 			}
+
+			// Padrão 3: Objeto com left/right
+			const objUsage = text.match(
+				/(left|right):\s*fa([A-Za-z0-9]+)/g,
+			);
+			objUsage?.forEach((match) => {
+				const iconName = match.split(':')[1].trim().replace('fa', '');
+				usedIcons.set(iconName, detectIconPackage(`fa${iconName}`));
+			});
 		});
 	});
 
