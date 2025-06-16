@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import { transformWithEsbuild } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 
 // Resolve caminho para ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -22,7 +23,7 @@ const runTypeGeneration = (env = 'development') => {
 	} catch (err) {
 		console.error('❌ Erro ao gerar metadata:', err);
 		if (env === 'development') process.exit(1);
-		throw err; // Propaga o erro no buildStart
+		throw err;
 	}
 };
 
@@ -34,6 +35,7 @@ if (process.env.NODE_ENV !== 'production') {
 export default defineConfig(({ mode }) => ({
 	plugins: [
 		preact(),
+		tailwindcss(),
 		{
 			name: 'fontawesome-watcher',
 			configureServer(server) {
@@ -61,29 +63,27 @@ export default defineConfig(({ mode }) => ({
 			name: 'file-line-transform',
 			enforce: 'pre',
 			async transform(code, id) {
-				// Função auxiliar para extração da linha (evita repetição de código)
 				if (!/node_modules/.test(id) && /\.(tsx?|jsx?)$/.test(id)) {
 					const originalFile = JSON.stringify(id);
-
-					// Expressão regular melhorada para capturar linha/coluna
 					const lineReplacement =
 						mode === 'production' ?
 							JSON.stringify({ file: 'production', line: '0' })
 						:	`(() => {
-        try {
-          const stackLine = new Error().stack.split('\\n')[2];
-          const match = stackLine.match(/:(\d+):\\d+/);
-          return {
-            file: ${JSON.stringify(originalFile)},
-            line: match ? match[1] : '0'
-          };
-        } catch {
-          return {
-            file: ${JSON.stringify(originalFile)},
-            line: '0'
-          };
-        }
-      })()`;
+                  try {
+                    const stackLine = new Error().stack.split('\\n')[2]
+                    const match = stackLine.match(/:(\d+):\\d+/)
+                    return {
+                      file: ${JSON.stringify(originalFile)},
+                      line: match ? match[1] : '0'
+                    }
+                  } catch {
+                    return {
+                      file: ${JSON.stringify(originalFile)},
+                      line: '0'
+                    }
+                  }
+                })()`;
+
 					const transformedCode = code.replace(
 						/__FILE_LINE__/g,
 						lineReplacement,
@@ -113,12 +113,9 @@ export default defineConfig(({ mode }) => ({
 			input: 'src/index.html',
 			output: {
 				compact: true,
-				// Garante que __FILE_LINE__ seja removido em produção
 				banner: `const __FILE_LINE__ = { file: 'prod', line: '0' };`,
 			},
 		},
-		// Habilita renomeação/mangle agressiva de identificadores
-		terserOptions: undefined, // não usamos
 		emptyOutDir: true,
 	},
 	esbuild: {

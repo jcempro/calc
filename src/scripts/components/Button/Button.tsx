@@ -2,8 +2,8 @@ import { JSX } from 'preact';
 import './Button.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { HAS, isTrue } from '../ts/common/generic';
-import { TOBJ } from '../ts/common/interfaces';
+import { HAS, isTrue } from '../../ts/common/generic';
+import { TOBJ } from '../../ts/common/interfaces';
 import { tv, VariantProps } from 'tailwind-variants';
 
 // Definindo as variantes com tailwind-variants

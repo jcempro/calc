@@ -1,6 +1,6 @@
 import '@scss/main/SectionAppWrapper.scss';
 import MainContent from './MainContent';
-import NavIcon from '@ext/NavIcon';
+import NavIcon from '@ext/NavIcon/NavIcon';
 import HeaderTer from './HeaderTer';
 
 export default function SectionAppWrapper() {

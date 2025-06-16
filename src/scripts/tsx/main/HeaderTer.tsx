@@ -1,5 +1,5 @@
 import '@scss/main/HeaderTer.scss';
-import Headers from '@ext/Headers';
+import Headers from '@ext/Headers/Headers';
 
 export default function HeaderTer() {
 	return (

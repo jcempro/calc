@@ -1,0 +1,16 @@
+[class*='menu-jcem-wrapper-'] {
+	display: inline-block;
+	position: relative;
+	min-width: 1em;
+	min-height: 1em;
+	font-size: 1rem; /* Base para unidades em */
+
+	/* Corrigido o seletor do input */
+	> input[type='radio'].acionador {
+		position: fixed;
+		z-index: -1000;
+		left: -50vw;
+		top: -50vh;
+		opacity: 0;
+	}
+}

@@ -1,6 +1,6 @@
 import '@scss/main.scss';
 import '@scss/main/HeaderMain.scss';
-import Headers from '@ext/Headers';
+import Headers from '@ext/Headers/Headers';
 
 export default function HeaderMain() {
 	return (

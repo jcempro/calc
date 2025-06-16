@@ -1,4 +1,9 @@
 {
+	"css.customData": [".vscode/tailwind.custom-data.json"],
+	"scss.customData": [".vscode/tailwind.custom-data.json"],
+	"editor.quickSuggestions": {
+		"strings": true
+	},
 	"editor.tabSize": 2,
 	"editor.insertSpaces": true,
 	"todo-tree.regex.regex": "(//|#|<!--|/\\*|^\\s*\\*)\\s*($TAGS)",

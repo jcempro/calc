@@ -1,4 +1,4 @@
-import { Button } from '@ext/Button';
+import { Button } from '@ext/Button/Button';
 import {
 	faHome,
 	faChevronRight,

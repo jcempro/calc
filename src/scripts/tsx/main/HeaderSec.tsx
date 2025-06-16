@@ -1,6 +1,6 @@
 import '@scss/main/HeaderSec.scss';
-import Headers from '@ext/Headers';
-import { IButton } from '@ext/Button';
+import Headers from '@ext/Headers/Headers';
+import { IButton } from '@ext/Button/Button';
 import {
 	faChevronRight,
 	faCog,
