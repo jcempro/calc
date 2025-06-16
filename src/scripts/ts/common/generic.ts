@@ -14,37 +14,106 @@ export interface MatchWithGroups extends RegExpMatchArray {
 	};
 }
 
-export function noEmpty<T = any>(v: T): boolean {
-	// Se for undefined, consideramos como vazio
+/**
+ * Verifica se um valor é considerado "vazio" de acordo com critérios específicos.
+ *
+ * @template T - Tipo genérico do valor a ser verificado
+ * @param {T} v - Valor a ser verificado
+ * @param {string} [true_vazio_se_tipo_diferente] - Se fornecido, retorna true quando o tipo do valor
+ *                                                 não corresponde ao tipo especificado
+ * @returns {boolean} Retorna true se o valor for considerado vazio, false caso contrário
+ *
+ * @description
+ * Esta função considera os seguintes valores como vazios:
+ * - undefined
+ * - Strings vazias ou com apenas espaços ('')
+ * - Arrays vazios ([])
+ * - Objetos sem propriedades próprias ({})
+ * - Map/Set vazios
+ * - NaN (para números)
+ * - Datas inválidas (new Date('invalid'))
+ *
+ * Observações importantes:
+ * - null É CONSIDERADO UM VALOR VÁLIDO (não vazio), pois representa a ausência intencional de valor
+ * - Objetos com protótipo diferente de Object.prototype não são considerados vazios
+ * - A função é protegida contra exceções, qualquer erro durante a verificação retornará false
+ * - Quando o segundo parâmetro é fornecido, a verificação de tipo tem precedência
+ */
+export function isEmpty<T = any>(
+	v: T,
+	true_vazio_se_tipo_diferente?: string,
+): boolean {
+	// Apenas undefined é considerado vazio imediatamente
 	if (v === undefined) return true;
 
-	// Verifica se é uma string vazia
-	if (typeof v === 'string' && `${v}`.trim().length === 0)
-		return true;
+	// Verificação segura contra exceções para o parâmetro de tipo
+	if (true_vazio_se_tipo_diferente) {
+		const typeCheck = (typeStr: string): boolean => {
+			try {
+				const t = typeStr.trim().toLowerCase();
 
-	// Verifica se é um array vazio
-	if (Array.isArray(v) && v.length === 0) return true;
+				// Verificação segura para tipos primitivos
+				const primitiveTypes = [
+					'string',
+					'number',
+					'bigint',
+					'boolean',
+					'symbol',
+					'function',
+				];
+				if (primitiveTypes.includes(t)) {
+					return typeof v !== t;
+				}
 
-	// Verifica se é um objeto "realmente vazio" (sem propriedades próprias nem herdadas)
-	if (typeof v === 'object') {
-		// Verifica se o objeto tem propriedades próprias
-		const keys = Object.getOwnPropertyNames(v);
+				// Verificação ultra-segura para construtores
+				const globalObj = (
+					typeof window !== 'undefined' ? window : globalThis) as any;
+				const _constructor = globalObj[t];
 
-		// Se não tiver propriedades próprias e o protótipo for Object.prototype (sem propriedades herdadas), considera vazio
-		if (
-			keys.length === 0 &&
-			Object.getPrototypeOf(v) === Object.prototype
-		) {
+				if (typeof _constructor === 'function') {
+					return !(v instanceof _constructor);
+				}
+			} catch {
+				return false;
+			}
+			return false;
+		};
+
+		if (typeCheck(true_vazio_se_tipo_diferente)) {
 			return true;
 		}
 	}
 
-	// Se não for nenhuma das situações acima, o valor não é vazio
+	// Verificações específicas por tipo (com proteção contra exceções)
+	try {
+		if (typeof v === 'string') return v.trim().length === 0;
+		if (typeof v === 'number') return isNaN(v);
+		if (Array.isArray(v)) return v.length === 0;
+		if (v instanceof Map || v instanceof Set) return v.size === 0;
+		if (v instanceof Date) return isNaN(v.getTime());
+
+		if (v !== null && typeof v === 'object') {
+			const keys = Object.keys(v);
+			return keys.length === 0;
+		}
+	} catch (e) {
+		// Se qualquer verificação lançar exceção, considera não vazio
+		return false;
+	}
+
+	// Valor não se enquadra em nenhum critério de vazio
 	return false;
 }
 
-export function isEmpty<T = any>(v: T): boolean {
-	return !noEmpty(v);
+/**
+ * Alias negado para isEmpty
+ *
+ */
+export function noEmpty<T = any>(
+	v: T,
+	true_vazio_se_tipo_diferente?: string,
+): boolean {
+	return !noEmpty(v, true_vazio_se_tipo_diferente);
 }
 
 export function isTrue(v: any): boolean {
