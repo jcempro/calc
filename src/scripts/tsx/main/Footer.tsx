@@ -1,7 +1,7 @@
 import { render } from 'preact';
 import '@scss/main/Footer.scss';
 
-export default function HeaderSec() {
+export function Footer() {
 	return (
 		<>
 			<footer>

@@ -1,70 +1,108 @@
-import './Menu.scss';
 import { IButton, Button } from '../Button/Button';
 import { useRef } from 'preact/hooks';
 import { JSX } from 'preact';
 import { guid } from '../../ts/common/generic';
-import NavIcon from '../NavIcon/NavIcon';
+import { NavIcon } from '../NavIcon/NavIcon';
+import { tv } from 'tailwind-variants';
+import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx'; // Importação adicionada aqui
 
 export interface IMenu extends Omit<IButton, 'htmlFor'> {
 	itens: IButton[];
 	checked?: boolean;
-	navclass?: string;
+	navClass?: string;
 	menuAlign?: 'left' | 'center' | 'right';
 	menuVariant?: 'dropdown' | 'vertical' | 'horizontal';
+	className?: string | JSX.SignalLike<string | undefined>;
 }
 
+const menuVariants = tv({
+	base: 'menu-jcem-wrapper relative',
+	variants: {
+		variant: {
+			dropdown: 'dropdown',
+			vertical: '',
+			horizontal: '',
+		},
+		align: {
+			left: '',
+			center: 'dropdown-center',
+			right: 'dropdown-end',
+		},
+	},
+	defaultVariants: {
+		variant: 'dropdown',
+		align: 'left',
+	},
+});
+
+const menuContentVariants = tv({
+	base: 'z-[1] bg-base-100 shadow-lg rounded-box',
+	variants: {
+		variant: {
+			dropdown: 'dropdown-content',
+			vertical: 'flex flex-col',
+			horizontal: 'flex flex-row',
+		},
+	},
+});
+
 export function Menu({
-	escopo,
+	escopo = 'global_menu',
 	itens,
 	checked,
-	navclass = '',
+	navClass = '',
 	menuAlign = 'left',
 	menuVariant = 'dropdown',
+	className,
 	...props
 }: IMenu) {
-	const id = useRef(`menu-${guid(18)}`);
-	escopo = escopo ?? 'global_menu';
+	const id = useRef(`menu-${guid(18)}`).current;
 
-	// Classes DaisyUI mantendo sua lógica original
-	const getMenuClasses = () => {
-		let base = 'menu ';
-
-		if (menuVariant === 'dropdown') {
-			base +=
-				'dropdown-content z-[1] bg-base-100 shadow-lg rounded-box ';
-			base +=
-				menuAlign === 'right' ? 'dropdown-end '
-				: menuAlign === 'center' ? 'dropdown-center '
-				: '';
-		} else if (menuVariant === 'vertical') {
-			base += 'vertical bg-base-100 shadow-lg rounded-box ';
-		} else {
-			base += 'horizontal bg-base-100 shadow-lg rounded-box ';
-		}
-
-		return base + navclass;
-	};
+	const resolveClass = (cls: unknown) =>
+		typeof cls === 'function' ? cls() : cls;
 
 	return (
 		<div
-			data-menu={id.current}
-			className={`menu-jcem-wrapper-${escopo} relative ${props.className ?? ''}`}
+			data-menu={id}
+			className={menuVariants({
+				variant: menuVariant,
+				align: menuAlign,
+				className: twMerge(
+					`menu-jcem-wrapper-${escopo}`,
+					resolveClass(className),
+				),
+			})}
 		>
-			{/* Botão que ativa o dropdown - mantendo sua implementação */}
 			<Button
 				{...props}
-				htmlFor={id.current}
+				htmlFor={id}
 				escopo={escopo}
-				className={`${props.className || ''}`}
+				className={twMerge(
+					resolveClass(props.class),
+					menuVariant === 'dropdown' && 'dropdown-toggle',
+				)}
 			/>
 
-			{/* NavIcon com todas as props originais */}
 			<NavIcon
-				menuId={id.current}
+				menuId={id}
 				escopo={escopo}
-				ulClass={getMenuClasses()}
-				wrapperClass="peer-checked:block hidden absolute"
+				behavior="menu"
+				orientation={
+					menuVariant === 'horizontal' ? 'horizontal' : 'vertical'
+				}
+				ulClass={twMerge(
+					menuContentVariants({ variant: menuVariant }),
+					resolveClass(navClass),
+				)}
+				wrapperClass={clsx(
+					// Corrigido para usar clsx
+					'peer-checked:block hidden absolute',
+					menuVariant === 'dropdown' && 'mt-1',
+					menuVariant === 'horizontal' && 'ml-1',
+				)}
 				itens={itens}
+				opened={checked}
 			/>
 		</div>
 	);

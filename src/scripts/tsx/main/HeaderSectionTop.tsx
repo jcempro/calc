@@ -1,9 +1,9 @@
 import '@scss/main/HeaderSectionTop.scss';
-import HeaderMain from './HeaderMain';
-import HeaderUpper from './HeaderUpper';
-import HeaderSec from './HeaderSec';
+import { HeaderMain } from './HeaderMain';
+import { HeaderUpper } from './HeaderUpper';
+import { HeaderSec } from './HeaderSec';
 
-export default function HeaderSectionTop() {
+export function HeaderSectionTop() {
 	return (
 		<>
 			<section className="header-top">

@@ -1,14 +1,14 @@
 import '@scss/main.scss';
 import '@scss/main/HeaderMain.scss';
-import Headers, { TItem } from '@ext/Headers/Headers';
+import { Header } from '@ext/Headers/Headers';
 import {
 	faEllipsisV,
 	faMapPin,
-	faTeletype,
 } from '@fortawesome/free-solid-svg-icons';
+import { TNavItem } from '@ext/NavIcon/NavIcon';
 
-export default function HeaderMain() {
-	const btbs: TItem[] = [
+export function HeaderMain() {
+	const bleft: TNavItem[] = [
 		{ icone: { left: faEllipsisV }, caption: `teste` },
 		{
 			icone: { left: faMapPin },
@@ -32,7 +32,7 @@ export default function HeaderMain() {
 
 	return (
 		<>
-			<Headers LeftBtbs={btbs} />
+			<Header leftItems={bleft} />
 		</>
 	);
 }

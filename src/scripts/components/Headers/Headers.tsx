@@ -1,126 +1,154 @@
 import { JSX } from 'preact';
-import { IButton, Button } from '@ext/Button/Button';
-import { IMenu, Menu } from '@ext/Menu/Menu';
+import { IButton } from '@ext/Button/Button';
+import { IMenu } from '@ext/Menu/Menu';
+import { NavIcon } from '@ext/NavIcon/NavIcon';
 import { TUISizes, TUIShadow } from '../../ts/common/ui.interfaces';
+import clsx from 'clsx';
+import { ClassNameValue, twMerge } from 'tailwind-merge';
 
-export type TItem = IButton | IMenu;
+type TNavItem = IButton | IMenu;
 
-export interface IHeader extends JSX.HTMLAttributes<HTMLElement> {
+export interface IHeader
+	extends Omit<JSX.HTMLAttributes<HTMLElement>, 'size'> {
 	classPart?: string;
-	LeftBtbs?: TItem[];
-	RightBtbs?: TItem[];
-	Middle?: JSX.Element;
+	leftItems?: TNavItem[];
+	rightItems?: TNavItem[];
+	middleContent?: JSX.Element;
 	title?: string;
 	titleAlign?: 'left' | 'center' | 'right';
-	SearchComponent?: JSX.Element;
+	searchComponent?: JSX.Element;
 	variant?: 'normal' | 'sticky' | 'ghost' | 'bordered';
 	size?: TUISizes;
 	shadow?: TUIShadow;
 	compact?: boolean;
+	escopo?: string;
 }
 
-export default function Headers({
+const sizeMap = {
+	xs: 'text-xs',
+	sm: 'text-sm',
+	md: 'text-md',
+	lg: 'text-lg',
+	xl: 'text-xl',
+} as const;
+
+const shadowMap = {
+	none: '',
+	sm: 'shadow-sm',
+	md: 'shadow-md',
+	lg: 'shadow-lg',
+	xl: 'shadow-xl',
+	'2xl': 'shadow-2xl',
+} as const;
+
+export function Header({
 	classPart = '',
-	LeftBtbs,
-	RightBtbs,
-	Middle,
+	leftItems = [],
+	rightItems = [],
+	middleContent,
 	title,
 	titleAlign = 'left',
-	SearchComponent,
+	searchComponent,
 	variant = 'normal',
 	size = 'sm',
 	shadow = 'none',
 	compact = false,
+	escopo,
+	className,
 	...props
 }: IHeader) {
-	// Classes base atualizadas com alinhamento vertical consistente
-	const headerClasses = [
-		'navbar',
-		'min-h-[1.2rem]', // Altura mínima consistente (ajuste conforme necessário)
-		'w-full',
-		'items-stretch', // Faz os filhos preencherem a altura total
-		variant !== 'normal' && `navbar-${variant}`,
-		`text-${size}`,
-		shadow !== 'none' && `shadow-${shadow}`,
-		compact ? 'py-1' : 'py-2',
-		classPart ? `header-${classPart}` : '',
-		props.className || '',
-	]
-		.filter(Boolean)
-		.join(' ');
+	// Classes base do Header
+	const headerClasses =
+		`header-jcem-${escopo} ` +
+		twMerge(
+			clsx(
+				'navbar min-h-12 w-full',
+				variant !== 'normal' && `navbar-${variant}`,
+				sizeMap[size],
+				shadow !== 'none' && shadowMap[shadow],
+				compact ? 'py-1 px-2' : 'py-2 px-4',
+				classPart && `header-${classPart}`,
+			),
+			className as ClassNameValue,
+		);
 
-	// Classes compartilhadas para as seções
-	const sectionClasses = 'flex items-center h-full';
+	// Configuração otimizada do NavIcon para Header
+	const getNavIconConfig = (items: TNavItem[]) => ({
+		itens: items.filter((i): i is IButton => !('items' in i)),
+		orientation: 'horizontal' as const,
+		ulClass: clsx(
+			'items-center',
+			compact ? 'gap-1' : 'gap-2',
+			'sm:gap-3',
+		),
+		className: 'h-full',
+	});
 
 	return (
 		<header {...props} className={headerClasses}>
 			{/* Seção Esquerda */}
-			<div className={`navbar-start ${sectionClasses}`}>
-				{LeftBtbs?.map((item, idx) =>
-					item.hasOwnProperty('itens') ?
-						<Menu
-							key={`left-${idx}`}
-							{...(item as IMenu)}
-							compact={compact}
-							className="h-full flex items-center" // Garante alinhamento
-						/>
-					:	<Button
-							key={`left-${idx}`}
-							{...(item as IButton)}
-							size={compact ? 'xs' : size}
-							className="flex items-center h-full" // Garante alinhamento
-						/>,
-				)}
-			</div>
+			{leftItems.length > 0 && (
+				<div className="navbar-start h-full">
+					<NavIcon
+						{...getNavIconConfig(leftItems)}
+						escopo="header-left"
+						className={twMerge(
+							'mr-auto',
+							leftItems.some((i) => 'items' in i) && 'relative', // Para menus dropdown
+						)}
+					/>
+				</div>
+			)}
 
 			{/* Seção Central */}
 			<div
-				className={`navbar-center ${sectionClasses} justify-${titleAlign}`}
+				className={clsx('navbar-center h-full', {
+					'text-left': titleAlign === 'left',
+					'text-center': titleAlign === 'center',
+					'text-right': titleAlign === 'right',
+				})}
 			>
 				{title ?
 					<h1
-						className={`
-              font-semibold 
-              ${compact ? 'text-sm' : `text-${size}`}
-              whitespace-nowrap
-              flex items-center // Garante alinhamento do texto
-            `}
+						className={clsx(
+							'font-semibold whitespace-nowrap',
+							compact ? 'text-sm' : 'text-lg',
+							'max-w-[180px] sm:max-w-md md:max-w-lg truncate',
+						)}
 					>
 						{title}
 					</h1>
-				:	<div className="flex items-center h-full">{Middle}</div>}
+				:	middleContent && (
+						<div className="h-full flex items-center">
+							{middleContent}
+						</div>
+					)
+				}
 			</div>
 
 			{/* Seção Direita */}
-			<div className={`navbar-end ${sectionClasses} gap-1 sm:gap-2`}>
-				{SearchComponent && (
+			<div className="navbar-end h-full">
+				{searchComponent && (
 					<div
-						className={`
-              form-control 
-              flex items-center // Garante alinhamento
-              ${compact ? 'max-w-[180px]' : 'max-w-xs'}
-              sm:${compact ? 'max-w-[200px]' : 'max-w-md'}
-              h-full // Preenche a altura
-            `}
+						className={clsx(
+							'h-full flex items-center mr-2',
+							compact ? 'max-w-[120px]' : 'max-w-[160px]',
+							'sm:max-w-[200px]',
+						)}
 					>
-						{SearchComponent}
+						{searchComponent}
 					</div>
 				)}
 
-				{RightBtbs?.map((item, idx) =>
-					item.hasOwnProperty('itens') ?
-						<Menu
-							key={`right-${idx}`}
-							{...(item as IMenu)}
-							compact={compact}
-							className="h-full flex items-center" // Garante alinhamento
-						/>
-					:	<Button
-							key={`right-${idx}`}
-							{...(item as IButton)}
-							size={compact ? 'xs' : size}
-							className="flex items-center h-full" // Garante alinhamento
-						/>,
+				{rightItems.length > 0 && (
+					<NavIcon
+						{...getNavIconConfig(rightItems)}
+						escopo="header-right"
+						className={twMerge(
+							'ml-auto',
+							rightItems.some((i) => 'items' in i) && 'relative', // Para menus dropdown
+						)}
+					/>
 				)}
 			</div>
 		</header>

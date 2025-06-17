@@ -1,8 +1,7 @@
 import { render } from 'preact';
-import HeaderSectionTop from './main/HeaderSectionTop';
-import SectionWrapper from './main/SectionWrapper';
-import Footer from './main/Footer';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { HeaderSectionTop } from './main/HeaderSectionTop';
+import { SectionWrapper } from './main/SectionWrapper';
+import { Footer } from './main/Footer';
 import '../../assets/css/tailwind.css';
 import '../../__generated__/fontawesome';
 

@@ -4,8 +4,15 @@ import { guid, isTrue } from '../../ts/common/generic';
 import { useRef } from 'preact/hooks';
 import { tv } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
+import { IMenu, Menu } from '@ext/Menu/Menu';
 
-interface INavIcon extends JSX.HTMLAttributes<HTMLElement> {
+export type TNavItem = IButton | IMenu;
+
+function isMenu(item: TNavItem): item is IMenu {
+	return 'itens' in item; // Note o 'itens' aqui
+}
+
+export interface INavIcon extends JSX.HTMLAttributes<HTMLDivElement> {
 	itens: IButton[];
 	escopo?: string;
 	menuId?: string;
@@ -13,26 +20,34 @@ interface INavIcon extends JSX.HTMLAttributes<HTMLElement> {
 	wrapperClass?: string;
 	opened?: boolean;
 	orientation?: 'vertical' | 'horizontal';
+	behavior?: 'toolbar' | 'menu' | 'header';
 }
 
 const navIconVariants = tv({
-	base: 'inav-jcem',
+	base: 'inav-jcem transition-all duration-200',
 	variants: {
+		behavior: {
+			toolbar: 'bg-base-100 rounded-lg p-1',
+			menu: 'absolute z-50',
+			header: 'flex items-center',
+		},
 		orientation: {
 			vertical: 'flex flex-col',
 			horizontal: 'flex flex-row',
 		},
 		opened: {
-			true: 'block',
-			false: 'hidden',
+			true: 'opacity-100 visible',
+			false: 'opacity-0 invisible absolute',
 		},
 	},
 	defaultVariants: {
+		behavior: 'toolbar',
 		orientation: 'vertical',
+		opened: true,
 	},
 });
 
-export default function NavIcon({
+export function NavIcon({
 	menuId,
 	escopo = 'global_menu',
 	itens,
@@ -40,81 +55,81 @@ export default function NavIcon({
 	wrapperClass,
 	opened = false,
 	orientation = 'vertical',
+	behavior = 'toolbar',
 	className,
 	...props
 }: INavIcon) {
-	const cid = menuId ?? useRef(`menu-${guid(18)}`).current;
+	const cid = useRef(menuId ?? `inav-${guid(18)}`).current;
 
-	// Correção para Signals
-	const resolvedClassName =
-		typeof className === 'function' ?
-			(className as Function)()
-		:	className;
-	const resolvedWrapperClass =
-		typeof wrapperClass === 'function' ?
-			(wrapperClass as Function)()
-		:	wrapperClass;
-	const resolvedUlClass =
-		typeof ulClass === 'function' ? (ulClass as Function)() : ulClass;
+	const resolveClass = (cls: unknown) =>
+		typeof cls === 'function' ? cls() : cls;
 
-	const baseClasses = navIconVariants({
-		orientation,
-		opened: isTrue(opened),
-	});
+	const renderItem = (item: TNavItem, idx: number) => {
+		const commonProps = {
+			key: `${cid}-item-${idx}`,
+			className: twMerge(
+				'w-full text-left',
+				resolveClass(item.className),
+			),
+		};
+
+		if (isMenu(item)) {
+			return (
+				<Menu
+					{...commonProps}
+					{...item}
+					menuVariant={
+						orientation === 'horizontal' ? 'horizontal' : 'dropdown'
+					}
+					itens={item.itens} // Passando a prop correta 'itens'
+				/>
+			);
+		}
+
+		return <Button {...commonProps} {...item} />;
+	};
 
 	return (
 		<>
 			{menuId && (
 				<input
-					type="radio"
+					type="checkbox"
 					name={escopo}
-					id={menuId}
-					className={`menu-jcem-input-${escopo} acionador`}
+					id={cid}
+					className="hidden peer"
 					checked={isTrue(opened)}
 				/>
 			)}
 
-			<nav
+			<div
+				{...(menuId ? { 'data-menu': cid } : { 'data-inav': cid })}
 				{...props}
 				className={twMerge(
-					baseClasses,
+					navIconVariants({
+						behavior,
+						orientation,
+						opened: isTrue(opened),
+					}),
 					`inav-jcem-${escopo}`,
-					resolvedWrapperClass,
-					resolvedClassName,
+					resolveClass(wrapperClass),
+					resolveClass(className),
 				)}
-				data-menu={menuId ? menuId : undefined}
-				data-inav={!menuId ? cid : undefined}
+				data-navicon={cid}
 			>
 				<ul
 					className={twMerge(
-						orientation === 'vertical' ?
-							'menu bg-base-100 rounded-box'
-						:	'flex space-x-2',
-						resolvedUlClass,
+						behavior === 'menu' ?
+							'menu bg-base-100 p-2 rounded-box'
+						:	'flex',
+						orientation === 'horizontal' ?
+							'gap-2 items-center'
+						:	'gap-1',
+						resolveClass(ulClass),
 					)}
 				>
-					{itens.map((item, index) => (
-						<li key={index}>
-							<Button
-								{...item}
-								className={twMerge(
-									'w-full text-left',
-									typeof item.className === 'function' ?
-										(item.className as Function)()
-									:	item.className,
-								)}
-								onClick={(e) => {
-									const radio = document.getElementById(
-										cid,
-									) as HTMLInputElement;
-									if (radio) radio.checked = false;
-									item.onClick?.(e);
-								}}
-							/>
-						</li>
-					))}
+					{itens.map(renderItem)}
 				</ul>
-			</nav>
+			</div>
 		</>
 	);
 }

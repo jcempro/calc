@@ -7,25 +7,25 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import '@scss/main.scss';
 
-export default function MainContent() {
+export function MainContent() {
 	return (
 		<>
 			<section className="main-content">
 				<main className="main-content">
 					<Button
-						caption="Meu Botão"
+						caption="teste Meu Botão"
 						icone={{ left: faHome, right: faChevronRight }}
 						htmlFor="input-id"
 					/>
 
 					<Button
-						caption="Centralizado"
+						caption="testv Centralizado"
 						icone={{ left: faCog }}
 						center={true}
 					/>
 
 					<Button
-						caption="Adaptativo"
+						caption="teste Adaptativo"
 						icone={{ left: faUser }}
 						className="w-auto max-w-[200px]"
 					/>

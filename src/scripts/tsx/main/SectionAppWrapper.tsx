@@ -1,9 +1,9 @@
 import '@scss/main/SectionAppWrapper.scss';
-import MainContent from './MainContent';
-import NavIcon from '@ext/NavIcon/NavIcon';
-import HeaderTer from './HeaderTer';
+import { MainContent } from './MainContent';
+import { NavIcon } from '@ext/NavIcon/NavIcon';
+import { HeaderTer } from './HeaderTer';
 
-export default function SectionAppWrapper() {
+export function SectionAppWrapper() {
 	return (
 		<>
 			<section className="app-wrapper">
@@ -11,12 +11,12 @@ export default function SectionAppWrapper() {
 				<HeaderTer />
 
 				<section className="app-main">
-					<NavIcon escopo="left-app" />
+					<NavIcon itens={[]} escopo="left-app" />
 
 					{/* Conteúdo principal */}
 					<MainContent />
 
-					<NavIcon escopo="right-app" />
+					<NavIcon itens={[]} escopo="right-app" />
 				</section>
 			</section>
 		</>

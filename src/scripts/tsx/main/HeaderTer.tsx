@@ -1,12 +1,12 @@
 import '@scss/main/HeaderTer.scss';
-import Headers from '@ext/Headers/Headers';
+import { Header } from '@ext/Headers/Headers';
 
-export default function HeaderTer() {
+export function HeaderTer() {
 	return (
 		<>
-			<Headers
+			<Header
 				classPart="tertiary"
-				RightBtbs={[
+				leftItems={[
 					{
 						className: 'menu-button',
 						ariaLabel: 'Menu direito secundário',

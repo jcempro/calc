@@ -1,6 +1,6 @@
 import '@scss/main/HeaderUpper.scss';
 
-export default function HeaderUpper() {
+export function HeaderUpper() {
 	return (
 		<>
 			<header className="header-upper">

@@ -1,16 +1,16 @@
 import '@scss/main/SectionWrapper.scss';
-import SectionAppWrapper from './SectionAppWrapper';
-import NavIcon from '@ext/NavIcon/NavIcon';
+import { SectionAppWrapper } from './SectionAppWrapper';
+import { NavIcon } from '@ext/NavIcon/NavIcon';
 
-export default function SectionWrapper() {
+export function SectionWrapper() {
 	return (
 		<>
 			<section className="outer-app">
-				<NavIcon />
+				<NavIcon itens={[]} />
 
 				<SectionAppWrapper />
 
-				<NavIcon />
+				<NavIcon itens={[]} />
 			</section>
 		</>
 	);
