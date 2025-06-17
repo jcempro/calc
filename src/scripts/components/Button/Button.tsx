@@ -5,22 +5,25 @@ import {
 	IconName,
 	IconPrefix,
 } from '@fortawesome/fontawesome-svg-core';
-import { tv, VariantProps } from 'tailwind-variants';
+import { tv, type VariantProps } from 'tailwind-variants';
 import { noEmpty } from '../../ts/common/generic';
+import { twMerge } from 'tailwind-merge';
 
-// 1. Tipos e Constantes
+// 1. Tipos originais mantidos
 export type TBTBIcon = {
 	left?: IconProp;
 	right?: IconProp;
 };
 
-// 7. Variantes do Tailwind (mantido igual)
+// 2. Variantes - Adaptação mínima
 const buttonVariants = tv({
 	base: [
-		`btn btn-dash btn-accent`,
-		'cursor-pointer', // Garantindo cursor pointer
+		'btn',
+		'btn-accent',
+		'cursor-pointer',
 		'shadow-none hover:shadow-none',
 		'rounded-lg',
+		'btb-jcem',
 	],
 	variants: {
 		size: {
@@ -51,11 +54,10 @@ const buttonVariants = tv({
 	},
 });
 
-type ButtonVariants = VariantProps<typeof buttonVariants>;
-
+// 3. Interface mantida idêntica
 export interface IButton
 	extends JSX.HTMLAttributes<HTMLLabelElement>,
-		ButtonVariants {
+		VariantProps<typeof buttonVariants> {
 	caption?: string;
 	icone?: string | IconProp | TBTBIcon;
 	ariaLabel?: string;
@@ -63,7 +65,7 @@ export interface IButton
 	escopo?: string;
 }
 
-// 2. Componente Principal
+// 4. Componente principal - Correção do erro
 export function Button({
 	caption,
 	icone,
@@ -76,7 +78,7 @@ export function Button({
 	className,
 	...props
 }: IButton) {
-	// 3. Tamanho dos ícones responsivo
+	// Tamanho dos ícones
 	const iconSizeClass = {
 		xs: 'h-3 w-3',
 		sm: 'h-3.5 w-3.5',
@@ -84,21 +86,17 @@ export function Button({
 		lg: 'h-5 w-5',
 	}[size];
 
-	// 4. Normalização segura de ícones (sem carregar tudo)
+	// Normalização de ícones
 	const normalizeIcon = (
 		icone: string | IconProp | TBTBIcon | undefined,
 	): TBTBIcon => {
 		if (!icone) return {};
-
-		// Caso 1: Já está no formato TBTBIcon
 		if (typeof icone === 'object' && 'left' in icone) {
 			return {
 				left: icone.left ? ensureIconProp(icone.left) : undefined,
 				right: icone.right ? ensureIconProp(icone.right) : undefined,
 			};
 		}
-
-		// Caso 2: String (formato "fas fa-ellipsis-v")
 		if (noEmpty(icone, 'string')) {
 			const [prefix, iconName] = `${icone}`.split(' ') as [
 				IconPrefix,
@@ -108,18 +106,13 @@ export function Button({
 				left: [prefix, iconName.replace('fa-', '') as IconName],
 			};
 		}
-
-		// Caso 3: IconProp direto (IconDefinition, [IconPrefix, IconName], etc.)
-		return {
-			left: ensureIconProp(icone),
-		};
+		return { left: ensureIconProp(icone) };
 	};
 
-	// 3. Função helper para garantir IconProp válido
 	function ensureIconProp(icon: any): IconProp {
 		if (!icon) {
 			console.warn('Ícone inválido fornecido');
-			return ['fas', 'question-circle']; // Fallback seguro
+			return ['fas', 'question-circle'];
 		}
 		return icon;
 	}
@@ -128,30 +121,38 @@ export function Button({
 	const has_licon = !!icon.left;
 	const has_ricon = !!icon.right && (has_licon || !!caption);
 	const has_cap = !!caption?.trim();
-
-	// 5. Lógica de layout responsivo
 	const shouldCenter =
 		center ||
 		(!has_licon && !has_ricon) ||
 		(has_licon && !has_cap && !has_ricon);
 
-	// 6. Renderização
+	// Correção principal: Removido .className desnecessário
+	const baseClasses = buttonVariants({
+		size,
+		compact,
+		center: shouldCenter,
+		hasLeftIcon: has_licon,
+		hasRightIcon: has_ricon,
+		hasCaption: has_cap,
+	});
+
+	// Tratamento seguro para className (incluindo Signals)
+	const resolvedClass = twMerge(
+		baseClasses, // Já é uma string
+		`btb-jcem-${escopo ?? 'btb'}`,
+		typeof className === 'function' ?
+			(className as Function)()
+		:	className,
+	);
+
 	return (
 		<label
 			{...props}
 			aria-label={ariaLabel}
 			htmlFor={htmlFor}
-			className={buttonVariants({
-				size,
-				compact,
-				center: shouldCenter,
-				hasLeftIcon: has_licon || undefined,
-				hasRightIcon: has_ricon || undefined,
-				hasCaption: has_cap || undefined,
-				className: `btb-jcem-${escopo ?? 'btb'} ${className || ''}`,
-			})}
+			className={resolvedClass}
 		>
-			{/* Ícone Esquerdo */}
+			{/* Renderização de ícones e texto mantida igual */}
 			{has_licon && (
 				<div
 					class={`
@@ -159,14 +160,10 @@ export function Button({
           ${has_cap && !shouldCenter ? 'flex-shrink-0' : ''}
         `}
 				>
-					<FontAwesomeIcon
-						icon={icon.left!}
-						className={iconSizeClass}
-					/>
+					<FontAwesomeIcon icon={icon.left!} class={iconSizeClass} />
 				</div>
 			)}
 
-			{/* Texto */}
 			{has_cap && (
 				<span
 					class={`
@@ -179,13 +176,9 @@ export function Button({
 				</span>
 			)}
 
-			{/* Ícone Direito */}
 			{has_ricon && (
 				<div class="ml-auto hidden sm:flex flex-shrink-0">
-					<FontAwesomeIcon
-						icon={icon.right!}
-						className={iconSizeClass}
-					/>
+					<FontAwesomeIcon icon={icon.right!} class={iconSizeClass} />
 				</div>
 			)}
 		</label>
