@@ -1,6 +1,6 @@
 # 🗂️ Documentação de Layout e Componentes UI
 
-<img src="ui.svg" alt="Diagrama Layout" style="max-height:40vh;">
+<img src="ui.svg" alt="Diagrama Layout" style="max-height:30vh;">
 
 ## 🔷 Arquitetura Geral
 
