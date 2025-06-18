@@ -73,6 +73,12 @@ graph TD
 
 ### `HeaderBar`
 
+#### Estrutura interna:
+
+```
+ [LeftItems*]? ([Title|MiddleContent]? [SearchComponent]?) [RightItems*]?
+```
+
 > Cabeçalho horizontal com 3 zonas:
 
 - **Left:** alinhado à esquerda.
@@ -96,6 +102,12 @@ graph TD
 ---
 
 ### `[2] NavIcon`
+
+#### Estrutura interna:
+
+```
+[Input:radio]? [Container] → [Lista:ul] → ([ButtonX] | [MenuX])\*
+```
 
 > Barra de ferramentas (`ButtonX`), com modos:
 
@@ -167,7 +179,7 @@ graph TD
 #### 📐 Estrutura Interna
 
 ```
-<input> [ButtonX] [NavIcon]
+[input:radio] [ButtonX] [NavIcon]
 ```
 
 ---
