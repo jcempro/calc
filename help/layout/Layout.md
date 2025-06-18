@@ -17,18 +17,22 @@ O `PageZone` pode conter os seguintes subcomponentes:
 
 ```
 [PageZone]
- ├── [HeaderZone]
+ ├── [HeaderZone] (opcional)
  │     ├── [HeaderBar]
  │     │     ├── [LeftZone]
  │     │     ├── [MiddleZone]
  │     │     ├── [RightZone]
  │     └── ...
- ├── [NavIcon] (esquerda ou direita, até 2)
+ ├── [NavIcon] (opcional; esquerda ou direita, até 2)
+ │     ├── [ButonX]
+ │     └── ...
  ├── [ContentWrapper]
  │     ├── [PageZone] (opcional, máximo 1; permite PageZone nesting)
- │     └── [*]
+ │     ├── [*]
+ │     └── ...
  └── [FootZone] (opcional)
-       └── [*]
+       ├── [*]
+       └── ...
 ```
 
 ## 🔹 Componentes Principais
