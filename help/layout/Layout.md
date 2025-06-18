@@ -76,7 +76,7 @@ graph TD
 #### Estrutura interna:
 
 ```
- [LeftItems*]? ([Title|MiddleContent]? [SearchComponent]?) [RightItems*]?
+ [LeftItems*]? ([Title|MiddleContent]? [SearchComponent]?) ([SearchComponent]?[RightItems*])?
 ```
 
 > Cabeçalho horizontal com 3 zonas:
