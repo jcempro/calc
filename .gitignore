@@ -3,3 +3,7 @@ node_modules
 !.vscode
 src/__generated__
 /package-lock.json
+*.psd
+*.ai
+*.zip
+*.7z
