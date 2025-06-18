@@ -19,12 +19,16 @@ O `PageZone` pode conter os seguintes subcomponentes:
 [PageZone]
  ├── [HeaderZone]
  │     ├── [HeaderBar]
- │     ├── [HeaderBar] (opcional)
+ │     │     ├── [LeftZone]
+ │     │     ├── [MiddleZone]
+ │     │     ├── [RightZone]
  │     └── ...
  ├── [NavIcon] (esquerda ou direita, até 2)
  ├── [ContentWrapper]
- │     └── [PageZone] (opcional, permite PageZone nesting)
+ │     ├── [PageZone] (opcional, máximo 1; permite PageZone nesting)
+ │     └── [*]
  └── [FootZone] (opcional)
+       └── [*]
 ```
 
 ## 🔹 Componentes Principais
@@ -44,12 +48,16 @@ O `PageZone` pode conter os seguintes subcomponentes:
 
 ```mermaid
 graph TD
-  PageZone --> HeaderZone
-  PageZone --> NavIcon1[NavIcon]
-  PageZone --> NavIcon2[NavIcon]
-  PageZone --> ContentWrapper
-  PageZone --> FootZone
-  ContentWrapper --> NestedPage[PageZone]
+    A[PageZone] --> B[HeaderZone]
+    A --> C[NavIcon]
+    A --> D[ContentWrapper]
+    A --> E[FootZone]
+    B --> F[HeaderBar]
+    F --> G[Left Zone]
+    F --> H[Middle Zone]
+    F --> I[Right Zone]
+    C --> J[ButtonX]
+    D --> A
 ```
 
 ### `[1] HeaderZone`
@@ -148,12 +156,24 @@ graph TD
 
 ---
 
+## MenuX
+
+> Extende Button
+
+#### 📐 Estrutura Interna
+
+```
+<input> [ButtonX] [NavIcon]
+```
+
+---
+
 ## 🔧 Animações e Estados
 
 - Totalmente CSS/SCSS/DaisyUI.
 - Transições suaves e rápidas.
-- Estados controlados via CSS puro (`input`, `:has`,...).
-- Sem uso de JS para estilos (salvo quando impossível por CSS).
+- Estados controlados via CSS puro (`input`, `:checked`, `:has`, `data-*`, `:focus`,...).
+- Sem uso de JS para estilos/animações/efeitos (salvo quando impossível por CSS).
 
 ---
 
@@ -165,7 +185,7 @@ graph TD
 ## Icones
 
 - Font: fontawesome, incluindo brands, regular e solids.
-- Uso de tailwind-merge com @fortawesome/react-fontawesome;
+- Uso de @fortawesome/react-fontawesome;
 - Se ícone fornecido como string: interprete para lidar corretamente, mas emita logger.warn.
 
 ---
@@ -176,3 +196,11 @@ graph TD
 - `ContentWrapper` e `FootZone` aceitam qualquer componente (`*`).
 - Layout otimizado para modularidade, performance e clareza de estados.
 - Os componentes devem remover duplicidade e conflitos de estilos (DaisyUI ou classes);
+- Projeto base:
+  - DaisyUI;
+  - tailwind-merge;
+  - tailwind-variants;
+  - clsx;
+  - tsx;
+  - PeacJS
+  - vite
