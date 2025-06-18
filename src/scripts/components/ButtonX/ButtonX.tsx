@@ -55,7 +55,7 @@ const buttonVariants = tv({
 });
 
 // 3. Interface mantida idêntica
-export interface IButton
+export interface IButtonX
 	extends JSX.HTMLAttributes<HTMLLabelElement>,
 		VariantProps<typeof buttonVariants> {
 	caption?: string;
@@ -66,7 +66,7 @@ export interface IButton
 }
 
 // 4. Componente principal - Correção do erro
-export function Button({
+export function ButtonX({
 	caption,
 	icone,
 	ariaLabel,
@@ -77,7 +77,7 @@ export function Button({
 	size = 'md',
 	className,
 	...props
-}: IButton) {
+}: IButtonX) {
 	// Tamanho dos ícones
 	const iconSizeClass = {
 		xs: 'h-3 w-3',

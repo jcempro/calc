@@ -1,6 +1,6 @@
 import '@scss/main/HeaderSec.scss';
-import { Header } from '@ext/Headers/Headers';
-import { IButton } from '@ext/Button/Button';
+import { HeaderBar } from '@ext/HeaderBar/HeaderBar';
+import { IButtonX } from '@ext/ButtonX/ButtonX';
 import {
 	faChevronRight,
 	faCog,
@@ -9,7 +9,7 @@ import {
 export function HeaderSec() {
 	return (
 		<>
-			<Header classPart="secondary" />
+			<HeaderBar classPart="secondary" />
 		</>
 	);
 }

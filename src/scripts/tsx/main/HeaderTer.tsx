@@ -1,10 +1,10 @@
 import '@scss/main/HeaderTer.scss';
-import { Header } from '@ext/Headers/Headers';
+import { HeaderBar } from '@ext/HeaderBar/HeaderBar';
 
 export function HeaderTer() {
 	return (
 		<>
-			<Header
+			<HeaderBar
 				classPart="tertiary"
 				leftItems={[
 					{

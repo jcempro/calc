@@ -1,19 +1,19 @@
-import { Button, IButton } from '../Button/Button';
+import { ButtonX, IButtonX } from '../ButtonX/ButtonX';
 import { JSX } from 'preact';
 import { guid, isTrue } from '../../ts/common/generic';
 import { useRef } from 'preact/hooks';
 import { tv } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
-import { IMenu, Menu } from '@ext/Menu/Menu';
+import { IMenuX, MenuX } from '@ext/MenuX/MenuX';
 
-export type TNavItem = IButton | IMenu;
+export type TNavItem = IButtonX | IMenuX;
 
-function isMenu(item: TNavItem): item is IMenu {
+function isMenu(item: TNavItem): item is IMenuX {
 	return 'itens' in item; // Note o 'itens' aqui
 }
 
 export interface INavIcon extends JSX.HTMLAttributes<HTMLDivElement> {
-	itens: IButton[];
+	itens: IButtonX[];
 	escopo?: string;
 	menuId?: string;
 	ulClass?: string;
@@ -75,7 +75,7 @@ export function NavIcon({
 
 		if (isMenu(item)) {
 			return (
-				<Menu
+				<MenuX
 					{...commonProps}
 					{...item}
 					menuVariant={
@@ -86,7 +86,7 @@ export function NavIcon({
 			);
 		}
 
-		return <Button {...commonProps} {...item} />;
+		return <ButtonX {...commonProps} {...item} />;
 	};
 
 	return (

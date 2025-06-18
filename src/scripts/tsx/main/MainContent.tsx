@@ -1,4 +1,4 @@
-import { Button } from '@ext/Button/Button';
+import { ButtonX } from '@ext/ButtonX/ButtonX';
 import {
 	faHome,
 	faChevronRight,
@@ -12,19 +12,19 @@ export function MainContent() {
 		<>
 			<section className="main-content">
 				<main className="main-content">
-					<Button
+					<ButtonX
 						caption="teste Meu Botão"
 						icone={{ left: faHome, right: faChevronRight }}
 						htmlFor="input-id"
 					/>
 
-					<Button
+					<ButtonX
 						caption="testv Centralizado"
 						icone={{ left: faCog }}
 						center={true}
 					/>
 
-					<Button
+					<ButtonX
 						caption="teste Adaptativo"
 						icone={{ left: faUser }}
 						className="w-auto max-w-[200px]"

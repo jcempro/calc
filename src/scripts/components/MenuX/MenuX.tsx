@@ -1,4 +1,4 @@
-import { IButton, Button } from '../Button/Button';
+import { IButtonX, ButtonX } from '../ButtonX/ButtonX';
 import { useRef } from 'preact/hooks';
 import { JSX } from 'preact';
 import { guid } from '../../ts/common/generic';
@@ -7,8 +7,8 @@ import { tv } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx'; // Importação adicionada aqui
 
-export interface IMenu extends Omit<IButton, 'htmlFor'> {
-	itens: IButton[];
+export interface IMenuX extends Omit<IButtonX, 'htmlFor'> {
+	itens: IButtonX[];
 	checked?: boolean;
 	navClass?: string;
 	menuAlign?: 'left' | 'center' | 'right';
@@ -47,7 +47,7 @@ const menuContentVariants = tv({
 	},
 });
 
-export function Menu({
+export function MenuX({
 	escopo = 'global_menu',
 	itens,
 	checked,
@@ -56,7 +56,7 @@ export function Menu({
 	menuVariant = 'dropdown',
 	className,
 	...props
-}: IMenu) {
+}: IMenuX) {
 	const id = useRef(`menu-${guid(18)}`).current;
 
 	const resolveClass = (cls: unknown) =>
@@ -74,7 +74,7 @@ export function Menu({
 				),
 			})}
 		>
-			<Button
+			<ButtonX
 				{...props}
 				htmlFor={id}
 				escopo={escopo}

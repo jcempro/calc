@@ -1,12 +1,12 @@
 import { JSX } from 'preact';
-import { IButton } from '@ext/Button/Button';
-import { IMenu } from '@ext/Menu/Menu';
+import { IButtonX } from '@ext/ButtonX/ButtonX';
+import { IMenuX } from '@ext/MenuX/MenuX';
 import { NavIcon } from '@ext/NavIcon/NavIcon';
 import { TUISizes, TUIShadow } from '../../ts/common/ui.interfaces';
 import clsx from 'clsx';
 import { ClassNameValue, twMerge } from 'tailwind-merge';
 
-type TNavItem = IButton | IMenu;
+type TNavItem = IButtonX | IMenuX;
 
 export interface IHeader
 	extends Omit<JSX.HTMLAttributes<HTMLElement>, 'size'> {
@@ -41,7 +41,7 @@ const shadowMap = {
 	'2xl': 'shadow-2xl',
 } as const;
 
-export function Header({
+export function HeaderBar({
 	classPart = '',
 	leftItems = [],
 	rightItems = [],
@@ -74,7 +74,7 @@ export function Header({
 
 	// Configuração otimizada do NavIcon para Header
 	const getNavIconConfig = (items: TNavItem[]) => ({
-		itens: items.filter((i): i is IButton => !('items' in i)),
+		itens: items.filter((i): i is IButtonX => !('items' in i)),
 		orientation: 'horizontal' as const,
 		ulClass: clsx(
 			'items-center',

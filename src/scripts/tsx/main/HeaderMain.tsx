@@ -1,6 +1,6 @@
 import '@scss/main.scss';
 import '@scss/main/HeaderMain.scss';
-import { Header } from '@ext/Headers/Headers';
+import { HeaderBar } from '@ext/HeaderBar/HeaderBar';
 import {
 	faEllipsisV,
 	faMapPin,
@@ -32,7 +32,7 @@ export function HeaderMain() {
 
 	return (
 		<>
-			<Header leftItems={bleft} />
+			<HeaderBar leftItems={bleft} />
 		</>
 	);
 }
