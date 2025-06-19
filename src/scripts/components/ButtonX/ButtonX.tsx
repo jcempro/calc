@@ -70,6 +70,7 @@
  * - Estados:
  *   • Controlados via data-attributes e pseudo-classes
  *   • Transições CSS-only
+ * - Font: fontawesome, incluindo brands, regular e solids; tranpilação: apenas o realmente usado;
  *
  * @development
  * - Boas práticas:
@@ -78,6 +79,7 @@
  *   • Comentários objetivos para mudanças complexas
  *   • Manter esta documentação no topo código com ajustes mínimos pertinentes
  *   • Comentário de uma única linha preferíveis, exceto quando para jsDoc
+ * - Font: fontawesome, incluindo brands, regular e solids; tranpilação: apenas o realmente usado;
  *
  * @dependencies
  *   • Preact + Vite (core)
