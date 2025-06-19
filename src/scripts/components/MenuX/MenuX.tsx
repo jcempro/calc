@@ -36,7 +36,7 @@
  *
  * @behavior
  * - Prioridades:
- *   1. Acessibilidade (aria-label quando aplicável
+ *   1. Acessibilidade (aria-label quando aplicável)
  *   2. Consistência visual (estados :hover, :active , ..., via CSS)
  *   3. Performance (zero JS para estado/animações/transições)
  * - Abertura e fechamento são controlados por input:hidden + label.
@@ -47,7 +47,7 @@
  * - Herda todas as props de `ButtonX`, exceto `htmlFor`.
  * - `itens`: lista de botões (`ButtonX[]`) exibidos no menu.
  * - `menuAlign`: alinhamento do menu (`left` | `center` | `right`).
- * - `menuVariant`: tipo de menu (`dropdown` | `vertical` | `horizontal`).
+ * - `variant`: tipo de menu (`dropdown` | `vertical` | `horizontal`).
  * - `navClass`: classes adicionais aplicadas à lista (`ul`) do menu.
  * - `className`: classes do wrapper principal (`div`).
  * - `checked`: controla abertura inicial (opcional).
@@ -86,25 +86,28 @@
  * @see {@link NavIcon} — Container dos itens do menu.
  */
 
-import { IButtonX, ButtonX } from '../ButtonX/ButtonX';
 import { useRef } from 'preact/hooks';
 import { JSX } from 'preact';
-import { guid } from '../../ts/common/generic';
+import { IButtonX, ButtonX } from '../ButtonX/ButtonX';
 import { NavIcon } from '../NavIcon/NavIcon';
-import { tv } from 'tailwind-variants';
+import { guid } from '../../ts/common/generic';
+import { tv, type VariantProps } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
-import clsx from 'clsx'; // Importação adicionada aqui
+import clsx from 'clsx';
+import { resolveClassName } from '../../ts/common/ui';
 
-export interface IMenuX extends Omit<IButtonX, 'htmlFor'> {
+export interface IMenuX
+	extends Omit<IButtonX, 'htmlFor'>,
+		VariantProps<typeof variants> {
 	itens: IButtonX[];
 	checked?: boolean;
-	navClass?: string;
+	navClass?: string | (() => string);
 	menuAlign?: 'left' | 'center' | 'right';
-	menuVariant?: 'dropdown' | 'vertical' | 'horizontal';
-	className?: string | JSX.SignalLike<string | undefined>;
+	variant?: 'dropdown' | 'vertical' | 'horizontal';
+	className?: string | (() => string);
 }
 
-const menuVariants = tv({
+const variants = tv({
 	base: 'menu-jcem-wrapper relative',
 	variants: {
 		variant: {
@@ -112,7 +115,7 @@ const menuVariants = tv({
 			vertical: '',
 			horizontal: '',
 		},
-		align: {
+		menuAlign: {
 			left: '',
 			center: 'dropdown-center',
 			right: 'dropdown-end',
@@ -120,7 +123,7 @@ const menuVariants = tv({
 	},
 	defaultVariants: {
 		variant: 'dropdown',
-		align: 'left',
+		menuAlign: 'left',
 	},
 });
 
@@ -135,40 +138,55 @@ const menuContentVariants = tv({
 	},
 });
 
+/** 🌟 Componente MenuX */
 export function MenuX({
 	escopo = 'global_menu',
 	itens,
 	checked,
-	navClass = '',
+	navClass,
 	menuAlign = 'left',
-	menuVariant = 'dropdown',
+	variant: variant = 'dropdown',
 	className,
 	...props
 }: IMenuX) {
 	const id = useRef(`menu-${guid(18)}`).current;
 
-	const resolveClass = (cls: unknown) =>
-		typeof cls === 'function' ? cls() : cls;
+	/** 🎨 Classes do wrapper */
+	const wrapperClass = variants({
+		variant: variant,
+		menuAlign,
+		className: twMerge(
+			`menu-jcem-wrapper-${escopo}`,
+			resolveClassName(className),
+		),
+	});
+
+	/** 🎨 Classes da lista do menu (NavIcon) */
+	const navUlClass = twMerge(
+		menuContentVariants({ variant: variant }),
+		resolveClassName(navClass),
+	);
+
+	/** 🎨 Classes do wrapper da NavIcon (menu flutuante) */
+	const navWrapperClass = clsx(
+		'peer-checked:block hidden absolute',
+		variant === 'dropdown' && 'mt-1',
+		variant === 'horizontal' && 'ml-1',
+	);
+
+	if (!itens?.length) {
+		console.warn(`MenuX (${escopo}) criado sem itens.`);
+	}
 
 	return (
-		<div
-			data-menu={id}
-			className={menuVariants({
-				variant: menuVariant,
-				align: menuAlign,
-				className: twMerge(
-					`menu-jcem-wrapper-${escopo}`,
-					resolveClass(className),
-				),
-			})}
-		>
+		<div data-menu={id} className={wrapperClass}>
 			<ButtonX
 				{...props}
 				htmlFor={id}
 				escopo={escopo}
 				className={twMerge(
-					resolveClass(props.class),
-					menuVariant === 'dropdown' && 'dropdown-toggle',
+					resolveClassName(className),
+					variant === 'dropdown' && 'dropdown-toggle',
 				)}
 			/>
 
@@ -177,20 +195,12 @@ export function MenuX({
 				escopo={escopo}
 				behavior="menu"
 				orientation={
-					menuVariant === 'horizontal' ? 'horizontal' : 'vertical'
+					variant === 'horizontal' ? 'horizontal' : 'vertical'
 				}
-				ulClass={twMerge(
-					menuContentVariants({ variant: menuVariant }),
-					resolveClass(navClass),
-				)}
-				wrapperClass={clsx(
-					// Corrigido para usar clsx
-					'peer-checked:block hidden absolute',
-					menuVariant === 'dropdown' && 'mt-1',
-					menuVariant === 'horizontal' && 'ml-1',
-				)}
 				itens={itens}
 				opened={checked}
+				ulClass={navUlClass}
+				wrapperClass={navWrapperClass}
 			/>
 		</div>
 	);
