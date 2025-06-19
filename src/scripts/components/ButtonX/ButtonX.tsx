@@ -9,13 +9,17 @@ import { tv, type VariantProps } from 'tailwind-variants';
 import { noEmpty } from '../../ts/common/generic';
 import { twMerge } from 'tailwind-merge';
 
-// 1. Tipos originais mantidos
+/* =========================================================================
+   🔷 Tipos de Ícone
+   ========================================================================= */
 export type TBTBIcon = {
 	left?: IconProp;
 	right?: IconProp;
 };
 
-// 2. Variantes - Adaptação mínima
+/* =========================================================================
+   🔷 Variantes — Gerenciamento Visual via Tailwind-Variants
+   ========================================================================= */
 const buttonVariants = tv({
 	base: [
 		'btn',
@@ -54,7 +58,9 @@ const buttonVariants = tv({
 	},
 });
 
-// 3. Interface mantida idêntica
+/* =========================================================================
+   🔷 Interface do Componente
+   ========================================================================= */
 export interface IButtonX
 	extends JSX.HTMLAttributes<HTMLLabelElement>,
 		VariantProps<typeof buttonVariants> {
@@ -65,7 +71,9 @@ export interface IButtonX
 	escopo?: string;
 }
 
-// 4. Componente principal - Correção do erro
+/* =========================================================================
+   🔷 Componente Principal
+   ========================================================================= */
 export function ButtonX({
 	caption,
 	icone,
@@ -78,7 +86,7 @@ export function ButtonX({
 	className,
 	...props
 }: IButtonX) {
-	// Tamanho dos ícones
+	/* 🛠️ Classes de tamanho dos ícones */
 	const iconSizeClass = {
 		xs: 'h-3 w-3',
 		sm: 'h-3.5 w-3.5',
@@ -86,7 +94,7 @@ export function ButtonX({
 		lg: 'h-5 w-5',
 	}[size];
 
-	// Normalização de ícones
+	/* 🔧 Função para normalizar o ícone */
 	const normalizeIcon = (
 		icone: string | IconProp | TBTBIcon | undefined,
 	): TBTBIcon => {
@@ -109,6 +117,7 @@ export function ButtonX({
 		return { left: ensureIconProp(icone) };
 	};
 
+	/* 🛠️ Garantia de validade do ícone */
 	function ensureIconProp(icon: any): IconProp {
 		if (!icon) {
 			console.warn('Ícone inválido fornecido');
@@ -117,16 +126,19 @@ export function ButtonX({
 		return icon;
 	}
 
+	/* 🔍 Processamento dos ícones */
 	const icon = normalizeIcon(icone);
 	const has_licon = !!icon.left;
 	const has_ricon = !!icon.right && (has_licon || !!caption);
 	const has_cap = !!caption?.trim();
+
+	/* 🧠 Lógica de alinhamento */
 	const shouldCenter =
 		center ||
 		(!has_licon && !has_ricon) ||
 		(has_licon && !has_cap && !has_ricon);
 
-	// Correção principal: Removido .className desnecessário
+	/* 🎨 Classes combinadas */
 	const baseClasses = buttonVariants({
 		size,
 		compact,
@@ -136,15 +148,15 @@ export function ButtonX({
 		hasCaption: has_cap,
 	});
 
-	// Tratamento seguro para className (incluindo Signals)
 	const resolvedClass = twMerge(
-		baseClasses, // Já é uma string
+		baseClasses,
 		`btb-jcem-${escopo ?? 'btb'}`,
 		typeof className === 'function' ?
 			(className as Function)()
 		:	className,
 	);
 
+	/* 🚀 Renderização */
 	return (
 		<label
 			{...props}
@@ -152,30 +164,29 @@ export function ButtonX({
 			htmlFor={htmlFor}
 			className={resolvedClass}
 		>
-			{/* Renderização de ícones e texto mantida igual */}
+			{/* 🔹 Ícone Esquerdo */}
 			{has_licon && (
 				<div
-					class={`
-          ${shouldCenter ? 'mx-auto' : 'mr-2'}
-          ${has_cap && !shouldCenter ? 'flex-shrink-0' : ''}
-        `}
+					class={`${
+						shouldCenter ? 'mx-auto' : 'mr-2'
+					} ${has_cap && !shouldCenter ? 'flex-shrink-0' : ''}`}
 				>
 					<FontAwesomeIcon icon={icon.left!} class={iconSizeClass} />
 				</div>
 			)}
 
+			{/* 🔸 Caption */}
 			{has_cap && (
 				<span
-					class={`
-          ${shouldCenter ? 'text-center' : 'text-left'}
-          ${has_ricon ? 'hidden xs:inline' : ''}
-          truncate
-        `}
+					class={`${
+						shouldCenter ? 'text-center' : 'text-left'
+					} ${has_ricon ? 'hidden xs:inline' : ''} truncate`}
 				>
 					{caption}
 				</span>
 			)}
 
+			{/* 🔹 Ícone Direito */}
 			{has_ricon && (
 				<div class="ml-auto hidden sm:flex flex-shrink-0">
 					<FontAwesomeIcon icon={icon.right!} class={iconSizeClass} />
