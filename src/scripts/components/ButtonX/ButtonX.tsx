@@ -98,10 +98,10 @@ import {
 	IconPrefix,
 } from '@fortawesome/fontawesome-svg-core';
 import { tv, type VariantProps } from 'tailwind-variants';
-import { noEmpty } from '../../ts/common/generic';
 import { twMerge } from 'tailwind-merge';
 import Logger from '../../ts/utils/logger';
 import { resolveClassName } from '../../ts/common/ui';
+import { noEmpty } from '../../ts/common/logicos';
 
 /** Tipagem para ícones lado esquerdo e direito */
 export type TBTBIcon = {

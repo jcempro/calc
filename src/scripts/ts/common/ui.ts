@@ -1,4 +1,5 @@
-import { guid, isEmpty } from './generic';
+import { guid } from './generic';
+import { isEmpty } from './logicos';
 
 export type TUISizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type TUIShadow = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';

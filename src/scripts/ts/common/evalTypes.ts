@@ -3,9 +3,8 @@
  */
 
 // Tipos utilitários
-
-import { getProp, HAS } from './generic';
 import { RecordT } from './interfaces';
+import { getProp } from './objetos';
 
 /**
  * Representa um construtor de classe.

@@ -103,12 +103,13 @@
 
 import { ButtonX, IButtonX } from '../ButtonX/ButtonX';
 import { JSX } from 'preact';
-import { guid, isTrue } from '../../ts/common/generic';
+import { guid } from '../../ts/common/generic';
 import { useRef } from 'preact/hooks';
 import { tv } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
 import { IMenuX, MenuX } from '@ext/MenuX/MenuX';
 import { resolveClassName } from '../../ts/common/ui';
+import { isTrue } from '../../ts/common/logicos';
 
 /** Tipo de itens aceitos: ButtonX ou MenuX */
 export type TNavItem = IButtonX | IMenuX;
