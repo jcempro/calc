@@ -90,6 +90,7 @@ import { tv, type VariantProps } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
 import { resolveClassName } from '../../ts/common/ui';
+import './PageZone.scss';
 
 /** 🔖 Definição dos variants para pagezoneZone */
 const pagezoneZoneVariants = tv({
@@ -140,7 +141,7 @@ export interface IpagezoneZone
 }
 
 /** 🌟 Componente pagezoneZone */
-export function pagezoneZone({
+export function PageZone({
 	escopo = 'pagezone',
 	classPart = '',
 	className,
