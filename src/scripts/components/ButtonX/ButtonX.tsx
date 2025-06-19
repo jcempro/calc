@@ -67,7 +67,7 @@
  *   • Mensagens de log/warn/error via Logger
  *   • Manutenção git-friendly (evitar breaking changes)
  *   • Comentários objetivos para mudanças complexas
- *   • Manter esta documentação no topo código com ajustes pertinentes
+ *   • Manter esta documentação no topo código com ajustes mínimos pertinentes
  *   • Comentário de uma única linha preferíveis, exceto quando para jsDoc
  * - Dependências:
  *   • Preact + Vite (core)
@@ -88,6 +88,7 @@ import {
 import { tv, type VariantProps } from 'tailwind-variants';
 import { noEmpty } from '../../ts/common/generic';
 import { twMerge } from 'tailwind-merge';
+import Logger from '../../ts/utils/logger';
 
 /** Tipagem para ícones lado esquerdo e direito */
 export type TBTBIcon = {
@@ -132,17 +133,42 @@ const buttonVariants = tv({
 		size: 'md',
 		center: true,
 	},
+	compoundVariants: [
+		{
+			hasLeftIcon: true,
+			hasCaption: false,
+			hasRightIcon: false,
+			center: true,
+			class: 'mx-auto',
+		},
+		{
+			hasLeftIcon: true,
+			hasCaption: true,
+			center: false,
+			class: 'mr-2 flex-shrink-0',
+		},
+		{
+			hasRightIcon: true,
+			class: 'ml-auto hidden sm:flex flex-shrink-0',
+		},
+		{
+			hasCaption: true,
+			hasRightIcon: true,
+			class: 'hidden xs:inline',
+		},
+	],
 });
 
 /** Props do ButtonX */
 export interface IButtonX
-	extends JSX.HTMLAttributes<HTMLLabelElement>,
+	extends Omit<JSX.HTMLAttributes<HTMLLabelElement>, 'className'>,
 		VariantProps<typeof buttonVariants> {
 	caption?: string;
 	icone?: string | IconProp | TBTBIcon;
 	ariaLabel?: string;
 	htmlFor?: string;
 	escopo?: string;
+	className?: string | (() => string) | undefined;
 }
 
 /** Componente principal ButtonX */
@@ -178,13 +204,15 @@ export function ButtonX({
 			};
 		}
 		if (noEmpty(icone, 'string')) {
-			const [prefix, iconName] = `${icone}`.split(' ') as [
-				IconPrefix,
-				string,
-			];
-			return {
-				left: [prefix, iconName.replace('fa-', '') as IconName],
-			};
+			const [prefix = 'fas', ...rest] = `${icone}`
+				.trim()
+				.split(/\s+/);
+			const iconName = rest.join('')?.replace(/^fa-/, '');
+			if (iconName) {
+				return {
+					left: [prefix as IconPrefix, iconName as IconName],
+				};
+			}
 		}
 		return { left: ensureIconProp(icone) };
 	};
@@ -192,7 +220,7 @@ export function ButtonX({
 	/** Garantia de IconProp válido */
 	function ensureIconProp(icon: any): IconProp {
 		if (!icon) {
-			console.warn('Ícone inválido fornecido');
+			Logger.warn('Ícone inválido fornecido.');
 			return ['fas', 'question-circle'];
 		}
 		return icon;
@@ -209,7 +237,14 @@ export function ButtonX({
 		(!has_licon && !has_ricon) ||
 		(has_licon && !has_cap && !has_ricon);
 
-	/** Classes finais do botão, com escopo customizável */
+	/** Validação de acessibilidade */
+	if (!ariaLabel && !has_cap) {
+		Logger.warn(
+			'[ButtonX] — Falta ariaLabel: é obrigatório quando caption está ausente.',
+		);
+	}
+
+	/** Classes finais */
 	const baseClasses = buttonVariants({
 		size,
 		compact,
@@ -222,9 +257,7 @@ export function ButtonX({
 	const resolvedClass = twMerge(
 		baseClasses,
 		`btb-jcem-${escopo ?? 'btb'}`,
-		typeof className === 'function' ?
-			(className as Function)()
-		:	className,
+		typeof className === 'function' ? className() : className,
 	);
 
 	return (
@@ -234,29 +267,19 @@ export function ButtonX({
 			htmlFor={htmlFor}
 			className={resolvedClass}
 		>
-			{/* Renderização condicional dos ícones e da legenda */}
+			{/* Left Icon */}
 			{has_licon && (
-				<div
-					class={`${
-						shouldCenter ? 'mx-auto' : 'mr-2'
-					} ${has_cap && !shouldCenter ? 'flex-shrink-0' : ''}`}
-				>
+				<div>
 					<FontAwesomeIcon icon={icon.left!} class={iconSizeClass} />
 				</div>
 			)}
 
-			{has_cap && (
-				<span
-					class={`${
-						shouldCenter ? 'text-center' : 'text-left'
-					} ${has_ricon ? 'hidden xs:inline' : ''} truncate`}
-				>
-					{caption}
-				</span>
-			)}
+			{/* Caption */}
+			{has_cap && <span class="truncate">{caption}</span>}
 
+			{/* Right Icon */}
 			{has_ricon && (
-				<div class="ml-auto hidden sm:flex flex-shrink-0">
+				<div>
 					<FontAwesomeIcon icon={icon.right!} class={iconSizeClass} />
 				</div>
 			)}
