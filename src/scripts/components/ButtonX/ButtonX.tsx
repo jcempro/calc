@@ -1,3 +1,68 @@
+/**
+ * ButtonX - Botão genérico, responsivo e customizável.
+ *
+ * @structure
+ * - Estrutura dinâmica: [leftIcon]? [caption]? [rightIcon]?
+ * - RightIcon só é renderizado quando:
+ *   • Existe caption **OU**
+ *   • Existe leftIcon + configuração explícita
+ * - Alinhamento automático baseado no conteúdo:
+ *   • Conteúdo centralizado quando apenas leftIcon presente
+ *   • RightIcon sempre alinhado à extremidade direita
+ *   • LeftIcon + caption: alinhamento configurável (esquerda/centro) padrão left
+ *
+ * @integration
+ * - Compatibilidade total com NavIcon (modos horizontal/vertical):
+ *   • Responde automaticamente a estados pai (expandido/retraído)
+ *   • Capaz de ajustar largura conforme contexto do container
+ *
+ * @layout
+ * - Modos operacionais:
+ *   • `inline`: Largura conforme conteúdo (w-auto)
+ *   • `full`: Largura uniforme entre siblings (baseada no maior elemento)
+ *
+ * - Responsividade intrínseca (xs, sm, md, lg)
+ * - Tratamento de overflow:
+ *   • Caption usa truncate
+ *   • Ícones mantêm proporção fixa
+ *
+ * @behavior
+ * - Prioridades:
+ *   1. Acessibilidade (aria-label obrigatório sem caption)
+ *   2. Consistência visual (estados :hover, :active via CSS)
+ *   3. Performance (zero JS para estado/animações/transições)
+ * - Tratamento de ícones:
+ *   • Aceita FontAwesome como string ("fas icon-name") ou IconProp
+ *   • Normalização automática de formatos e icones
+ *   • Fallback para ícone padrão em erros
+ *
+ * @style
+ * - Arquitetura CSS:
+ *   • Base: DaisyUI
+ *   • Variações: Tailwind Variants
+ *   • Combinação segura: Tailwind Merge
+ * - Customização:
+ *   • Classes podem ser sobrescritas
+ *   • Conflitos de estilos e redundancias são resolvidos e geram warnings
+ * - Estados:
+ *   • Controlados via data-attributes e pseudo-classes
+ *   • Transições CSS-only
+ *
+ * @development
+ * - Boas práticas:
+ *   • Mensagens de log/warn/error via Logger
+ *   • Manutenção git-friendly (evitar breaking changes)
+ *   • Comentários objetivos para mudanças complexas
+ *   • Manter esta documentação no topo código com ajustes pertinentes
+ * - Dependências:
+ *   • Preact + Vite (core)
+ *   • @fortawesome/react-fontawesome (ícones)
+ *   • tailwind-merge + tailwind-variants (estilos)
+ *   • DaisyUI
+ *
+ * @see {@link NavIcon} Para uso em barras de ferramentas
+ */
+
 import { JSX } from 'preact';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
