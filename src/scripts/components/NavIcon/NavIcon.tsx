@@ -103,24 +103,31 @@ import { useRef } from 'preact/hooks';
 import { tv } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
 import { IMenuX, MenuX } from '@ext/MenuX/MenuX';
+import { resolveClassName } from '../../ts/common/ui';
 
+/** Tipo de itens aceitos: ButtonX ou MenuX */
 export type TNavItem = IButtonX | IMenuX;
 
+/** Type guard para diferenciar MenuX */
 function isMenu(item: TNavItem): item is IMenuX {
-	return 'itens' in item; // Note o 'itens' aqui
+	return 'itens' in item;
 }
 
-export interface INavIcon extends JSX.HTMLAttributes<HTMLDivElement> {
-	itens: IButtonX[];
+/** Props do NavIcon */
+export interface INavIcon
+	extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'className'> {
+	itens: TNavItem[];
 	escopo?: string;
 	menuId?: string;
-	ulClass?: string;
-	wrapperClass?: string;
+	ulClass?: string | (() => string);
+	wrapperClass?: string | (() => string);
 	opened?: boolean;
 	orientation?: 'vertical' | 'horizontal';
 	behavior?: 'toolbar' | 'menu' | 'header';
+	className?: string | (() => string);
 }
 
+/** Variantes visuais */
 const navIconVariants = tv({
 	base: 'inav-jcem transition-all duration-200',
 	variants: {
@@ -145,6 +152,7 @@ const navIconVariants = tv({
 	},
 });
 
+/** 🔥 Componente NavIcon */
 export function NavIcon({
 	menuId,
 	escopo = 'global_menu',
@@ -159,15 +167,13 @@ export function NavIcon({
 }: INavIcon) {
 	const cid = useRef(menuId ?? `inav-${guid(18)}`).current;
 
-	const resolveClass = (cls: unknown) =>
-		typeof cls === 'function' ? cls() : cls;
-
+	/** 🔨 Renderiza cada item */
 	const renderItem = (item: TNavItem, idx: number) => {
 		const commonProps = {
 			key: `${cid}-item-${idx}`,
 			className: twMerge(
 				'w-full text-left',
-				resolveClass(item.className),
+				resolveClassName(item.className),
 			),
 		};
 
@@ -176,10 +182,9 @@ export function NavIcon({
 				<MenuX
 					{...commonProps}
 					{...item}
-					menuVariant={
+					variant={
 						orientation === 'horizontal' ? 'horizontal' : 'dropdown'
 					}
-					itens={item.itens} // Passando a prop correta 'itens'
 				/>
 			);
 		}
@@ -189,6 +194,7 @@ export function NavIcon({
 
 	return (
 		<>
+			{/* Controle de estado via input */}
 			{menuId && (
 				<input
 					type="radio"
@@ -199,6 +205,7 @@ export function NavIcon({
 				/>
 			)}
 
+			{/* Wrapper */}
 			<div
 				{...(menuId ? { 'data-menu': cid } : { 'data-inav': cid })}
 				{...props}
@@ -209,11 +216,12 @@ export function NavIcon({
 						opened: isTrue(opened),
 					}),
 					`inav-jcem-${escopo}`,
-					resolveClass(wrapperClass),
-					resolveClass(className),
+					resolveClassName(wrapperClass),
+					resolveClassName(className),
 				)}
 				data-navicon={cid}
 			>
+				{/* Lista dos itens */}
 				<ul
 					className={twMerge(
 						behavior === 'menu' ?
@@ -222,7 +230,7 @@ export function NavIcon({
 						orientation === 'horizontal' ?
 							'gap-2 items-center'
 						:	'gap-1',
-						resolveClass(ulClass),
+						resolveClassName(ulClass),
 					)}
 				>
 					{itens.map(renderItem)}
