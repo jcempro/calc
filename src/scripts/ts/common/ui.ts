@@ -1,4 +1,4 @@
-import { tv, VariantProps } from 'tailwind-variants';
+import { guid, isEmpty } from './generic';
 
 export type TUISizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type TUIShadow = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
@@ -16,4 +16,8 @@ export function resolveClassName(value: unknown): string | undefined {
 		return (value as { value: unknown }).value as string;
 	}
 	return undefined;
+}
+
+export function getEscopo(escopo: string | undefined): string {
+	return isEmpty(escopo) ? `${guid(4)}` : (<string>escopo)?.trim();
 }
