@@ -10,6 +10,15 @@
  *
  * @structure
  * - Estrutura dinâmica: [leftIcon]? [caption]? [rightIcon]?
+ *
+ * Layout geral:
+ * ```
+ * [ButtonX]
+ *  ├── [leftIcon] (Icone esquerdo - Principal)
+ *  ├── [caption] (Texto do botão)
+ *  └── [rightIcon] (Icone direito)
+ * ```
+ *
  * - RightIcon só é renderizado quando:
  *   • Existe caption **OU**
  *   • Existe leftIcon + configuração explícita
@@ -69,10 +78,11 @@
  *   • Comentários objetivos para mudanças complexas
  *   • Manter esta documentação no topo código com ajustes mínimos pertinentes
  *   • Comentário de uma única linha preferíveis, exceto quando para jsDoc
- * - Dependências:
+ *
+ * @dependencies
  *   • Preact + Vite (core)
  *   • @fortawesome/react-fontawesome (ícones)
- *   • tailwind-merge + tailwind-variants (estilos)
+ *   • tailwind-merge + tailwind-variants (estilos) + clsx
  *   • DaisyUI
  *
  * @see {@link NavIcon} Para uso em barras de ferramentas
