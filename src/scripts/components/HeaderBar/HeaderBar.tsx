@@ -9,6 +9,7 @@
  *
  * Suporte a botões (`ButtonX`), menus (`MenuX`) e barras (`NavIcon`).
  * Permite também inserir um campo de busca e título ou conteúdo central.
+ * Cada seções pode receber qualquer tipo de componente, inclusive pura HTML
  *
  * @structure
  * Layout geral:
@@ -98,15 +99,21 @@
  */
 
 import { JSX } from 'preact';
-import { IButtonX } from '@ext/ButtonX/ButtonX';
-import { IMenuX } from '@ext/MenuX/MenuX';
-import { INavIcon, NavIcon } from '@ext/NavIcon/NavIcon';
-import { TUISizes, TUIShadow } from '../../ts/common/ui';
+import { IButtonX } from '../ButtonX/ButtonX';
+import { IMenuX } from '../MenuX/MenuX';
+import { INavIcon, NavIcon, TNavItem } from '../NavIcon/NavIcon';
+import {
+	TUISizes,
+	TUIShadow,
+	resolveClassName,
+} from '../../ts/common/ui';
 import clsx from 'clsx';
-import { ClassNameValue, twMerge } from 'tailwind-merge';
+import { twMerge } from 'tailwind-merge';
 
-type TBarItem = IButtonX | IMenuX | INavIcon;
+/** Tipo de itens permitidos no Header */
+export type TBarItem = IButtonX | IMenuX | INavIcon;
 
+/** Props do HeaderBar */
 export interface IHeader
 	extends Omit<JSX.HTMLAttributes<HTMLElement>, 'size'> {
 	classPart?: string;
@@ -123,6 +130,7 @@ export interface IHeader
 	escopo?: string;
 }
 
+/** 🔧 Mapeamento de tamanhos → Tailwind */
 const sizeMap = {
 	xs: 'text-xs',
 	sm: 'text-sm',
@@ -131,6 +139,7 @@ const sizeMap = {
 	xl: 'text-xl',
 } as const;
 
+/** 🔧 Mapeamento de sombras → Tailwind */
 const shadowMap = {
 	none: '',
 	sm: 'shadow-sm',
@@ -139,6 +148,24 @@ const shadowMap = {
 	xl: 'shadow-xl',
 	'2xl': 'shadow-2xl',
 } as const;
+
+/** 🔥 Filtro seguro → Extrai apenas ButtonX e MenuX (NavItems) */
+const filterNavItems = (items: TBarItem[]): TNavItem[] =>
+	items.filter(
+		(i): i is TNavItem => 'onClick' in i || 'itens' in i, // Button ou Menu
+	);
+
+/** 🔧 Configuração NavIcon padrão para Header */
+const getNavIconConfig = (items: TNavItem[], compact: boolean) => ({
+	itens: items,
+	orientation: 'horizontal' as const,
+	ulClass: clsx(
+		'items-center',
+		compact ? 'gap-1' : 'gap-2',
+		'sm:gap-3',
+	),
+	className: 'h-full',
+});
 
 export function HeaderBar({
 	classPart = '',
@@ -152,54 +179,41 @@ export function HeaderBar({
 	size = 'sm',
 	shadow = 'none',
 	compact = false,
-	escopo,
+	escopo = 'header',
 	className,
 	...props
 }: IHeader) {
-	// Classes base do Header
-	const headerClasses =
-		`header-jcem-${escopo} ` +
-		twMerge(
-			clsx(
-				'navbar min-h-12 w-full',
-				variant !== 'normal' && `navbar-${variant}`,
-				sizeMap[size],
-				shadow !== 'none' && shadowMap[shadow],
-				compact ? 'py-1 px-2' : 'py-2 px-4',
-				classPart && `header-${classPart}`,
-			),
-			className as ClassNameValue,
-		);
-
-	// Configuração otimizada do NavIcon para Header
-	const getNavIconConfig = (items: TBarItem[]) => ({
-		itens: items.filter((i): i is IButtonX => !('items' in i)),
-		orientation: 'horizontal' as const,
-		ulClass: clsx(
-			'items-center',
-			compact ? 'gap-1' : 'gap-2',
-			'sm:gap-3',
+	/** 🎨 Classes do Header */
+	const headerClasses = twMerge(
+		clsx(
+			'navbar min-h-12 w-full',
+			variant !== 'normal' && `navbar-${variant}`,
+			sizeMap[size],
+			shadowMap[shadow],
+			compact ? 'py-1 px-2' : 'py-2 px-4',
+			`header-jcem-${escopo}`,
+			classPart && `header-${classPart}`,
 		),
-		className: 'h-full',
-	});
+		resolveClassName(className),
+	);
 
 	return (
 		<header {...props} className={headerClasses}>
-			{/* Seção Esquerda */}
+			{/* 🅰️ Esquerda */}
 			{leftItems.length > 0 && (
 				<div className="navbar-start h-full">
 					<NavIcon
-						{...getNavIconConfig(leftItems)}
+						{...getNavIconConfig(filterNavItems(leftItems), compact)}
 						escopo="header-left"
 						className={twMerge(
 							'mr-auto',
-							leftItems.some((i) => 'items' in i) && 'relative', // Para menus dropdown
+							leftItems.some((i) => 'itens' in i) && 'relative',
 						)}
 					/>
 				</div>
 			)}
 
-			{/* Seção Central */}
+			{/* 🅱️ Centro */}
 			<div
 				className={clsx('navbar-center h-full flex-1', {
 					'text-left': titleAlign === 'left',
@@ -225,7 +239,7 @@ export function HeaderBar({
 				}
 			</div>
 
-			{/* Seção Direita */}
+			{/* 🅲 Direita */}
 			<div className="navbar-end h-full">
 				{searchComponent && (
 					<div
@@ -241,11 +255,11 @@ export function HeaderBar({
 
 				{rightItems.length > 0 && (
 					<NavIcon
-						{...getNavIconConfig(rightItems)}
+						{...getNavIconConfig(filterNavItems(rightItems), compact)}
 						escopo="header-right"
 						className={twMerge(
 							'ml-auto',
-							rightItems.some((i) => 'items' in i) && 'relative', // Para menus dropdown
+							rightItems.some((i) => 'itens' in i) && 'relative',
 						)}
 					/>
 				)}
