@@ -99,6 +99,7 @@ import { tv, type VariantProps } from 'tailwind-variants';
 import { noEmpty } from '../../ts/common/generic';
 import { twMerge } from 'tailwind-merge';
 import Logger from '../../ts/utils/logger';
+import { resolveClassName } from '../../ts/common/ui';
 
 /** Tipagem para ícones lado esquerdo e direito */
 export type TBTBIcon = {
@@ -267,7 +268,7 @@ export function ButtonX({
 	const resolvedClass = twMerge(
 		baseClasses,
 		`btb-jcem-${escopo ?? 'btb'}`,
-		typeof className === 'function' ? className() : className,
+		resolveClassName(className),
 	);
 
 	return (
