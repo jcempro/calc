@@ -40,6 +40,11 @@
  *   • Wrapper: `inav-jcem-{escopo}`
  *   • Itens (ul): flexível, configurável via `ulClass`
  * - Responsivo e adaptável ao contexto.
+ * - Largura/altura conforme do modo (horizontal/vertical):
+ *   • full: `100%` do espaço disponível.
+ *   • fixa: definida arbitratiamente (mas responsiva).
+ *   • minima: ajusta ao conteúdo.
+ * - Overflow: Nunca usa scrollbar → cria submenus ou colapsa.
  *
  * @behavior
  * - Prioridades:
