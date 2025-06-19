@@ -1,6 +1,13 @@
 /**
  * ButtonX - Botão genérico, responsivo e customizável.
  *
+ * @example
+ * <ButtonX
+ *   caption="Confirmar"
+ *   icone={{ left: 'fas save', right: 'fas check' }}
+ *   size="md"
+ * />
+ *
  * @structure
  * - Estrutura dinâmica: [leftIcon]? [caption]? [rightIcon]?
  * - RightIcon só é renderizado quando:
@@ -25,6 +32,12 @@
  * - Tratamento de overflow:
  *   • Caption usa truncate
  *   • Ícones mantêm proporção fixa
+ *
+ * @responsive
+ * - xs: 320px+
+ * - sm: 480px+
+ * - md: 768px+
+ * - lg: 1024px+
  *
  * @behavior
  * - Prioridades:
