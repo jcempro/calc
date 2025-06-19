@@ -22,6 +22,7 @@
  * - Compatibilidade total com NavIcon (modos horizontal/vertical):
  *   • Responde automaticamente a estados pai (expandido/retraído)
  *   • Capaz de ajustar largura conforme contexto do container
+ *   • design system usando input:radio + label, quando pertinente
  *
  * @layout
  * - Modos operacionais:
