@@ -1,3 +1,101 @@
+/**
+ * NavIcon — Barra de Navegação, Menu ou Toolbar.
+ *
+ * @description
+ * Contêiner de botões (`ButtonX`) e menus (`MenuX`), utilizado para construir barras
+ * de navegação verticais, horizontais, toolbars ou menus suspensos.
+ * É um componente fundamental na composição de `PageZone` e `HeaderBar`.
+ *
+ * @structure
+ * Layout geral:
+ * ```
+ * [NavIcon]
+ *  ├── [input:radio]? (opcional, controle de estado se menuId estiver presente)
+ *  └── [div.wrapper]
+ *       └── [ul]
+ *            ├── [ButtonX | MenuX]*
+ * ```
+ *
+ * @integration
+ * - Compatível com:
+ *   • `PageZone`
+ *   • `HeaderBar`
+ *   • `MenuX`
+ *   • `FootZone`
+ * - Pode funcionar como:
+ *   • Toolbar
+ *   • Menu suspenso
+ *   • Menu lateral
+ *   • Barra horizontal
+ *
+ * @layout
+ * - Orientação:
+ *   • `vertical` (padrão)
+ *   • `horizontal`
+ * - Comportamento (`behavior`):
+ *   • `toolbar` (default)
+ *   • `menu` (menu flutuante, dropdown)
+ *   • `header` (integrado ao HeaderBar)
+ * - Classes:
+ *   • Wrapper: `inav-jcem-{escopo}`
+ *   • Itens (ul): flexível, configurável via `ulClass`
+ * - Responsivo e adaptável ao contexto.
+ *
+ * @behavior
+ * - Prioridades:
+ *   1. Acessibilidade (aria-label quando aplicável)
+ *   2. Consistência visual (estados :hover, :active , ..., via CSS)
+ *   3. Performance (zero JS para estado/animações/transições)
+ * - Suporte a controle de abertura/fechamento por `input:radio`.
+ * - Abertura baseada em `menuId` + `checked`.
+ * - Suporte a controle externo (`opened`).
+ * - Sincroniza estado via `data-*` e `peer-checked`.
+ * - Permite nesting ilimitado com `MenuX`.
+ *
+ * @props
+ * - `itens`: array de `ButtonX` ou `MenuX`.
+ * - `escopo`: string (define o namespace dos dados e classes).
+ * - `menuId`: string (id opcional para controle por input:radio).
+ * - `opened`: boolean (força estado aberto/fechado).
+ * - `orientation`: 'vertical' | 'horizontal'.
+ * - `behavior`: 'toolbar' | 'menu' | 'header'.
+ * - `ulClass`: classes aplicadas ao ul (lista dos itens).
+ * - `wrapperClass`: classes aplicadas ao wrapper principal.
+ * - `className`: classes adicionais ao wrapper principal.
+ *
+ * @style
+ * - Arquitetura CSS:
+ *   • DaisyUI + Tailwind Variants + Tailwind Merge + clsx
+ *   • Wrapper: `inav-jcem-wrapper`.
+ *   • Escopo: classes `inav-jcem-wrapper-{escopo}`.
+ * - Composição segura com `tailwind-merge` e `clsx`
+ * - Customização:
+ *   • Classes podem ser sobrescritas
+ * - Estados:
+ *   • Controlados via data-attributes e pseudo-classes
+ *   • Transições CSS-only
+ *
+ * @development
+ * - Gera ids únicos via `guid()`.
+ * - Mantém consistência total com `ButtonX` e `MenuX`.
+ * - Usa helper `resolveClassName()` para tratamento de classes.
+ * - Boas práticas:
+ *   • Mensagens de log/warn/error via Logger
+ *   • Manutenção git-friendly (evitar breaking changes)
+ *   • Comentários objetivos para mudanças complexas
+ *   • Manter esta documentação no topo código com ajustes mínimos pertinentes
+ *   • Comentário de uma única linha preferíveis, exceto quando para jsDoc
+ *
+ * @dependencies
+ * - Preact + Vite (core)
+ * - ButtonX (botão principal)
+ * - NavIcon (container dos itens)
+ * - tailwind-variants + tailwind-merge + clsx
+ *
+ * @see {@link ButtonX}
+ * @see {@link MenuX}
+ */
+
 import { ButtonX, IButtonX } from '../ButtonX/ButtonX';
 import { JSX } from 'preact';
 import { guid, isTrue } from '../../ts/common/generic';
@@ -93,7 +191,7 @@ export function NavIcon({
 		<>
 			{menuId && (
 				<input
-					type="checkbox"
+					type="radio"
 					name={escopo}
 					id={cid}
 					className="hidden peer"
