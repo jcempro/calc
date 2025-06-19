@@ -67,6 +67,7 @@
  *   • Manutenção git-friendly (evitar breaking changes)
  *   • Comentários objetivos para mudanças complexas
  *   • Manter esta documentação no topo código com ajustes pertinentes
+ *   • Comentário de uma única linha preferíveis, exceto quando para jsDoc
  * - Dependências:
  *   • Preact + Vite (core)
  *   • @fortawesome/react-fontawesome (ícones)
@@ -87,17 +88,13 @@ import { tv, type VariantProps } from 'tailwind-variants';
 import { noEmpty } from '../../ts/common/generic';
 import { twMerge } from 'tailwind-merge';
 
-/* =========================================================================
-   🔷 Tipos de Ícone
-   ========================================================================= */
+/** Tipagem para ícones lado esquerdo e direito */
 export type TBTBIcon = {
 	left?: IconProp;
 	right?: IconProp;
 };
 
-/* =========================================================================
-   🔷 Variantes — Gerenciamento Visual via Tailwind-Variants
-   ========================================================================= */
+/** Variantes visuais usando Tailwind Variants */
 const buttonVariants = tv({
 	base: [
 		'btn',
@@ -136,9 +133,7 @@ const buttonVariants = tv({
 	},
 });
 
-/* =========================================================================
-   🔷 Interface do Componente
-   ========================================================================= */
+/** Props do ButtonX */
 export interface IButtonX
 	extends JSX.HTMLAttributes<HTMLLabelElement>,
 		VariantProps<typeof buttonVariants> {
@@ -149,9 +144,7 @@ export interface IButtonX
 	escopo?: string;
 }
 
-/* =========================================================================
-   🔷 Componente Principal
-   ========================================================================= */
+/** Componente principal ButtonX */
 export function ButtonX({
 	caption,
 	icone,
@@ -164,7 +157,7 @@ export function ButtonX({
 	className,
 	...props
 }: IButtonX) {
-	/* 🛠️ Classes de tamanho dos ícones */
+	/** Tamanho de ícone por variante de tamanho */
 	const iconSizeClass = {
 		xs: 'h-3 w-3',
 		sm: 'h-3.5 w-3.5',
@@ -172,7 +165,7 @@ export function ButtonX({
 		lg: 'h-5 w-5',
 	}[size];
 
-	/* 🔧 Função para normalizar o ícone */
+	/** Normalização de qualquer formato de entrada de ícone */
 	const normalizeIcon = (
 		icone: string | IconProp | TBTBIcon | undefined,
 	): TBTBIcon => {
@@ -195,7 +188,7 @@ export function ButtonX({
 		return { left: ensureIconProp(icone) };
 	};
 
-	/* 🛠️ Garantia de validade do ícone */
+	/** Garantia de IconProp válido */
 	function ensureIconProp(icon: any): IconProp {
 		if (!icon) {
 			console.warn('Ícone inválido fornecido');
@@ -204,19 +197,18 @@ export function ButtonX({
 		return icon;
 	}
 
-	/* 🔍 Processamento dos ícones */
 	const icon = normalizeIcon(icone);
 	const has_licon = !!icon.left;
 	const has_ricon = !!icon.right && (has_licon || !!caption);
 	const has_cap = !!caption?.trim();
 
-	/* 🧠 Lógica de alinhamento */
+	/** Lógica para centralização automática */
 	const shouldCenter =
 		center ||
 		(!has_licon && !has_ricon) ||
 		(has_licon && !has_cap && !has_ricon);
 
-	/* 🎨 Classes combinadas */
+	/** Classes finais do botão, com escopo customizável */
 	const baseClasses = buttonVariants({
 		size,
 		compact,
@@ -234,7 +226,6 @@ export function ButtonX({
 		:	className,
 	);
 
-	/* 🚀 Renderização */
 	return (
 		<label
 			{...props}
@@ -242,7 +233,7 @@ export function ButtonX({
 			htmlFor={htmlFor}
 			className={resolvedClass}
 		>
-			{/* 🔹 Ícone Esquerdo */}
+			{/* Renderização condicional dos ícones e da legenda */}
 			{has_licon && (
 				<div
 					class={`${
@@ -253,7 +244,6 @@ export function ButtonX({
 				</div>
 			)}
 
-			{/* 🔸 Caption */}
 			{has_cap && (
 				<span
 					class={`${
@@ -264,7 +254,6 @@ export function ButtonX({
 				</span>
 			)}
 
-			{/* 🔹 Ícone Direito */}
 			{has_ricon && (
 				<div class="ml-auto hidden sm:flex flex-shrink-0">
 					<FontAwesomeIcon icon={icon.right!} class={iconSizeClass} />
