@@ -22,6 +22,7 @@
  * - RightIcon só é renderizado quando:
  *   • Existe caption **OU**
  *   • Existe leftIcon + configuração explícita
+ *   • Caption pode ser o atributo caption XOR label
  * - Alinhamento automático baseado no conteúdo:
  *   • Conteúdo centralizado quando apenas leftIcon presente
  *   • RightIcon sempre alinhado à extremidade direita
