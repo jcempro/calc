@@ -88,7 +88,7 @@
 
 import { useRef } from 'preact/hooks';
 import { JSX } from 'preact';
-import { IButtonX, ButtonX } from '../ButtonX/ButtonX';
+import { TButtonX, ButtonX } from '../ButtonX/ButtonX';
 import { NavIcon } from '../NavIcon/NavIcon';
 import { guid } from '../../ts/common/generic';
 import { tv, type VariantProps } from 'tailwind-variants';
@@ -97,9 +97,9 @@ import clsx from 'clsx';
 import { resolveClassName } from '../../ts/common/ui';
 
 export interface IMenuX
-	extends Omit<IButtonX, 'htmlFor'>,
+	extends Omit<TButtonX, 'htmlFor'>,
 		VariantProps<typeof variants> {
-	itens: IButtonX[];
+	itens: TButtonX[];
 	checked?: boolean;
 	navClass?: string | (() => string);
 	menuAlign?: 'left' | 'center' | 'right';

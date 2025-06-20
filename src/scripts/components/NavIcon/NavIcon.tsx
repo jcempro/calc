@@ -101,7 +101,7 @@
  * @see {@link MenuX}
  */
 
-import { ButtonX, IButtonX } from '../ButtonX/ButtonX';
+import { ButtonX, TButtonX } from '../ButtonX/ButtonX';
 import { JSX } from 'preact';
 import { guid } from '../../ts/common/generic';
 import { useRef } from 'preact/hooks';
@@ -112,7 +112,7 @@ import { resolveClassName } from '../../ts/common/ui';
 import { isTrue } from '../../ts/common/logicos';
 
 /** Tipo de itens aceitos: ButtonX ou MenuX */
-export type TNavItem = IButtonX | IMenuX;
+export type TNavItem = TButtonX | IMenuX;
 
 /** Type guard para diferenciar MenuX */
 function isMenu(item: TNavItem): item is IMenuX {
