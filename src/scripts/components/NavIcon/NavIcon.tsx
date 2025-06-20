@@ -165,7 +165,7 @@ export function NavIcon({
 	itens,
 	ulClass,
 	wrapperClass,
-	opened = false,
+	opened = true,
 	orientation = 'vertical',
 	behavior = 'toolbar',
 	className,
