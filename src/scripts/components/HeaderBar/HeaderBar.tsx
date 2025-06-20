@@ -7,7 +7,6 @@
  * - Centro (`navbar-center`)
  * - Direita (`navbar-end`)
  *
- *
  * @structure
  * Layout geral:
  * ```
@@ -62,7 +61,6 @@
  * - `rightItems`: itens à direita (ButtonX | MenuX | NavIcon[])
  * - `middleContent`: conteúdo customizado no centro (JSX.Element)
  * - `title`: texto do título central
- * - `searchComponent`: JSX.Element de busca na direita
  * - `variant`, `size`, `shadow`, `compact`: estilização
  * - `escopo`: namespace de classes/data-attributes
  * - `classPart`: string para personalização de classe
@@ -70,7 +68,7 @@
  *
  * @development
  * - Mantém consistência total com `NavIcon`, `ButtonX` e `MenuX`.
- * - Quando seção receber apenas ButtonX/MenuX ou recebe outros tipo, porẽm com vários ButtonX/MenuX sequencias: encapsula ButtonX/MenuX
+ * - Quando seção receber apenas ButtonX/MenuX ou recebe outros tipos, porẽm com vários ButtonX/MenuX sequencias: encapsula ButtonX/MenuX seguidos
  *
  * - Usa helper `resolveClassName()` para tratamento de classes.
  * - Boas práticas:
