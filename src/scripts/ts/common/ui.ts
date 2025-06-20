@@ -6,7 +6,8 @@ export type TUIShadow = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 export type TCaption =
 	| { caption: string; label?: never } // 'caption' é obrigatório, 'label' é inexistente
-	| { caption?: never; label: string }; // 'label' é obrigatório, 'caption' é inexistente
+	| { caption?: never; label: string } // 'label' é obrigatório, 'caption' é inexistente
+	| { caption?: never; label: never }; // nenhum
 
 export function getCaption(
 	i1: string | undefined,
