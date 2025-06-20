@@ -1,8 +1,19 @@
 import { guid } from './generic';
-import { isEmpty } from './logicos';
+import { isEmpty, noEmpty } from './logicos';
 
 export type TUISizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type TUIShadow = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+
+export type TCaption =
+	| { caption: string; label?: never } // 'caption' é obrigatório, 'label' é inexistente
+	| { caption?: never; label: string }; // 'label' é obrigatório, 'caption' é inexistente
+
+export function getCaption(
+	i1: string | undefined,
+	i2: string | undefined,
+): string {
+	return [i1, i2].filter((v) => noEmpty(v)).join('');
+}
 
 export function isSignal(
 	value: unknown,

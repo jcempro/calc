@@ -100,7 +100,11 @@ import {
 import { tv, type VariantProps } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
 import Logger from '../../ts/utils/logger';
-import { resolveClassName } from '../../ts/common/ui';
+import {
+	getCaption,
+	resolveClassName,
+	TCaption,
+} from '../../ts/common/ui';
 import { noEmpty } from '../../ts/common/logicos';
 
 /** Tipagem para ícones lado esquerdo e direito */
@@ -173,21 +177,23 @@ const buttonVariants = tv({
 });
 
 /** Props do ButtonX */
-export interface IButtonX
-	extends Omit<JSX.HTMLAttributes<HTMLLabelElement>, 'className'>,
-		VariantProps<typeof buttonVariants> {
-	caption?: string;
-	icone?: string | IconProp | TBTBIcon;
-	ariaLabel?: string;
-	htmlFor?: string;
-	escopo?: string;
-	className?: string | (() => string) | undefined;
-}
+export type TButtonX = Omit<
+	JSX.HTMLAttributes<HTMLLabelElement>,
+	'className'
+> &
+	VariantProps<typeof buttonVariants> & {
+		icon?: string | IconProp | TBTBIcon;
+		ariaLabel?: string;
+		htmlFor?: string;
+		escopo?: string;
+		className?: string | (() => string) | undefined;
+	} & TCaption;
 
 /** Componente principal ButtonX */
 export function ButtonX({
 	caption,
-	icone,
+	label,
+	icon: icone,
 	ariaLabel,
 	htmlFor,
 	escopo,
@@ -196,7 +202,9 @@ export function ButtonX({
 	size = 'md',
 	className,
 	...props
-}: IButtonX) {
+}: TButtonX) {
+	caption = getCaption(caption, label);
+
 	/** Tamanho de ícone por variante de tamanho */
 	const iconSizeClass = {
 		xs: 'h-3 w-3',
