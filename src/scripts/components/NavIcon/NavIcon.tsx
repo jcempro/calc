@@ -173,7 +173,7 @@ export function NavIcon({
 }: INavIcon) {
 	const cid = useRef(menuId ?? `inav-${guid(18)}`).current;
 
-	/** 🔨 Renderiza cada item */
+	/** 🔨 Renderiza cada item dentro de <li> */
 	const renderItem = (item: TNavItem, idx: number) => {
 		const commonProps = {
 			key: `${cid}-item-${idx}`,
@@ -183,8 +183,8 @@ export function NavIcon({
 			),
 		};
 
-		if (isMenu(item)) {
-			return (
+		const content =
+			isMenu(item) ?
 				<MenuX
 					{...commonProps}
 					{...item}
@@ -192,10 +192,10 @@ export function NavIcon({
 						orientation === 'horizontal' ? 'horizontal' : 'dropdown'
 					}
 				/>
-			);
-		}
+			:	<ButtonX {...commonProps} {...item} />;
 
-		return <ButtonX {...commonProps} {...item} />;
+		/** 🔗 Sempre encapsular em <li> */
+		return <li key={`${cid}-li-${idx}`}>{content}</li>;
 	};
 
 	return (
