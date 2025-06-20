@@ -14,19 +14,19 @@ export function MainContent() {
 				<main className="main-content">
 					<ButtonX
 						caption="teste Meu Botão"
-						icone={{ left: faHome, right: faChevronRight }}
+						icon={{ left: faHome, right: faChevronRight }}
 						htmlFor="input-id"
 					/>
 
 					<ButtonX
 						caption="testv Centralizado"
-						icone={{ left: faCog }}
+						icon={{ left: faCog }}
 						center={true}
 					/>
 
 					<ButtonX
 						caption="teste Adaptativo"
-						icone={{ left: faUser }}
+						icon={{ left: faUser }}
 						className="w-auto max-w-[200px]"
 					/>
 					<p>Conteúdo principal da página.</p>

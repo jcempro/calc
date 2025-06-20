@@ -6,16 +6,17 @@ export function HeaderTer() {
 		<>
 			<HeaderBar
 				classPart="tertiary"
-				leftItems={[
+				left={[
 					{
 						className: 'menu-button',
 						ariaLabel: 'Menu direito secundário',
-						icone: 'fas fa-user',
+						icon: 'fas fa-user',
+						caption: 'coisas',
 					},
 					{
 						className: 'menu-button',
 						ariaLabel: 'Menu direito secundário',
-						icone: 'fas fa-cog',
+						icon: 'fas fa-cog',
 					},
 				]}
 			/>

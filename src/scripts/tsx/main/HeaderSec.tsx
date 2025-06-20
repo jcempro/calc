@@ -1,6 +1,6 @@
 import '@scss/main/HeaderSec.scss';
 import { HeaderBar } from '@ext/HeaderBar/HeaderBar';
-import { IButtonX } from '@ext/ButtonX/ButtonX';
+import { TButtonX } from '@ext/ButtonX/ButtonX';
 import {
 	faChevronRight,
 	faCog,
