@@ -106,7 +106,10 @@ import {
 	resolveClassName,
 	TCaption,
 } from '../../ts/common/ui';
-import { noEmpty } from '../../ts/common/logicos';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
 
 /** Tipagem para ícones lado esquerdo e direito */
 export type TBTBIcon = {
@@ -219,23 +222,30 @@ export function ButtonX({
 		icone: string | IconProp | TBTBIcon | undefined,
 	): TBTBIcon => {
 		if (!icone) return {};
-		if (typeof icone === 'object' && 'left' in icone) {
+
+		// 🟩 Caso seja objeto com left/right
+		if (
+			typeof icone === 'object' &&
+			('left' in icone || 'right' in icone)
+		) {
 			return {
 				left: icone.left ? ensureIconProp(icone.left) : undefined,
 				right: icone.right ? ensureIconProp(icone.right) : undefined,
 			};
 		}
-		if (noEmpty(icone, 'string')) {
-			const [prefix = 'fas', ...rest] = `${icone}`
-				.trim()
-				.split(/\s+/);
-			const iconName = rest.join('')?.replace(/^fa-/, '');
+
+		// 🟩 Caso seja string simples
+		if (typeof icone === 'string') {
+			const [prefix = 'fas', ...rest] = icone.trim().split(/\s+/);
+			const iconName = rest.join('-').replace(/^fa-/, '');
 			if (iconName) {
 				return {
 					left: [prefix as IconPrefix, iconName as IconName],
 				};
 			}
 		}
+
+		// 🟩 Caso IconProp direto
 		return { left: ensureIconProp(icone) };
 	};
 
@@ -245,6 +255,19 @@ export function ButtonX({
 			Logger.warn('Ícone inválido fornecido.');
 			return ['fas', 'question-circle'];
 		}
+
+		// 🟩 Se for string, parseia
+		if (typeof icon === 'string') {
+			const [prefix = 'fas', ...rest] = icon.trim().split(/\s+/);
+			const iconName = rest.join('-').replace(/^fa-/, '');
+			if (!iconName) {
+				Logger.warn(`Ícone string inválido: "${icon}"`);
+				return ['fas', 'question-circle'];
+			}
+			return [prefix as IconPrefix, iconName as IconName];
+		}
+
+		// 🟩 Se já for IconProp
 		return icon;
 	}
 
