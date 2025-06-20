@@ -20,6 +20,46 @@
  *  └── [navbar-end]    → rightItems + searchComponent
  * ```
  *
+ * @example
+ * ```tsx
+ * <HeaderBar
+ *   title="Dashboard"
+ *   titleAlign="center"
+ *   variant="sticky"
+ *   size="md"
+ *   shadow="lg"
+ *   leftItems={[
+ *     { icon: 'home', label: 'Início', onClick: () => console.log('Home') },
+ *     {
+ *       icon: 'menu',
+ *       label: 'Mais',
+ *       items: [
+ *         { icon: 'settings', label: 'Configurações', onClick: () => {} },
+ *         { icon: 'info', label: 'Sobre', onClick: () => {} },
+ *       ],
+ *     },
+ *   ]}
+ *   rightItems={[
+ *     {
+ *       icon: 'user',
+ *       label: 'Conta',
+ *       items: [
+ *         { icon: 'profile', label: 'Perfil', onClick: () => {} },
+ *         { icon: 'logout', label: 'Sair', onClick: () => {} },
+ *       ],
+ *     },
+ *   ]}
+ *   searchComponent={
+ *     <input
+ *       type="text"
+ *       className="input input-bordered input-sm"
+ *       placeholder="Buscar..."
+ *     />
+ *   }
+ *   escopo="app"
+ * />
+ * ```
+ *
  * @integration
  * - Totalmente integrado com:
  *   • ButtonX
@@ -71,6 +111,7 @@
  *
  * @development
  * - Mantém consistência total com `NavIcon`, `ButtonX` e `MenuX`.
+ * - Pioridade paa botões e icones NavIcon (sempre encapsula se não for)
  * - Usa helper `resolveClassName()` para tratamento de classes.
  * - Boas práticas:
  *   • Mensagens de log/warn/error via Logger
@@ -78,6 +119,8 @@
  *   • Comentários objetivos para mudanças complexas
  *   • Manter esta documentação no topo código com ajustes mínimos pertinentes
  *   • Comentário de uma única linha preferíveis, exceto quando para jsDoc
+ *   • Alteração de comentários devem ser feitos apenas quando realmente necessários
+ *   • Estrutura sequêncial', tais com ordme de include, devem ser mantidas - iguais exceto quando impossĩvel
  *
  * @style
  * - Arquitetura CSS:
@@ -98,8 +141,127 @@
  * @see {@link NavIcon}
  */
 
+/**
+ * HeaderBar — Cabeçalho flexível, responsivo e componível.
+ *
+ * @description
+ * Componente de cabeçalho (geralmente em forma de barra horizontal) que organiza conteúdos em três seções horizontais:
+ * - Esquerda (`navbar-start`)
+ * - Centro (`navbar-center`)
+ * - Direita (`navbar-end`)
+ *
+ * Suporte a botões (`ButtonX`), menus (`MenuX`) e barras (`NavIcon`).
+ * Permite também inserir um campo de busca e título ou conteúdo central.
+ * Cada seção pode receber qualquer tipo de componente, inclusive puro HTML.
+ *
+ * @structure
+ * Layout geral:
+ * ```
+ * [HeaderBar]
+ *  ├── [navbar-start]  → leftItems
+ *  ├── [navbar-center] → title | middleContent
+ *  └── [navbar-end]    → rightItems + searchComponent
+ * ```
+ *
+ * @example
+ * ```tsx
+ * <HeaderBar
+ *   title="Dashboard"
+ *   titleAlign="center"
+ *   variant="sticky"
+ *   size="md"
+ *   shadow="lg"
+ *   escopo="app"
+ *   leftItems={[
+ *     { icon: 'home', label: 'Início', onClick: () => console.log('Home') },
+ *     {
+ *       label: 'Opções',
+ *       items: [
+ *         { label: 'Configurações', icon: 'settings', onClick: () => {} },
+ *         { label: 'Sair', icon: 'logout', onClick: () => {} },
+ *       ],
+ *     },
+ *   ]}
+ *   rightItems={[
+ *     { icon: 'user', label: 'Perfil', onClick: () => {} },
+ *   ]}
+ *   searchComponent={
+ *     <input
+ *       type="text"
+ *       className="input input-bordered input-sm"
+ *       placeholder="Buscar..."
+ *     />
+ *   }
+ * />
+ * ```
+ *
+ * @integration
+ * - Totalmente integrado com:
+ *   • ButtonX
+ *   • MenuX
+ *   • NavIcon
+ *   • PageZone
+ * - Pode ser usado como cabeçalho de páginas, módulos, dashboards, apps.
+ * - Opcionalmente, via parâmetro, pode fixar-se (sticky) ao topo.
+ *
+ * @layout
+ * - Variante visual (`variant`):
+ *   • normal | sticky | ghost | bordered
+ * - Tamanho (`size`):
+ *   • xs | sm | md | lg | xl
+ * - Sombra (`shadow`):
+ *   • none | sm | md | lg | xl | 2xl
+ * - Compactação (`compact`):
+ *   • padding e gaps reduzidos
+ * - Alinhamento do título (`titleAlign`):
+ *   • left | center | right
+ * - Classes:
+ *   • Wrapper: `header-jcem-{escopo}`
+ * - Responsivo e adaptável ao contexto.
+ * - Overflow: Nunca usa scrollbar → cria submenus ou colapsa.
+ * - Largura: 100% do espaço disponível
+ *
+ * @style
+ * - Arquitetura CSS:
+ *   • DaisyUI + Tailwind Variants + Tailwind Merge + clsx
+ * - Wrapper: `header-jcem-`.
+ * - Escopo: classes `header-jcem-{escopo}`.
+ * - Composição segura com `tailwind-merge` e `clsx`
+ *
+ * @props
+ * - `leftItems`: itens à esquerda (ButtonX | MenuX | NavIcon[])
+ * - `rightItems`: itens à direita (ButtonX | MenuX | NavIcon[])
+ * - `middleContent`: conteúdo customizado no centro (JSX.Element)
+ * - `title`: texto do título central
+ * - `searchComponent`: JSX.Element de busca na direita
+ * - `variant`, `size`, `shadow`, `compact`: estilização
+ * - `escopo`: namespace de classes/data-attributes
+ * - `classPart`: string para personalização de classe
+ * - `className`: classes adicionais
+ *
+ * @development
+ * - Mantém consistência total com `NavIcon`, `ButtonX` e `MenuX`.
+ * - Usa helper `resolveClassName()` para tratamento de classes.
+ * - Boas práticas:
+ *   • Mensagens de log/warn/error via Logger
+ *   • Manutenção git-friendly (evitar breaking changes)
+ *   • Comentários objetivos para mudanças complexas
+ *   • Manter esta documentação atualizada
+ *   • Comentário de uma única linha, exceto para jsDoc
+ *
+ * @dependencies
+ * - ButtonX
+ * - MenuX
+ * - NavIcon
+ * - tailwind-variants + tailwind-merge + clsx
+ * - Preact + Vite (core)
+ *
+ * @see {@link ButtonX}
+ * @see {@link MenuX}
+ * @see {@link NavIcon}
+ */
 import { JSX } from 'preact';
-import { IButtonX } from '../ButtonX/ButtonX';
+import { TButtonX } from '../ButtonX/ButtonX';
 import { IMenuX } from '../MenuX/MenuX';
 import { INavIcon, NavIcon, TNavItem } from '../NavIcon/NavIcon';
 import {
@@ -111,7 +273,7 @@ import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 /** Tipo de itens permitidos no Header */
-export type TBarItem = IButtonX | IMenuX | INavIcon;
+export type TBarItem = TButtonX | IMenuX | INavIcon;
 
 /** Props do HeaderBar */
 export interface IHeader
