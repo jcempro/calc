@@ -1,5 +1,5 @@
 /**
- * pagezoneZone — Contêiner principal para seções, páginas e módulos.
+ * PageZone — Contêiner principal para seções, páginas e módulos.
  *
  * @description
  * Estrutura visual que delimita uma zona da página, como seções,
@@ -9,10 +9,56 @@
  *
  * @structure
  * Layout geral:
- * ```
- * [pagezoneZone]
- * ├── Conteúdo arbitrário (JSX.Element[])
- * ```
+ *
+ * [PageZone]
+ * ├── (HeaderZone)  // Pelo menos um destes ↓ deve existir (AnyComponent* ou HeaderBar*)
+ * │     ├── (AnyComponent*) //^2
+ * │     └── (HeaderBar*)  //^2
+ * │           ├── [LeftZone] //^3
+ * │           │     └── [ButtonX+/MenuX+]  //^1
+ * │           ├── [MiddleZone] //^3
+ * │           │     └── [ButtonX+/MenuX+]  //^1
+ * │           └── [RightZone] //^3
+ * │                 └── [ButtonX+/MenuX+]  //^1
+ * ├── (NavIcon)  // localizado à esquerda ou direita, até 2
+ * │     └── [ButtonX+]
+ * ├── [ContentWrapper]
+ * │     └── (PageZone) ⊕ [AnyComponent+]  // XOR
+ * └── (FootZone)
+ *       └── [AnyComponent+]  //^2
+ *
+ * Legenda:
+ * - (opcional): componente não obrigatório
+ * - [A]: exatamente 1 elemento do tipo A
+ * - [A+]: 1+ elementos (obrigatório)
+ * - [A*]: 0+ elementos (opcional)
+ * - [A/B] ou [A] / [B]: OR (pode ter A, B ou ambos)
+ * - [A⊕B] ou [A] ⊕ [B]: XOR (apenas A ou apenas B)
+ * - [AnyComponent]: qualquer componente válido
+ * - //^1: ButtonX/MenuX não podem aparecer sequencialmente fora de NavIcon
+ * - //^2: Componentes empilhados verticalmente
+ * - //^3: empilhados horizontalmente - ocupam,juntos, toda a área horizontal
+ *
+ * - Em designer:
+ *
+ * +-------------------------------+
+ * | ╔═══════════════════════════╗ |
+ * | ║ [HeaderZone]              ║ |
+ * | ║ • [AnyComponent*] (V)     ║ |
+ * | ║ • [HeaderBar*]:           ║ |
+ * | ║   [LftZ][MidZ][RgtZ]      ║ |
+ * | ║   [BtnX][MenuX][BtnX]     ║ |
+ * | ╚═══════════════════════════╝ |
+ * | ┌─────┐ +────────────+ ┌─────┐
+ * | │[NAV]│ |[ContentWr] │ │[NAV]│
+ * | │ •BX │ | •(PageZ)⊕ │ │ •BX │
+ * | │ •BX │ | •[AnyComp+]│ │ •BX │
+ * | └─────┘ +────────────+ └─────┘
+ * | ╔═══════════════════════════╗ |
+ * | ║ [FootZone]                ║ |
+ * | ║ • [AnyComponent+] (V)     ║ |
+ * | ╚═══════════════════════════╝ |
+ * +-------------------------------+
  *
  * @integration
  * - Totalmente integrado com:
@@ -92,9 +138,9 @@ import clsx from 'clsx';
 import { resolveClassName } from '../../ts/common/ui';
 import './PageZone.scss';
 
-/** 🔖 Definição dos variants para pagezoneZone */
-const pagezoneZoneVariants = tv({
-	base: 'pagezonezone-jcem relative w-full',
+/** 🔖 Definição dos variants para PageZone */
+const PageZoneVariants = tv({
+	base: 'PageZone-jcem relative w-full',
 	variants: {
 		variant: {
 			normal: '',
@@ -132,15 +178,15 @@ const pagezoneZoneVariants = tv({
 	},
 });
 
-/** 🔗 Props do componente pagezoneZone */
-export interface IpagezoneZone
+/** 🔗 Props do componente PageZone */
+export interface IPageZone
 	extends Omit<JSX.HTMLAttributes<HTMLElement>, 'size'>,
-		VariantProps<typeof pagezoneZoneVariants> {
+		VariantProps<typeof PageZoneVariants> {
 	escopo?: string;
 	classPart?: string;
 }
 
-/** 🌟 Componente pagezoneZone */
+/** 🌟 Componente PageZone */
 export function PageZone({
 	escopo = 'pagezone',
 	classPart = '',
@@ -150,13 +196,13 @@ export function PageZone({
 	shadow = 'none',
 	compact = false,
 	...props
-}: IpagezoneZone) {
+}: IPageZone) {
 	/** 🎨 Classes finais */
 	const finalClass = twMerge(
-		pagezoneZoneVariants({ variant, size, shadow, compact }),
+		PageZoneVariants({ variant, size, shadow, compact }),
 		clsx(
-			`pagezonezone-jcem-${escopo}`,
-			classPart && `pagezonezone-${classPart}`,
+			`PageZone-jcem-${escopo}`,
+			classPart && `PageZone-${classPart}`,
 		),
 		resolveClassName(className),
 	);
