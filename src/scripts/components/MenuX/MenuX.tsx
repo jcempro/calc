@@ -88,18 +88,19 @@
 
 import { useRef } from 'preact/hooks';
 import { JSX } from 'preact';
-import { IButtonX, ButtonX } from '../ButtonX/ButtonX';
+import { TButtonX, ButtonX } from '../ButtonX/ButtonX';
 import { NavIcon } from '../NavIcon/NavIcon';
 import { guid } from '../../ts/common/generic';
 import { tv, type VariantProps } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
-import { resolveClassName } from '../../ts/common/ui';
+import { getCaption, resolveClassName } from '../../ts/common/ui';
+import { HAS } from '../../ts/common/logicos';
 
 export interface IMenuX
-	extends Omit<IButtonX, 'htmlFor'>,
+	extends Omit<TButtonX, 'htmlFor'>,
 		VariantProps<typeof variants> {
-	itens: IButtonX[];
+	itens: TButtonX[];
 	checked?: boolean;
 	navClass?: string | (() => string);
 	menuAlign?: 'left' | 'center' | 'right';
@@ -149,6 +150,11 @@ export function MenuX({
 	className,
 	...props
 }: IMenuX) {
+	props.caption = getCaption(props.caption, props.label);
+	if (HAS('label', props)) {
+		delete props['label'];
+	}
+
 	const id = useRef(`menu-${guid(18)}`).current;
 
 	/** 🎨 Classes do wrapper */
@@ -181,7 +187,7 @@ export function MenuX({
 	return (
 		<div data-menu={id} className={wrapperClass}>
 			<ButtonX
-				{...props}
+				{...(props as TButtonX)}
 				htmlFor={id}
 				escopo={escopo}
 				className={twMerge(

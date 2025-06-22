@@ -22,6 +22,7 @@
  * - RightIcon só é renderizado quando:
  *   • Existe caption **OU**
  *   • Existe leftIcon + configuração explícita
+ *   • Caption pode ser o atributo caption XOR label
  * - Alinhamento automático baseado no conteúdo:
  *   • Conteúdo centralizado quando apenas leftIcon presente
  *   • RightIcon sempre alinhado à extremidade direita
@@ -100,8 +101,15 @@ import {
 import { tv, type VariantProps } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
 import Logger from '../../ts/utils/logger';
-import { resolveClassName } from '../../ts/common/ui';
-import { noEmpty } from '../../ts/common/logicos';
+import {
+	getCaption,
+	resolveClassName,
+	TCaption,
+} from '../../ts/common/ui';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
 
 /** Tipagem para ícones lado esquerdo e direito */
 export type TBTBIcon = {
@@ -173,21 +181,23 @@ const buttonVariants = tv({
 });
 
 /** Props do ButtonX */
-export interface IButtonX
-	extends Omit<JSX.HTMLAttributes<HTMLLabelElement>, 'className'>,
-		VariantProps<typeof buttonVariants> {
-	caption?: string;
-	icone?: string | IconProp | TBTBIcon;
-	ariaLabel?: string;
-	htmlFor?: string;
-	escopo?: string;
-	className?: string | (() => string) | undefined;
-}
+export type TButtonX = Omit<
+	JSX.HTMLAttributes<HTMLLabelElement>,
+	'className'
+> &
+	VariantProps<typeof buttonVariants> & {
+		icon?: string | IconProp | TBTBIcon;
+		ariaLabel?: string;
+		htmlFor?: string;
+		escopo?: string;
+		className?: string | (() => string) | undefined;
+	} & TCaption;
 
 /** Componente principal ButtonX */
 export function ButtonX({
 	caption,
-	icone,
+	label,
+	icon: icone,
 	ariaLabel,
 	htmlFor,
 	escopo,
@@ -196,7 +206,9 @@ export function ButtonX({
 	size = 'md',
 	className,
 	...props
-}: IButtonX) {
+}: TButtonX) {
+	caption = getCaption(caption, label);
+
 	/** Tamanho de ícone por variante de tamanho */
 	const iconSizeClass = {
 		xs: 'h-3 w-3',
@@ -210,23 +222,30 @@ export function ButtonX({
 		icone: string | IconProp | TBTBIcon | undefined,
 	): TBTBIcon => {
 		if (!icone) return {};
-		if (typeof icone === 'object' && 'left' in icone) {
+
+		// 🟩 Caso seja objeto com left/right
+		if (
+			typeof icone === 'object' &&
+			('left' in icone || 'right' in icone)
+		) {
 			return {
 				left: icone.left ? ensureIconProp(icone.left) : undefined,
 				right: icone.right ? ensureIconProp(icone.right) : undefined,
 			};
 		}
-		if (noEmpty(icone, 'string')) {
-			const [prefix = 'fas', ...rest] = `${icone}`
-				.trim()
-				.split(/\s+/);
-			const iconName = rest.join('')?.replace(/^fa-/, '');
+
+		// 🟩 Caso seja string simples
+		if (typeof icone === 'string') {
+			const [prefix = 'fas', ...rest] = icone.trim().split(/\s+/);
+			const iconName = rest.join('-').replace(/^fa-/, '');
 			if (iconName) {
 				return {
 					left: [prefix as IconPrefix, iconName as IconName],
 				};
 			}
 		}
+
+		// 🟩 Caso IconProp direto
 		return { left: ensureIconProp(icone) };
 	};
 
@@ -236,6 +255,19 @@ export function ButtonX({
 			Logger.warn('Ícone inválido fornecido.');
 			return ['fas', 'question-circle'];
 		}
+
+		// 🟩 Se for string, parseia
+		if (typeof icon === 'string') {
+			const [prefix = 'fas', ...rest] = icon.trim().split(/\s+/);
+			const iconName = rest.join('-').replace(/^fa-/, '');
+			if (!iconName) {
+				Logger.warn(`Ícone string inválido: "${icon}"`);
+				return ['fas', 'question-circle'];
+			}
+			return [prefix as IconPrefix, iconName as IconName];
+		}
+
+		// 🟩 Se já for IconProp
 		return icon;
 	}
 

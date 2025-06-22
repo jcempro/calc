@@ -101,7 +101,7 @@
  * @see {@link MenuX}
  */
 
-import { ButtonX, IButtonX } from '../ButtonX/ButtonX';
+import { ButtonX, TButtonX } from '../ButtonX/ButtonX';
 import { JSX } from 'preact';
 import { guid } from '../../ts/common/generic';
 import { useRef } from 'preact/hooks';
@@ -112,7 +112,7 @@ import { resolveClassName } from '../../ts/common/ui';
 import { isTrue } from '../../ts/common/logicos';
 
 /** Tipo de itens aceitos: ButtonX ou MenuX */
-export type TNavItem = IButtonX | IMenuX;
+export type TNavItem = TButtonX | IMenuX;
 
 /** Type guard para diferenciar MenuX */
 function isMenu(item: TNavItem): item is IMenuX {
@@ -165,7 +165,7 @@ export function NavIcon({
 	itens,
 	ulClass,
 	wrapperClass,
-	opened = false,
+	opened = true,
 	orientation = 'vertical',
 	behavior = 'toolbar',
 	className,
@@ -173,7 +173,7 @@ export function NavIcon({
 }: INavIcon) {
 	const cid = useRef(menuId ?? `inav-${guid(18)}`).current;
 
-	/** 🔨 Renderiza cada item */
+	/** 🔨 Renderiza cada item dentro de <li> */
 	const renderItem = (item: TNavItem, idx: number) => {
 		const commonProps = {
 			key: `${cid}-item-${idx}`,
@@ -183,8 +183,8 @@ export function NavIcon({
 			),
 		};
 
-		if (isMenu(item)) {
-			return (
+		const content =
+			isMenu(item) ?
 				<MenuX
 					{...commonProps}
 					{...item}
@@ -192,10 +192,10 @@ export function NavIcon({
 						orientation === 'horizontal' ? 'horizontal' : 'dropdown'
 					}
 				/>
-			);
-		}
+			:	<ButtonX {...commonProps} {...item} />;
 
-		return <ButtonX {...commonProps} {...item} />;
+		/** 🔗 Sempre encapsular em <li> */
+		return <li key={`${cid}-li-${idx}`}>{content}</li>;
 	};
 
 	return (

@@ -8,31 +8,45 @@ import {
 import { TNavItem } from '@ext/NavIcon/NavIcon';
 
 export function HeaderMain() {
-	const bleft: TNavItem[] = [
-		{ icone: { left: faEllipsisV }, caption: `teste` },
-		{
-			icone: { left: faMapPin },
-			caption: `menu`,
-			itens: [
-				{
-					icone: { left: faEllipsisV },
-					caption: `teste3`,
-				},
-				{
-					icone: { left: faEllipsisV },
-					caption: `test4`,
-				},
-				{
-					icone: { left: faEllipsisV },
-					caption: `test5`,
-				},
-			],
-		},
-	];
-
 	return (
-		<>
-			<HeaderBar leftItems={bleft} />
-		</>
+		<HeaderBar
+			title="Dashboard"
+			titleAlign="center"
+			variant="sticky"
+			size="md"
+			shadow="lg"
+			escopo="app"
+			left={[
+				{
+					className: 'text-base-content',
+					icon: 'fas home',
+					caption: 'Home',
+					onClick: () => console.log('Home'),
+				},
+				{
+					icon: 'settings',
+					caption: 'Configurações',
+					onClick: () => console.log('Configurações'),
+				},
+			]}
+			right={[
+				{
+					icon: 'user',
+					caption: 'Perfil',
+					itens: [
+						{
+							icon: 'user',
+							caption: 'Minha Conta',
+							onClick: () => console.log('Minha Conta'),
+						},
+						{
+							icon: 'log-out',
+							caption: 'Sair',
+							onClick: () => console.log('Sair'),
+						},
+					],
+				},
+			]}
+		/>
 	);
 }
