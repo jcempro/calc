@@ -1,3 +1,5 @@
+import { TButtonX } from '@ext/ButtonX/ButtonX';
+import { IMenuX } from '@ext/MenuX/MenuX';
 import { guid } from './generic';
 import { isEmpty, noEmpty } from './logicos';
 
@@ -34,3 +36,8 @@ export function resolveClassName(value: unknown): string | undefined {
 export function getEscopo(escopo: string | undefined): string {
 	return isEmpty(escopo) ? `${guid(4)}` : (<string>escopo)?.trim();
 }
+
+/** Tipo de itens aceitos: ButtonX ou MenuX */
+export type TItemX =
+	| (TButtonX & { kind: 'button' })
+	| (IMenuX & { kind: 'menu' });
