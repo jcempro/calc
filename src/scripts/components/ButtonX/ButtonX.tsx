@@ -4,7 +4,7 @@
  * @example
  * <ButtonX
  *   caption="Confirmar"
- *   icone={{ left: 'fas save', right: 'fas check' }}
+ *   icon={{ left: 'fas save', right: 'fas check' }}
  *   size="md"
  * />
  *
@@ -110,6 +110,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import { noEmpty } from '../../ts/common/logicos';
 
 /** Tipagem para ícones lado esquerdo e direito */
 export type TBTBIcon = {
@@ -197,7 +198,7 @@ export type TButtonX = Omit<
 export function ButtonX({
 	caption,
 	label,
-	icon: icone,
+	icon,
 	ariaLabel,
 	htmlFor,
 	escopo,
@@ -219,61 +220,48 @@ export function ButtonX({
 
 	/** Normalização de qualquer formato de entrada de ícone */
 	const normalizeIcon = (
-		icone: string | IconProp | TBTBIcon | undefined,
+		icon: string | IconProp | TBTBIcon | undefined,
 	): TBTBIcon => {
-		if (!icone) return {};
+		if (!icon) return {};
 
 		// 🟩 Caso seja objeto com left/right
 		if (
-			typeof icone === 'object' &&
-			('left' in icone || 'right' in icone)
+			typeof icon === 'object' &&
+			('left' in icon || 'right' in icon)
 		) {
 			return {
-				left: icone.left ? ensureIconProp(icone.left) : undefined,
-				right: icone.right ? ensureIconProp(icone.right) : undefined,
+				left: icon.left ? ensureIconProp(icon.left) : undefined,
+				right: icon.right ? ensureIconProp(icon.right) : undefined,
 			};
 		}
 
-		// 🟩 Caso seja string simples
-		if (typeof icone === 'string') {
-			const [prefix = 'fas', ...rest] = icone.trim().split(/\s+/);
-			const iconName = rest.join('-').replace(/^fa-/, '');
-			if (iconName) {
-				return {
-					left: [prefix as IconPrefix, iconName as IconName],
-				};
-			}
-		}
-
-		// 🟩 Caso IconProp direto
-		return { left: ensureIconProp(icone) };
+		return { left: ensureIconProp(icon, icon) };
 	};
 
 	/** Garantia de IconProp válido */
-	function ensureIconProp(icon: any): IconProp {
-		if (!icon) {
+	function ensureIconProp(x: any, def?: any): IconProp {
+		def = typeof def !== undefined ? def : ['fas', 'question-circle'];
+
+		if (!x) {
 			Logger.warn('Ícone inválido fornecido.');
-			return ['fas', 'question-circle'];
+			return def;
 		}
 
-		// 🟩 Se for string, parseia
-		if (typeof icon === 'string') {
-			const [prefix = 'fas', ...rest] = icon.trim().split(/\s+/);
+		if (noEmpty(x, 'string')) {
+			const [prefix = 'fas', ...rest] = `${x}`.trim().split(/\s+/);
 			const iconName = rest.join('-').replace(/^fa-/, '');
-			if (!iconName) {
-				Logger.warn(`Ícone string inválido: "${icon}"`);
-				return ['fas', 'question-circle'];
+			if (iconName) {
+				return [prefix as IconPrefix, iconName as IconName];
 			}
-			return [prefix as IconPrefix, iconName as IconName];
 		}
 
-		// 🟩 Se já for IconProp
-		return icon;
+		Logger.warn(`Ícone string inválido: "${x}"`);
+		return def;
 	}
 
-	const icon = normalizeIcon(icone);
-	const has_licon = !!icon.left;
-	const has_ricon = !!icon.right && (has_licon || !!caption);
+	const icn = normalizeIcon(icon);
+	const has_licon = !!icn.left;
+	const has_ricon = !!icn.right && (has_licon || !!caption);
 	const has_cap = !!caption?.trim();
 
 	/** Lógica para centralização automática */
@@ -315,7 +303,7 @@ export function ButtonX({
 			{/* Left Icon */}
 			{has_licon && (
 				<div>
-					<FontAwesomeIcon icon={icon.left!} class={iconSizeClass} />
+					<FontAwesomeIcon icon={icn.left!} class={iconSizeClass} />
 				</div>
 			)}
 
@@ -325,7 +313,7 @@ export function ButtonX({
 			{/* Right Icon */}
 			{has_ricon && (
 				<div>
-					<FontAwesomeIcon icon={icon.right!} class={iconSizeClass} />
+					<FontAwesomeIcon icon={icn.right!} class={iconSizeClass} />
 				</div>
 			)}
 		</label>
