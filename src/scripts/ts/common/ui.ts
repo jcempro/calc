@@ -41,3 +41,14 @@ export function getEscopo(escopo: string | undefined): string {
 export type TItemX =
 	| (TButtonX & { kind: 'button' })
 	| (IMenuX & { kind: 'menu' });
+
+export const HTML_TAGS = [
+	'section',
+	'header',
+	'footer',
+	'div',
+	'main',
+	'article',
+	'aside',
+] as const;
+export type HtmlTag = (typeof HTML_TAGS)[number];

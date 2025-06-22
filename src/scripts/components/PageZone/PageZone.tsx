@@ -12,7 +12,7 @@
  *
  * [PageZone]
  * ├── (HeaderZone)  // Pelo menos um destes ↓ deve existir (AnyComponent* ou HeaderBar*)
- * │     ├── (AnyComponent*) //^2
+ * │     ├── (breadcrumbs*) //^2
  * │     └── (HeaderBar*)  //^2
  * │           ├── [LeftZone] //^3
  * │           │     └── [ButtonX+/MenuX+]  //^1
@@ -20,11 +20,14 @@
  * │           │     └── [ButtonX+/MenuX+]  //^1
  * │           └── [RightZone] //^3
  * │                 └── [ButtonX+/MenuX+]  //^1
- * ├── (NavIcon)  // localizado à esquerda ou direita, até 2
- * │     └── [ButtonX+]
- * ├── [ContentWrapper]
- * │     └── (PageZone) ⊕ [AnyComponent+]  // XOR
- * └── (FootZone)
+ * ├── EnclosureContent
+ * │   ├── (NavIcon)  // left
+ * │   │     └── [ButtonX+]
+ * │   ├── ContentWrapper   [obrigatório]
+ * │   │    └── (PageZone) ⊕ [AnyComponent+]  // XOR
+ * │   └── (NavIcon) // right
+ * │         └── [ButtonX+]
+ * └── (FooterZone)
  *       └── [AnyComponent+]  //^2
  *
  * Legenda:
@@ -35,6 +38,7 @@
  * - [A/B] ou [A] / [B]: OR (pode ter A, B ou ambos)
  * - [A⊕B] ou [A] ⊕ [B]: XOR (apenas A ou apenas B)
  * - [AnyComponent]: qualquer componente válido
+ * - [breadcrumbs]: readcrumb navigation, que é um elemento de interface do usuário em sites e aplicativos.
  * - //^1: ButtonX/MenuX não podem aparecer sequencialmente fora de NavIcon
  * - //^2: Componentes empilhados verticalmente
  * - //^3: empilhados horizontalmente - ocupam,juntos, toda a área horizontal
@@ -49,13 +53,13 @@
  * | ║   [LftZ][MidZ][RgtZ]      ║ |
  * | ║   [BtnX][MenuX][BtnX]     ║ |
  * | ╚═══════════════════════════╝ |
- * | ┌─────┐ +────────────+ ┌─────┐
- * | │[NAV]│ |[ContentWr] │ │[NAV]│
- * | │ •BX │ | •(PageZ)⊕ │ │ •BX │
- * | │ •BX │ | •[AnyComp+]│ │ •BX │
- * | └─────┘ +────────────+ └─────┘
+ * | ┌─────┐ +────────────+ ┌─────┐|
+ * | │[NAV]│ |[ContentWr] │ │[NAV]│|
+ * | │ •BX │ | •(PageZ)⊕ │ │ •BX │|
+ * | │ •BX │ | •[AnyComp+]│ │ •BX │|
+ * | └─────┘ +────────────+ └─────┘|
  * | ╔═══════════════════════════╗ |
- * | ║ [FootZone]                ║ |
+ * | ║ [FooterZone]                |
  * | ║ • [AnyComponent+] (V)     ║ |
  * | ╚═══════════════════════════╝ |
  * +-------------------------------+
@@ -115,6 +119,12 @@
  *   • Manter esta documentação no topo código com ajustes mínimos pertinentes
  *   • Comentário de uma única linha preferíveis, exceto quando para jsDoc
  *
+ * @behavior
+ * - Prioridades:
+ *   1. Acessibilidade (aria-label quando aplicável)
+ *   2. Consistência visual (estados :hover, :active , ..., via CSS)
+ *   3. Performance (zero JS para estado/animações/transições)
+ *
  * @dependencies
  * - ButtonX
  * - MenuX
@@ -130,15 +140,31 @@
  * @see {@link MenuX}
  * @see {@link ButtonX}
  */
-
-import { JSX } from 'preact';
+import { JSX, toChildArray, VNode } from 'preact';
 import { tv, type VariantProps } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
 import { resolveClassName } from '../../ts/common/ui';
 import './PageZone.scss';
+//import { ContentWrapper } from '../ContentWrapper/ContentWrapper';
+import { HeaderZone } from '../HeaderZone/HeaderZone';
+import { Button, INavIcon, Menu, NavIcon } from '../NavIcon/NavIcon';
+import { FooterZone } from '../FootZone/FootZone';
+import { EnclosureContent } from '@ext/EnclosureContent/EnclosureContent';
+import { ContentWrapper } from '@ext/ContentWrapper/ContentWrapper';
+import { HAS } from '../../ts/common/logicos';
 
-/** 🔖 Definição dos variants para PageZone */
+/** 🔗 Props */
+export interface IPageZone
+	extends Omit<JSX.HTMLAttributes<HTMLElement>, 'size'>,
+		VariantProps<typeof PageZoneVariants> {
+	escopo?: string;
+	classPart?: string;
+	left?: INavIcon;
+	right?: INavIcon;
+}
+
+/** 🎨 Variantes */
 const PageZoneVariants = tv({
 	base: 'PageZone-jcem relative w-full',
 	variants: {
@@ -178,15 +204,10 @@ const PageZoneVariants = tv({
 	},
 });
 
-/** 🔗 Props do componente PageZone */
-export interface IPageZone
-	extends Omit<JSX.HTMLAttributes<HTMLElement>, 'size'>,
-		VariantProps<typeof PageZoneVariants> {
-	escopo?: string;
-	classPart?: string;
-}
+/** 🧠 Type Guard */
+const isType = (node: VNode, cmp: any) => node?.type === cmp;
 
-/** 🌟 Componente PageZone */
+/** 🚀 PageZone */
 export function PageZone({
 	escopo = 'pagezone',
 	classPart = '',
@@ -195,8 +216,88 @@ export function PageZone({
 	size = 'md',
 	shadow = 'none',
 	compact = false,
+	children,
+	left,
+	right,
 	...props
 }: IPageZone) {
+	/** 🔍 Processamento dos filhos */
+	const childs = toChildArray(children).filter(Boolean) as VNode[];
+
+	/** 🚥 Validar e extrair na ordem */
+	let idx = 0;
+
+	// Header (opcional, se presente deve ser primeiro)
+	const header =
+		isType(childs[idx], HeaderZone) ? childs[idx++] : null;
+
+	// Nav Left (opcional, se presente deve ser segundo)
+	const cleft =
+		'flex-shrink-0 h-full' + HAS('className', left ? left : {}) ?
+			left?.className
+		:	'';
+	if (left) delete left.className;
+	const navLeft =
+		!left ? false : (
+			<NavIcon as="aside" className={cleft} {...left} />
+		);
+
+	// ContentWrapper (obrigatório)
+	if (!isType(childs[idx], ContentWrapper)) {
+		console.error(
+			`[PageZone] Esperado <ContentWrapper> na posição ${idx + 1}.`,
+		);
+		throw new Error(
+			`[PageZone] Conteúdo principal deve estar dentro de <ContentWrapper>.`,
+		);
+	}
+	const content = childs[idx++];
+
+	// Nav Right (opcional)
+	const cright =
+		'flex-shrink-0 h-full' + HAS('className', right ? right : {}) ?
+			right?.className
+		:	'';
+	if (right) delete right.className;
+	const navRight =
+		!right ? false : (
+			<NavIcon as="aside" className={cright} {...right} />
+		);
+
+	// Footer (opcional, se presente deve ser o último)
+	const footer =
+		isType(childs[idx], FooterZone) ? childs[idx++] : null;
+
+	// 🚫 Sobras inválidas
+	if (idx < childs.length) {
+		console.error(
+			`[PageZone] Componentes inesperados após posição ${idx}. Verifique a ordem: Header → NavLeft → ContentWrapper → NavRight → Footer.`,
+		);
+		throw new Error(`[PageZone] Ordem dos filhos inválida.`);
+	}
+
+	/** ⚠️ Avisos úteis */
+	if (!header) {
+		console.warn(
+			`[PageZone] HeaderZone não fornecido. Página sem cabeçalho.`,
+		);
+	}
+	if (!footer) {
+		console.warn(
+			`[PageZone] FooterZone não fornecido. Página sem rodapé.`,
+		);
+	}
+	if (navLeft && !navRight) {
+		console.warn(
+			`[PageZone] Apenas NavIcon à esquerda. Considere adicionar um à direita.`,
+		);
+	}
+	if (navRight && !navLeft) {
+		console.warn(
+			`[PageZone] Apenas NavIcon à direita. Considere adicionar um à esquerda.`,
+		);
+	}
+
 	/** 🎨 Classes finais */
 	const finalClass = twMerge(
 		PageZoneVariants({ variant, size, shadow, compact }),
@@ -207,9 +308,25 @@ export function PageZone({
 		resolveClassName(className),
 	);
 
+	/** 🚧 Renderização */
 	return (
-		<section {...props} className={finalClass}>
-			{props.children}
+		<section
+			{...props}
+			className={twMerge(
+				finalClass,
+				'flex flex-col min-h-dvh', // 🚩 Garante altura mínima da janela
+			)}
+		>
+			{/* Header */}
+			{header}
+
+			{/* Body */}
+			<EnclosureContent navLeft={navLeft} navRight={navRight}>
+				{content}
+			</EnclosureContent>
+
+			{/* Footer */}
+			{footer}
 		</section>
 	);
 }

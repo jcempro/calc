@@ -65,6 +65,8 @@
  *   • Base: DaisyUI
  *   • Variações: Tailwind Variants
  *   • Combinação segura: Tailwind Merge
+ * - Temas:
+ *   • Segue os tokens/temas do Tailwind + DaisyUI
  * - Customização:
  *   • Classes podem ser sobrescritas
  *   • Conflitos de estilos e redundancias são resolvidos e geram warnings

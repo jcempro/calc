@@ -59,6 +59,8 @@
  *   • Content: `dropdown-content` ou flexível (vertical/horizontal).
  *   • Escopo: classes `menu-jcem-wrapper-{escopo}`.
  * - Composição segura com `tailwind-merge` e `clsx`.
+ * - Temas:
+ *   • Segue os tokens/temas do Tailwind + DaisyUI
  * - Customização:
  *   • Classes podem ser sobrescritas
  * - Estados:
@@ -94,7 +96,11 @@ import { guid } from '../../ts/common/generic';
 import { tv, type VariantProps } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
-import { getCaption, resolveClassName } from '../../ts/common/ui';
+import {
+	getCaption,
+	resolveClassName,
+	TItemX,
+} from '../../ts/common/ui';
 import { HAS } from '../../ts/common/logicos';
 
 export interface IMenuX

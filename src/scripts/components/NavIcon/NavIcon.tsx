@@ -108,21 +108,37 @@ import { useRef } from 'preact/hooks';
 import { tv } from 'tailwind-variants';
 import { twMerge } from 'tailwind-merge';
 import { IMenuX, MenuX } from '@ext/MenuX/MenuX';
-import { resolveClassName } from '../../ts/common/ui';
+import {
+	HTML_TAGS,
+	HtmlTag,
+	resolveClassName,
+	TItemX,
+} from '../../ts/common/ui';
 import { isTrue } from '../../ts/common/logicos';
 
-/** Tipo de itens aceitos: ButtonX ou MenuX */
-export type TNavItem = TButtonX | IMenuX;
-
 /** Type guard para diferenciar MenuX */
-function isMenu(item: TNavItem): item is IMenuX {
-	return 'itens' in item;
+function isMenu(
+	item: TItemX,
+): item is Extract<TItemX, { kind: 'menu' }> {
+	return item.kind === 'menu' || 'itens' in item;
 }
+
+export const Button = (props: Omit<TButtonX, 'kind'>): TItemX =>
+	({
+		...props,
+		kind: 'button',
+	}) as TItemX;
+
+export const Menu = (props: Omit<IMenuX, 'kind'>): TItemX =>
+	({
+		...props,
+		kind: 'menu',
+	}) as TItemX;
 
 /** Props do NavIcon */
 export interface INavIcon
 	extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'className'> {
-	itens: TNavItem[];
+	itens: TItemX[];
 	escopo?: string;
 	menuId?: string;
 	ulClass?: string | (() => string);
@@ -131,6 +147,7 @@ export interface INavIcon
 	orientation?: 'vertical' | 'horizontal';
 	behavior?: 'toolbar' | 'menu' | 'header';
 	className?: string | (() => string);
+	as?: any;
 }
 
 /** Variantes visuais */
@@ -159,7 +176,8 @@ const navIconVariants = tv({
 });
 
 /** 🔥 Componente NavIcon */
-export function NavIcon({
+export function NavIcon<T extends HtmlTag>({
+	as = `div`,
 	menuId,
 	escopo = 'global_menu',
 	itens,
@@ -171,10 +189,11 @@ export function NavIcon({
 	className,
 	...props
 }: INavIcon) {
+	const Tag = HTML_TAGS.includes(as) ? as : 'section';
 	const cid = useRef(menuId ?? `inav-${guid(18)}`).current;
 
-	/** 🔨 Renderiza cada item dentro de <li> */
-	const renderItem = (item: TNavItem, idx: number) => {
+	/** 🔨 Renderiza cada item */
+	const renderItem = (item: TItemX, idx: number) => {
 		const commonProps = {
 			key: `${cid}-item-${idx}`,
 			className: twMerge(
@@ -212,7 +231,7 @@ export function NavIcon({
 			)}
 
 			{/* Wrapper */}
-			<div
+			<Tag
 				{...(menuId ? { 'data-menu': cid } : { 'data-inav': cid })}
 				{...props}
 				className={twMerge(
@@ -241,7 +260,7 @@ export function NavIcon({
 				>
 					{itens.map(renderItem)}
 				</ul>
-			</div>
+			</Tag>
 		</>
 	);
 }
