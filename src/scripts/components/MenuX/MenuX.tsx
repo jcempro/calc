@@ -97,10 +97,15 @@ import clsx from 'clsx';
 import { getCaption, resolveClassName } from '../../ts/common/ui';
 import { HAS } from '../../ts/common/logicos';
 
+/** Tipo de itens aceitos: ButtonX ou MenuX */
+export type TItemX =
+	| (TButtonX & { kind: 'button' })
+	| (IMenuX & { kind: 'menu' });
+
 export interface IMenuX
 	extends Omit<TButtonX, 'htmlFor'>,
 		VariantProps<typeof variants> {
-	itens: TButtonX[];
+	itens: TItemX[];
 	checked?: boolean;
 	navClass?: string | (() => string);
 	menuAlign?: 'left' | 'center' | 'right';
