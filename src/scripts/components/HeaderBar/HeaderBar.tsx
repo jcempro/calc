@@ -27,6 +27,12 @@
  * - Suporte a botões (`ButtonX`), menus (`MenuX`) e barras (`NavIcon`).
  * - Cada seções pode receber qualquer tipo de componente, inclusive puro HTML*
  *
+ * @behavior
+ * - Prioridades:
+ *   1. Acessibilidade (aria-label quando aplicável)
+ *   2. Consistência visual (estados :hover, :active , ..., via CSS)
+ *   3. Performance (zero JS para estado/animações/transições)
+ *
  * @layout
  * - Variante visual (`variant`):
  *   • normal | sticky | ghost | bordered
@@ -102,11 +108,12 @@
 import { JSX } from 'preact';
 import { TButtonX } from '../ButtonX/ButtonX';
 import { IMenuX } from '../MenuX/MenuX';
-import { INavIcon, NavIcon, TNavItem } from '../NavIcon/NavIcon';
+import { INavIcon, NavIcon } from '../NavIcon/NavIcon';
 import {
 	TUISizes,
 	TUIShadow,
 	resolveClassName,
+	TItemX,
 } from '../../ts/common/ui';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -149,7 +156,7 @@ const shadowMap = {
 	'2xl': 'shadow-2xl',
 } as const;
 
-/** 🔥 Agrupa sequências de TNavItem em NavIcon */
+/** 🔥 Agrupa sequências de TItemX em NavIcon */
 function groupItems(
 	items: (TBarItem | JSX.Element)[],
 	compact: boolean,
@@ -157,7 +164,7 @@ function groupItems(
 	zone: string,
 ) {
 	const result: JSX.Element[] = [];
-	let buffer: TNavItem[] = [];
+	let buffer: TItemX[] = [];
 
 	const flushBuffer = () => {
 		if (buffer.length > 0) {
@@ -181,7 +188,7 @@ function groupItems(
 	for (const item of items) {
 		const isNavItem = 'onClick' in item || 'itens' in item;
 		if (isNavItem) {
-			buffer.push(item as TNavItem);
+			buffer.push(item as TItemX);
 		} else {
 			flushBuffer();
 			result.push(item as JSX.Element);
