@@ -5,7 +5,7 @@ import { Footer } from './main/Footer';
 import { PageZone } from '../components/PageZone/PageZone';
 import '../../assets/css/tailwind.css';
 import '../../__generated__/fontawesome';
-import { FooterZone } from '@ext/FootZone/FootZone';
+import { FooterZone } from '@ext/FooterZone/FooterZone';
 import { HeaderBar } from '@ext/HeaderBar/HeaderBar';
 import { HeaderZone } from '@ext/HeaderZone/HeaderZone';
 import { Button, Menu, NavIcon } from '@ext/NavIcon/NavIcon';
