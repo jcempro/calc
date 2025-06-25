@@ -10,6 +10,7 @@
  * @structure
  * Layout geral:
  *
+ * ````
  * [PageZone]
  * ├── (HeaderZone)  // Pelo menos um destes ↓ deve existir (AnyComponent* ou HeaderBar*)
  * │     ├── (AnyComponent*) // stack
@@ -30,11 +31,11 @@
  * │   ├── (NavIcon)  // left
  * │   │     └── [ButtonX+]
  * │   ├── ContentWrapper   [obrigatório]
- * │   │    └── (PageZone) ⊕ [AnyComponent+]  // XOR
+ * │   │    └── (PageZone) ^ [AnyComponent+]  // XOR
  * │   └── (NavIcon) // right
  * │         └── [ButtonX+]
  * └── (FooterZone)
- *       └── [AnyComponent+]  //^2
+ *       └── [AnyComponent+]  //#2
  *
  * Legenda:
  * - (A): componente não obrigatório
@@ -45,30 +46,37 @@
  * - [A^B] ou [A] ^ [B]: XOR (apenas A ou apenas B)
  * - [AnyComponent]: qualquer componente válido
  * - [breadcrumbs]: readcrumb navigation, que é um elemento de interface do usuário em sites e aplicativos.
- * - //^1: ButtonX/MenuX não podem aparecer sequencialmente fora de NavIcon
- * - //^2: Componentes empilhados verticalmente
- * - //^3: empilhados horizontalmente - ocupam,juntos, toda a área horizontal
+ * - //#1: ButtonX/MenuX não podem aparecer sequencialmente fora de NavIcon
+ * - //#2: Componentes empilhados verticalmente
+ * - //#3: empilhados horizontalmente - ocupam,juntos, toda a área horizontal
+ * * ````
  *
  * - Em designer:
  *
- * +-------------------------------+
- * | ╔═══════════════════════════╗ |
- * | ║ [HeaderZone]              ║ |
- * | ║ • [AnyComponent*] (V)     ║ |
- * | ║ • [HeaderBar*]:           ║ |
- * | ║   [LftZ][MidZ][RgtZ]      ║ |
- * | ║   [BtnX][MenuX][BtnX]     ║ |
- * | ╚═══════════════════════════╝ |
- * | ┌─────┐ +────────────+ ┌─────┐|
- * | │[NAV]│ |[ContentWr] │ │[NAV]│|
- * | │ •BX │ | •(PageZ)⊕ │ │ •BX │|
- * | │ •BX │ | •[AnyComp+]│ │ •BX │|
- * | └─────┘ +────────────+ └─────┘|
- * | ╔═══════════════════════════╗ |
- * | ║ [FooterZone]                |
- * | ║ • [AnyComponent+] (V)     ║ |
- * | ╚═══════════════════════════╝ |
- * +-------------------------------+
+ * ````
+ * +----------------------------------+
+ * | [PageZone]                       |          |
+ * | ╔══════════════════════════════╗ |
+ * | ║ [HeaderZone]                 ║ |
+ * | ║ • [AnyComponent*] (V)        ║ |
+ * | ║ • [HeaderBar*]:              ║ |
+ * | ║   > [LftZ][MidZ][RgtZ]       ║ |
+ * | ║   >> [ButonX*]/[MenuX*]...   ║ |
+ * | ╚══════════════════════════════╝ |
+ * | ╔══════════════════════════════╗ |
+ * | ║ [EnclosureContent]           ║ |
+ * | ║┌─────┐ +────────────+ ┌─────┐║ |
+ * | ║│[NAV]│ |[ContentWr] │ │[NAV]│║ |
+ * | ║│ •BX │ | •(PageZ)^  │ │ •BX │║ |
+ * | ║│ •BX │ | •[AnyComp+]│ │ •BX │║ |
+ * | ║└─────┘ +────────────+ └─────┘║ |
+ * | ╚══════════════════════════════╝ |
+ * | ╔══════════════════════════════╗ |
+ * | ║ [FooterZone]                 ║ |
+ * | ║ • [AnyComponent+] (V)        ║ |
+ * | ╚══════════════════════════════╝ |
+ * +----------------------------------+
+ * ````
  *
  * @integration
  * - Totalmente integrado com:
@@ -155,7 +163,7 @@ import './PageZone.scss';
 //import { ContentWrapper } from '../ContentWrapper/ContentWrapper';
 import { HeaderZone } from '../HeaderZone/HeaderZone';
 import { Button, INavIcon, Menu, NavIcon } from '../NavIcon/NavIcon';
-import { FooterZone } from '../FootZone/FootZone';
+import { FooterZone } from '../FooterZone/FooterZone';
 import { EnclosureContent } from '@ext/EnclosureContent/EnclosureContent';
 import { ContentWrapper } from '@ext/ContentWrapper/ContentWrapper';
 import { HAS } from '../../ts/common/logicos';
