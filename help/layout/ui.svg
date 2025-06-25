@@ -170,7 +170,7 @@
        id="g1098"
        inkscape:label="page">
       <rect
-         style="fill:#ffe4b5;stroke:#171717;stroke-width:0.539242;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#ffe4b5;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1"
          id="rect111"
          width="203.27806"
          height="292.86752"
@@ -190,7 +190,7 @@
        transform="translate(4.3723164,12.666407)"
        inkscape:label="HeaderZone">
       <rect
-         style="fill:#fa8072;fill-opacity:0.3;stroke:#171717;stroke-width:0.548692;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#fa8072;fill-opacity:0.3;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1"
          id="rect111-9"
          width="188.01595"
          height="105.96692"
@@ -202,7 +202,7 @@
          inkscape:label="HeaderBar"
          style="display:inline">
         <rect
-           style="fill:#6495ed;fill-opacity:0.60784;stroke:#171717;stroke-width:0.453188;stroke-dasharray:none;stroke-opacity:1"
+           style="fill:#6495ed;fill-opacity:0.60784;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1"
            id="rect111-9-4"
            width="175.75183"
            height="77.332817"
@@ -214,21 +214,21 @@
            inkscape:label="HeaderBar"
            style="display:inline">
           <rect
-             style="fill:#778899;fill-opacity:0.356007;stroke:#171717;stroke-width:0.443674;stroke-dasharray:1.33102, 1.33102;stroke-dashoffset:0;stroke-opacity:0.618593"
+             style="fill:#778899;fill-opacity:0.356007;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.33102, 1.33102;stroke-dashoffset:0;stroke-opacity:0.7"
              id="rect111-9-4-6"
              width="52.255703"
              height="33.681374"
              x="6.4626184"
              y="5.0043592" />
           <rect
-             style="display:inline;fill:#778899;fill-opacity:0.356007;stroke:#171717;stroke-width:0.443674;stroke-dasharray:1.33102, 1.33102;stroke-dashoffset:0;stroke-opacity:0.618593"
+             style="display:inline;fill:#778899;fill-opacity:0.356007;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.33102, 1.33102;stroke-dashoffset:0;stroke-opacity:0.7"
              id="rect111-9-4-6-0"
              width="52.255703"
              height="33.681374"
              x="63.776703"
              y="5.0043592" />
           <rect
-             style="display:inline;fill:#778899;fill-opacity:0.356007;stroke:#171717;stroke-width:0.443674;stroke-dasharray:1.33102, 1.33102;stroke-dashoffset:0;stroke-opacity:0.618593"
+             style="display:inline;fill:#778899;fill-opacity:0.356007;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.33102, 1.33102;stroke-dashoffset:0;stroke-opacity:0.7"
              id="rect111-9-4-6-0-6"
              width="52.255703"
              height="33.681374"
@@ -242,7 +242,7 @@
              inkscape:transform-center-x="-28.451243"
              inkscape:transform-center-y="9.8635768">
             <rect
-               style="fill:#b0c4de;fill-opacity:1;stroke:#171717;stroke-width:0.153214;stroke-dasharray:none;stroke-opacity:1"
+               style="fill:#b0c4de;fill-opacity:1;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1"
                id="rect5055-6-6"
                width="20.016701"
                height="42.510254"
@@ -270,16 +270,16 @@
                  x="-283.89258"
                  y="423.87149"
                  id="tspan12037"><tspan
-                   style="font-size:8.35824px;line-height:0.35"
+                   style="font-size:8px;line-height:0.35"
                    id="tspan12035">View:
 </tspan></tspan><tspan
                  x="-283.89258"
                  y="431.81182"
                  id="tspan12041"><tspan
-                   style="font-size:8.35824px;line-height:1.55"
+                   style="font-size:8px;line-height:1.55"
                    id="tspan12039">Coll.</tspan></tspan></text>
             <rect
-               style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.531033;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.519108"
+               style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.7"
                id="rect5363-2-5"
                width="9.0646114"
                height="9.2934456"
@@ -309,13 +309,13 @@
              x="-283.89258"
              y="416.84624"
              id="tspan12051"><tspan
-               style="font-size:8.32885px"
+               style="font-size:8px"
                id="tspan12049">
 </tspan></tspan><tspan
              x="-283.89258"
              y="417.89204"
              id="tspan12055"><tspan
-               style="font-size:8.32885px"
+               style="font-size:8px"
                id="tspan12053">AnyComponent, NavIcon, ButtonX or MenuX in any sub area</tspan></tspan></text>
       </g>
       <text
@@ -332,7 +332,7 @@
            x="-283.89258"
            y="416.84624"
            id="tspan12063"><tspan
-             style="font-size:8.32885px;line-height:0.1"
+             style="font-size:8px;line-height:0.1"
              id="tspan12061">Stack AnyComponent | HeaderBar</tspan></tspan></text>
     </g>
     <g
@@ -340,7 +340,7 @@
        transform="translate(4.3288817,124.42056)"
        inkscape:label="EnclosureContent">
       <rect
-         style="fill:#7fffd4;fill-opacity:0.3;stroke:#171717;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#7fffd4;fill-opacity:0.3;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1"
          id="rect111-9-3"
          width="188.00452"
          height="119.55788"
@@ -359,7 +359,7 @@
          transform="matrix(1.0000059,0,0,0.99297565,37.208455,22.665143)"
          inkscape:label="ContentWrapper">
         <rect
-           style="fill:#fdf5e6;fill-opacity:1;stroke:#171717;stroke-width:0.543043;stroke-dasharray:none;stroke-opacity:1"
+           style="fill:#fdf5e6;fill-opacity:1;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1"
            id="rect111-9-3-7"
            width="113.6843"
            height="94.027222"
@@ -380,7 +380,7 @@
          inkscape:label="Navicon"
          style="display:inline">
         <rect
-           style="fill:#dda0dd;fill-opacity:0.7;stroke:#171717;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
+           style="fill:#dda0dd;fill-opacity:0.7;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1"
            id="rect111-9-3-7-2"
            width="93.49852"
            height="23.609182"
@@ -400,7 +400,7 @@
              x="-283.89258"
              y="417.25797"
              id="tspan12075"><tspan
-               style="font-size:8.32885px;line-height:0.35"
+               style="font-size:8px;line-height:0.35"
                id="tspan12073">View: Collapsed</tspan></tspan></text>
         <g
            id="g5061-3"
@@ -408,7 +408,7 @@
            inkscape:label="ButtonX-expandido"
            style="display:inline">
           <rect
-             style="fill:#b0c4de;fill-opacity:1;stroke:#171717;stroke-width:0.153214;stroke-dasharray:none;stroke-opacity:1"
+             style="fill:#b0c4de;fill-opacity:1;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1"
              id="rect5055-6"
              width="20.016701"
              height="42.510254"
@@ -436,7 +436,7 @@
                x="-283.89258"
                y="423.87149"
                id="tspan12089"><tspan
-                 style="font-size:8.35824px;line-height:0.35"
+                 style="font-size:8px;line-height:0.35"
                  id="tspan12087">View:
 </tspan></tspan><tspan
                x="-283.89258"
@@ -445,7 +445,7 @@
                  style="line-height:1.55"
                  id="tspan12091">Coll.</tspan></tspan></text>
           <rect
-             style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.531033;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.519108"
+             style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.7"
              id="rect5363-2"
              width="9.0646114"
              height="9.2934456"
@@ -467,7 +467,7 @@
          inkscape:label="Navicon"
          style="display:inline">
         <rect
-           style="fill:#dda0dd;fill-opacity:0.7;stroke:#171717;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
+           style="fill:#dda0dd;fill-opacity:0.7;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1"
            id="rect2185"
            width="93.425423"
            height="67.814636"
@@ -487,14 +487,14 @@
              x="-283.89258"
              y="417.25797"
              id="tspan12103"><tspan
-               style="font-size:8.32885px;line-height:0.35"
+               style="font-size:8px;line-height:0.35"
                id="tspan12101">View: Expanded</tspan></tspan></text>
         <g
            id="g5061"
            transform="matrix(0,1.0000059,-0.99297564,0,98.777879,8.6900379)"
            inkscape:label="ButtonX-expandido">
           <rect
-             style="fill:#b0c4de;fill-opacity:1;stroke:#171717;stroke-width:0.21897;stroke-dasharray:none;stroke-opacity:1"
+             style="fill:#b0c4de;fill-opacity:1;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1"
              id="rect5055"
              width="60.471825"
              height="28.741003"
@@ -514,24 +514,24 @@
                x="-283.89258"
                y="417.27148"
                id="tspan12111"><tspan
-                 style="font-size:8.35824px;line-height:0.35"
+                 style="font-size:8px;line-height:0.35"
                  id="tspan12109">View: Exp</tspan></tspan></text>
           <rect
-             style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.531033;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.519108"
+             style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.7"
              id="rect5363"
              width="9.0646114"
              height="9.2934456"
              x="10.421017"
              y="19.911087" />
           <rect
-             style="display:inline;fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.531033;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.519108"
+             style="display:inline;fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.7"
              id="rect5363-5"
              width="19.823994"
              height="7.5676894"
              x="23.034571"
              y="20.773966" />
           <rect
-             style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.531033;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.519108"
+             style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.7"
              id="rect5392"
              width="9.0646114"
              height="9.2934456"
@@ -549,7 +549,7 @@
              xml:space="preserve"
              transform="matrix(0.59298535,0,0,0.54681911,193.00873,-195.83469)"
              id="text5594"
-             style="font-size:8.35824px;white-space:pre;shape-inside:url(#rect5596);display:inline;fill:#000000;fill-opacity:0.768522;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+             style="font-size:8px;white-space:pre;shape-inside:url(#rect5596);display:inline;fill:#000000;fill-opacity:0.768522;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
                x="-283.89258"
                y="406.03269"
                id="tspan12115">Label</tspan></text>
@@ -569,7 +569,7 @@
        transform="translate(4.3288817,251.44066)"
        inkscape:label="FooterZone">
       <rect
-         style="fill:#2f4f4f;fill-opacity:0.3;stroke:#171717;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#2f4f4f;fill-opacity:0.3;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1"
          id="rect111-9-3-2"
          width="188.17082"
          height="30.499775"
@@ -589,17 +589,17 @@
            x="-283.89258"
            y="416.84624"
            id="tspan12125"><tspan
-             style="font-size:8.32885px;line-height:0.1"
+             style="font-size:8px;line-height:0.1"
              id="tspan12123">Stack AnyComponent</tspan></tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:3.175px;fill:#7fffd4;fill-opacity:0.3;stroke:none;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
+         style="font-size:3.2px;fill:#7fffd4;fill-opacity:0.3;stroke:none;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1"
          x="40.963024"
          y="18.44392"
          id="text1651"><tspan
            sodipodi:role="line"
            id="tspan1649"
-           style="stroke-width:0.529167"
+           style="stroke-width:0.55"
            x="40.963024"
            y="18.44392"></tspan></text>
     </g>
