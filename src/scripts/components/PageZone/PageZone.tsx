@@ -12,14 +12,20 @@
  *
  * [PageZone]
  * ├── (HeaderZone)  // Pelo menos um destes ↓ deve existir (AnyComponent* ou HeaderBar*)
- * │     ├── (breadcrumbs*) //^2
+ * │     ├── (AnyComponent*) // stack
  * │     └── (HeaderBar*)  //^2
  * │           ├── [LeftZone] //^3
- * │           │     └── [ButtonX+/MenuX+]  //^1
+ * │           │     ├── (breadcrumbs*) //^2
+ * │           │     ├── (AnyComponents*) //^2
+ * │           │     └── (ButtonX+/MenuX+)  //^1
  * │           ├── [MiddleZone] //^3
- * │           │     └── [ButtonX+/MenuX+]  //^1
+ * │           │     ├── (breadcrumbs*) //^2
+ * │           │     ├── (AnyComponents*) //^2
+ * │           │     └── (ButtonX+/MenuX+)  //^1
  * │           └── [RightZone] //^3
- * │                 └── [ButtonX+/MenuX+]  //^1
+ * │                 ├── (breadcrumbs*) //^2
+ * │                 ├── (AnyComponents*) //^2
+ * │                 └── (ButtonX+/MenuX+)  //^1
  * ├── EnclosureContent
  * │   ├── (NavIcon)  // left
  * │   │     └── [ButtonX+]
@@ -31,12 +37,12 @@
  *       └── [AnyComponent+]  //^2
  *
  * Legenda:
- * - (opcional): componente não obrigatório
+ * - (A): componente não obrigatório
  * - [A]: exatamente 1 elemento do tipo A
  * - [A+]: 1+ elementos (obrigatório)
  * - [A*]: 0+ elementos (opcional)
  * - [A/B] ou [A] / [B]: OR (pode ter A, B ou ambos)
- * - [A⊕B] ou [A] ⊕ [B]: XOR (apenas A ou apenas B)
+ * - [A^B] ou [A] ^ [B]: XOR (apenas A ou apenas B)
  * - [AnyComponent]: qualquer componente válido
  * - [breadcrumbs]: readcrumb navigation, que é um elemento de interface do usuário em sites e aplicativos.
  * - //^1: ButtonX/MenuX não podem aparecer sequencialmente fora de NavIcon
