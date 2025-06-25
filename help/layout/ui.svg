@@ -24,15 +24,15 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="0.46858866"
-     inkscape:cx="642.35442"
-     inkscape:cy="595.40493"
+     inkscape:zoom="0.66268444"
+     inkscape:cx="467.79429"
+     inkscape:cy="312.36587"
      inkscape:window-width="844"
      inkscape:window-height="694"
      inkscape:window-x="522"
      inkscape:window-y="2"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="g1098-2-8" />
   <defs
      id="defs2">
     <rect
@@ -125,6 +125,42 @@
        width="100.98031"
        height="15.246584"
        id="rect5602-7" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="281.36164"
+       height="29.424078"
+       id="rect973-6-7" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="151.23666"
+       height="30.966461"
+       id="rect973-6-7-0" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="101.11525"
+       height="56.9785"
+       id="rect5063-9-2-3" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="100.98031"
+       height="15.246584"
+       id="rect5063-8-2" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="101.11525"
+       height="56.9785"
+       id="rect5063-9-2-3-4" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="100.98031"
+       height="15.246584"
+       id="rect5063-8-2-7" />
   </defs>
   <g
      inkscape:label="Camada 1"
@@ -134,60 +170,182 @@
        id="g1098"
        inkscape:label="page">
       <rect
-         style="fill:#ffe4b5;stroke:#171717;stroke-width:0.52916667;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#ffe4b5;stroke:#171717;stroke-width:0.539242;stroke-dasharray:none;stroke-opacity:1"
          id="rect111"
          width="203.27806"
-         height="282.02597"
+         height="292.86752"
          x="3.3609695"
-         y="8.2649765" />
+         y="2.0662384" />
       <text
          xml:space="preserve"
-         transform="matrix(0.59298536,0,0,0.59298536,179.40293,-224.36356)"
+         transform="matrix(0.59298536,0,0,0.59298536,176.03693,-231.55184)"
          id="text971"
          style="white-space:pre;shape-inside:url(#rect973);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
            x="-283.89258"
            y="409.34624"
-           id="tspan7842">PageZone</tspan></text>
+           id="tspan12023">PageZone</tspan></text>
     </g>
     <g
        id="g1098-2"
-       transform="translate(4.3723164,17.958074)"
+       transform="translate(4.3723164,12.666407)"
        inkscape:label="HeaderZone">
       <rect
-         style="fill:#fa8072;stroke:#171717;stroke-width:0.52916667;stroke-dasharray:none;stroke-opacity:1;fill-opacity:0.30000001"
+         style="fill:#fa8072;fill-opacity:0.3;stroke:#171717;stroke-width:0.548692;stroke-dasharray:none;stroke-opacity:1"
          id="rect111-9"
-         width="188.03546"
-         height="98.549103"
-         x="6.6099529"
-         y="6.7392635" />
+         width="188.01595"
+         height="105.96692"
+         x="6.6197157"
+         y="6.7490263" />
+      <g
+         id="g1098-2-8"
+         transform="translate(6.1797949,21.617255)"
+         inkscape:label="HeaderBar"
+         style="display:inline">
+        <rect
+           style="fill:#6495ed;fill-opacity:0.60784;stroke:#171717;stroke-width:0.453188;stroke-dasharray:none;stroke-opacity:1"
+           id="rect111-9-4"
+           width="175.75183"
+           height="77.332817"
+           x="6.5719633"
+           y="6.7012739" />
+        <g
+           id="g1098-2-8-3"
+           transform="matrix(0.99938867,0,0,1.4233848,4.6472302,22.612067)"
+           inkscape:label="HeaderBar"
+           style="display:inline">
+          <rect
+             style="fill:#778899;fill-opacity:0.356007;stroke:#171717;stroke-width:0.443674;stroke-dasharray:1.33102, 1.33102;stroke-dashoffset:0;stroke-opacity:0.618593"
+             id="rect111-9-4-6"
+             width="52.255703"
+             height="33.681374"
+             x="6.4626184"
+             y="5.0043592" />
+          <rect
+             style="display:inline;fill:#778899;fill-opacity:0.356007;stroke:#171717;stroke-width:0.443674;stroke-dasharray:1.33102, 1.33102;stroke-dashoffset:0;stroke-opacity:0.618593"
+             id="rect111-9-4-6-0"
+             width="52.255703"
+             height="33.681374"
+             x="63.776703"
+             y="5.0043592" />
+          <rect
+             style="display:inline;fill:#778899;fill-opacity:0.356007;stroke:#171717;stroke-width:0.443674;stroke-dasharray:1.33102, 1.33102;stroke-dashoffset:0;stroke-opacity:0.618593"
+             id="rect111-9-4-6-0-6"
+             width="52.255703"
+             height="33.681374"
+             x="120.99286"
+             y="5.0043592" />
+          <g
+             id="g5061-3-0"
+             transform="matrix(1.0006176,0,0,0.69761575,4.5469435,4.9399361)"
+             inkscape:label="ButtonX-expandido"
+             style="display:inline"
+             inkscape:transform-center-x="-28.451243"
+             inkscape:transform-center-y="9.8635768">
+            <rect
+               style="fill:#b0c4de;fill-opacity:1;stroke:#171717;stroke-width:0.153214;stroke-dasharray:none;stroke-opacity:1"
+               id="rect5055-6-6"
+               width="20.016701"
+               height="42.510254"
+               x="6.3817787"
+               y="2.947262" />
+            <text
+               xml:space="preserve"
+               transform="matrix(0.59298536,0,0,0.59298536,177.13422,-229.45566)"
+               id="text5059-2-1-1"
+               style="line-height:0;white-space:pre;shape-inside:url(#rect5063-9-2-3-4);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+                 x="-283.89258"
+                 y="405.14624"
+                 id="tspan12027"><tspan
+                   style="line-height:0.55"
+                   id="tspan12025">BtX
+</tspan></tspan><tspan
+                 x="-283.89258"
+                 y="415.94624"
+                 id="tspan12033"><tspan
+                   style="line-height:0.55"
+                   id="tspan12029">MnX</tspan><tspan
+                   style="line-height:1.25"
+                   id="tspan12031">
+</tspan></tspan><tspan
+                 x="-283.89258"
+                 y="423.87149"
+                 id="tspan12037"><tspan
+                   style="font-size:8.35824px;line-height:0.35"
+                   id="tspan12035">View:
+</tspan></tspan><tspan
+                 x="-283.89258"
+                 y="431.81182"
+                 id="tspan12041"><tspan
+                   style="font-size:8.35824px;line-height:1.55"
+                   id="tspan12039">Coll.</tspan></tspan></text>
+            <rect
+               style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.531033;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.519108"
+               id="rect5363-2-5"
+               width="9.0646114"
+               height="9.2934456"
+               x="11.479343"
+               y="31.635113" />
+            <text
+               xml:space="preserve"
+               transform="matrix(0.59298535,0,0,0.54681911,180.69082,-183.57776)"
+               id="text5059-1-5"
+               style="font-size:7.4605px;white-space:pre;shape-inside:url(#rect5063-8-2-7);display:inline;fill:#000000;fill-opacity:0.768522;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+                 x="-283.89258"
+                 y="405.21586"
+                 id="tspan12043">ICO</tspan></text>
+          </g>
+        </g>
+        <text
+           xml:space="preserve"
+           transform="matrix(0.59298536,0,0,0.59298536,179.29095,-225.56195)"
+           id="text971-1-5"
+           style="line-height:0;white-space:pre;shape-inside:url(#rect973-6-7);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+             x="-283.89258"
+             y="409.34624"
+             id="tspan12047"><tspan
+               style="line-height:1.25"
+               id="tspan12045">HeaderBar
+</tspan></tspan><tspan
+             x="-283.89258"
+             y="416.84624"
+             id="tspan12051"><tspan
+               style="font-size:8.32885px"
+               id="tspan12049">
+</tspan></tspan><tspan
+             x="-283.89258"
+             y="417.89204"
+             id="tspan12055"><tspan
+               style="font-size:8.32885px"
+               id="tspan12053">AnyComponent, NavIcon, ButtonX or MenuX in any sub area</tspan></tspan></text>
+      </g>
       <text
          xml:space="preserve"
          transform="matrix(0.59298536,0,0,0.59298536,179.29095,-225.56195)"
          id="text971-1"
-         style="line-height:0;white-space:pre;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1;shape-inside:url(#rect973-6)"><tspan
+         style="line-height:0;white-space:pre;shape-inside:url(#rect973-6);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
            x="-283.89258"
            y="409.34624"
-           id="tspan7846"><tspan
+           id="tspan12059"><tspan
              style="line-height:1.25"
-             id="tspan7844">HeaderZone
+             id="tspan12057">HeaderZone
 </tspan></tspan><tspan
            x="-283.89258"
            y="416.84624"
-           id="tspan7850"><tspan
+           id="tspan12063"><tspan
              style="font-size:8.32885px;line-height:0.1"
-             id="tspan7848">Stack AnyComponent</tspan></tspan></text>
+             id="tspan12061">Stack AnyComponent | HeaderBar</tspan></tspan></text>
     </g>
     <g
        id="g1098-2-9"
-       transform="translate(4.3288817,121.77471)"
+       transform="translate(4.3288817,124.42056)"
        inkscape:label="EnclosureContent">
       <rect
-         style="fill:#7fffd4;fill-opacity:0.3;stroke:#171717;stroke-width:0.52916667;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#7fffd4;fill-opacity:0.3;stroke:#171717;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
          id="rect111-9-3"
          width="188.00452"
          height="119.55788"
          x="6.6254292"
-         y="7.2546353" />
+         y="7.7838016" />
       <text
          xml:space="preserve"
          transform="matrix(0.59298536,0,0,0.59298536,179.40293,-224.36356)"
@@ -195,10 +353,10 @@
          style="white-space:pre;shape-inside:url(#rect973-6-0);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
            x="-283.89258"
            y="409.34624"
-           id="tspan7852">EnclosureContent</tspan></text>
+           id="tspan12065">EnclosureContent</tspan></text>
       <g
          id="g1098-2-9-8"
-         transform="matrix(1.0000059,0,0,0.99297565,37.208455,23.723477)"
+         transform="matrix(1.0000059,0,0,0.99297565,37.208455,22.665143)"
          inkscape:label="ContentWrapper">
         <rect
            style="fill:#fdf5e6;fill-opacity:1;stroke:#171717;stroke-width:0.543043;stroke-dasharray:none;stroke-opacity:1"
@@ -214,11 +372,11 @@
            style="white-space:pre;shape-inside:url(#rect973-6-0-1);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
              x="-283.89258"
              y="409.34624"
-             id="tspan7854">ContentWrapper</tspan></text>
+             id="tspan12067">ContentWrapper</tspan></text>
       </g>
       <g
          id="g1098-2-9-8-0"
-         transform="rotate(-90,66.641729,60.144667)"
+         transform="rotate(-90,66.112563,59.615501)"
          inkscape:label="Navicon"
          style="display:inline">
         <rect
@@ -235,15 +393,15 @@
            style="line-height:0;white-space:pre;shape-inside:url(#rect973-6-0-1-2);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
              x="-283.89258"
              y="409.34624"
-             id="tspan7858"><tspan
+             id="tspan12071"><tspan
                style="line-height:1.25"
-               id="tspan7856">NavIcon
+               id="tspan12069">NavIcon
 </tspan></tspan><tspan
              x="-283.89258"
              y="417.25797"
-             id="tspan7862"><tspan
+             id="tspan12075"><tspan
                style="font-size:8.32885px;line-height:0.35"
-               id="tspan7860">View: Collapsed</tspan></tspan></text>
+               id="tspan12073">View: Collapsed</tspan></tspan></text>
         <g
            id="g5061-3"
            transform="matrix(0,1.0000059,-0.99297564,0,99.002696,2.0536972)"
@@ -263,29 +421,29 @@
              style="line-height:0;white-space:pre;shape-inside:url(#rect5063-9-2);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
                x="-283.89258"
                y="405.14624"
-               id="tspan7866"><tspan
+               id="tspan12079"><tspan
                  style="line-height:0.55"
-                 id="tspan7864">BtX
+                 id="tspan12077">BtX
 </tspan></tspan><tspan
                x="-283.89258"
                y="415.94624"
-               id="tspan7872"><tspan
+               id="tspan12085"><tspan
                  style="line-height:0.55"
-                 id="tspan7868">MnX</tspan><tspan
+                 id="tspan12081">MnX</tspan><tspan
                  style="line-height:1.25"
-                 id="tspan7870">
+                 id="tspan12083">
 </tspan></tspan><tspan
                x="-283.89258"
                y="423.87149"
-               id="tspan7876"><tspan
+               id="tspan12089"><tspan
                  style="font-size:8.35824px;line-height:0.35"
-                 id="tspan7874">View:
+                 id="tspan12087">View:
 </tspan></tspan><tspan
                x="-283.89258"
                y="431.81182"
-               id="tspan7880"><tspan
+               id="tspan12093"><tspan
                  style="line-height:1.55"
-                 id="tspan7878">Coll.</tspan></tspan></text>
+                 id="tspan12091">Coll.</tspan></tspan></text>
           <rect
              style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.531033;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.519108"
              id="rect5363-2"
@@ -300,12 +458,12 @@
              style="font-size:7.4605px;white-space:pre;shape-inside:url(#rect5063-8);display:inline;fill:#000000;fill-opacity:0.768522;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
                x="-283.89258"
                y="405.21586"
-               id="tspan7882">ICO</tspan></text>
+               id="tspan12095">ICO</tspan></text>
         </g>
       </g>
       <g
          id="g2191"
-         transform="rotate(-90,117.73329,9.0288118)"
+         transform="rotate(-90,117.20413,8.4996452)"
          inkscape:label="Navicon"
          style="display:inline">
         <rect
@@ -322,15 +480,15 @@
            style="line-height:0;white-space:pre;shape-inside:url(#rect2193);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
              x="-283.89258"
              y="409.34624"
-             id="tspan7886"><tspan
+             id="tspan12099"><tspan
                style="line-height:1.25"
-               id="tspan7884">NavIcon
+               id="tspan12097">NavIcon
 </tspan></tspan><tspan
              x="-283.89258"
              y="417.25797"
-             id="tspan7890"><tspan
+             id="tspan12103"><tspan
                style="font-size:8.32885px;line-height:0.35"
-               id="tspan7888">View: Expanded</tspan></tspan></text>
+               id="tspan12101">View: Expanded</tspan></tspan></text>
         <g
            id="g5061"
            transform="matrix(0,1.0000059,-0.99297564,0,98.777879,8.6900379)"
@@ -349,15 +507,15 @@
              style="line-height:0;white-space:pre;shape-inside:url(#rect5063-9);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
                x="-283.89258"
                y="409.34624"
-               id="tspan7894"><tspan
+               id="tspan12107"><tspan
                  style="line-height:1.25"
-                 id="tspan7892">ButtonX/MenuX
+                 id="tspan12105">ButtonX/MenuX
 </tspan></tspan><tspan
                x="-283.89258"
                y="417.27148"
-               id="tspan7898"><tspan
+               id="tspan12111"><tspan
                  style="font-size:8.35824px;line-height:0.35"
-                 id="tspan7896">View: Exp</tspan></tspan></text>
+                 id="tspan12109">View: Exp</tspan></tspan></text>
           <rect
              style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.531033;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.519108"
              id="rect5363"
@@ -386,7 +544,7 @@
              style="font-size:7.4605px;white-space:pre;shape-inside:url(#rect5063);display:inline;fill:#000000;fill-opacity:0.768522;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
                x="-283.89258"
                y="405.21586"
-               id="tspan7900">ICO</tspan></text>
+               id="tspan12113">ICO</tspan></text>
           <text
              xml:space="preserve"
              transform="matrix(0.59298535,0,0,0.54681911,193.00873,-195.83469)"
@@ -394,7 +552,7 @@
              style="font-size:8.35824px;white-space:pre;shape-inside:url(#rect5596);display:inline;fill:#000000;fill-opacity:0.768522;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
                x="-283.89258"
                y="406.03269"
-               id="tspan7902">Label</tspan></text>
+               id="tspan12115">Label</tspan></text>
           <text
              xml:space="preserve"
              transform="matrix(0.59298535,0,0,0.54681911,222.49482,-195.30178)"
@@ -402,16 +560,16 @@
              style="font-size:7.4605px;white-space:pre;shape-inside:url(#rect5602);display:inline;fill:#000000;fill-opacity:0.768522;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
                x="-283.89258"
                y="405.21586"
-               id="tspan7904">ICO</tspan></text>
+               id="tspan12117">ICO</tspan></text>
         </g>
       </g>
     </g>
     <g
        id="g1098-2-9-6"
-       transform="translate(4.3288817,247.2073)"
+       transform="translate(4.3288817,251.44066)"
        inkscape:label="FooterZone">
       <rect
-         style="fill:#2f4f4f;fill-opacity:0.3;stroke:#171717;stroke-width:0.52916667;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#2f4f4f;fill-opacity:0.3;stroke:#171717;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
          id="rect111-9-3-2"
          width="188.17082"
          height="30.499775"
@@ -424,15 +582,15 @@
          style="line-height:0;white-space:pre;shape-inside:url(#rect973-6-0-0);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
            x="-283.89258"
            y="409.34624"
-           id="tspan7908"><tspan
+           id="tspan12121"><tspan
              style="line-height:1.25"
-             id="tspan7906">FooterZone
+             id="tspan12119">FooterZone
 </tspan></tspan><tspan
            x="-283.89258"
            y="416.84624"
-           id="tspan7912"><tspan
+           id="tspan12125"><tspan
              style="font-size:8.32885px;line-height:0.1"
-             id="tspan7910">Stack AnyComponent</tspan></tspan></text>
+             id="tspan12123">Stack AnyComponent</tspan></tspan></text>
       <text
          xml:space="preserve"
          style="font-size:3.175px;fill:#7fffd4;fill-opacity:0.3;stroke:none;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
