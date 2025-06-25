@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
-   width="880"
-   height="800"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
    version="1.1"
-   id="svg21"
-   sodipodi:docname="layout.svg"
-   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   id="svg5"
+   sodipodi:docname="ui.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs21" />
   <sodipodi:namedview
-     id="namedview21"
+     id="namedview7"
      pagecolor="#ffffff"
      bordercolor="#000000"
      borderopacity="0.25"
@@ -21,150 +22,428 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="1.00875"
-     inkscape:cx="599.75217"
-     inkscape:cy="400"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg21" />
-  <style
-     id="style1">
-    .page { fill: #c9d8f0; stroke: #000; stroke-width: 2; }
-    .header { fill: #b7e3c5; stroke: #000; stroke-width: 1.5; }
-    .nav { fill: #e3d2eb; stroke: #000; stroke-width: 1.5; }
-    .wrapper { fill: #ffffff; stroke: #000; stroke-width: 1.5; }
-    .foot { fill: #dadada; stroke: #000; stroke-width: 1.5; }
-    .legend { fill: #f9f9f9; stroke: #000; stroke-width: 1; }
-    .text { font-family: sans-serif; font-size: 16px; fill: #000; }
-    .title { font-weight: bold; font-size: 18px; }
-    .subtitle { font-style: italic; font-size: 14px; }
-  </style>
-  <!-- PAGE -->
-  <rect
-     class="page"
-     x="42"
-     y="50"
-     width="800"
-     height="700"
-     rx="10"
-     ry="10"
-     id="rect1" />
-  <text
-     class="text title"
-     x="52"
-     y="75"
-     id="text1">[0] PAGE / Página</text>
-  <text
-     class="text subtitle"
-     x="52"
-     y="95"
-     id="text2">Component: PageZone</text>
-  <!-- HEADER ZONE -->
-  <rect
-     class="header"
-     x="92"
-     y="100"
-     width="700"
-     height="80"
-     rx="5"
-     ry="5"
-     id="rect2" />
-  <text
-     class="text title"
-     x="102"
-     y="125"
-     id="text3">[1] HEADER ZONE / Cabeçalho</text>
-  <text
-     class="text subtitle"
-     x="102"
-     y="145"
-     id="text4">Component: HeaderZone</text>
-  <text
-     class="text subtitle"
-     x="102"
-     y="165"
-     id="text5">Stack of HeaderBar</text>
-  <!-- NAVICON LEFT -->
-  <rect
-     class="nav"
-     x="92"
-     y="200"
-     width="60"
-     height="400"
-     rx="5"
-     ry="5"
-     id="rect5" />
-  <text
-     class="text title"
-     transform="rotate(-90)"
-     text-anchor="middle"
-     id="text6"
-     x="-400"
-     y="122">[2] NAVICON / Barra</text>
-  <!-- NAVICON RIGHT -->
-  <rect
-     class="nav"
-     x="732"
-     y="200"
-     width="60"
-     height="400"
-     rx="5"
-     ry="5"
-     id="rect6" />
-  <text
-     class="text title"
-     transform="rotate(-90)"
-     text-anchor="middle"
-     id="text7"
-     x="-400"
-     y="762">[2] NAVICON / Barra</text>
-  <!-- WRAPPER -->
-  <rect
-     class="wrapper"
-     x="162"
-     y="200"
-     width="560"
-     height="400"
-     rx="5"
-     ry="5"
-     id="rect7" />
-  <text
-     class="text title"
-     x="172"
-     y="230"
-     id="text8">[4] WRAPPER</text>
-  <text
-     class="text subtitle"
-     x="172"
-     y="250"
-     id="text9">Component: ContentWrapper</text>
-  <text
-     class="text subtitle"
-     x="172"
-     y="270"
-     id="text10">Can contain [0] PAGE (nested)</text>
-  <!-- FOOT -->
-  <rect
-     class="foot"
-     x="92"
-     y="620"
-     width="700"
-     height="60"
-     rx="5"
-     ry="5"
-     id="rect10" />
-  <text
-     class="text title"
-     x="102"
-     y="650"
-     id="text11">[3] FOOT ZONE / Rodapé</text>
-  <text
-     class="text subtitle"
-     x="102"
-     y="670"
-     id="text12">Component: FootZone</text>
-  <!-- LEGENDA -->
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.46858866"
+     inkscape:cx="642.35442"
+     inkscape:cy="595.40493"
+     inkscape:window-width="844"
+     inkscape:window-height="694"
+     inkscape:window-x="522"
+     inkscape:window-y="2"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <rect
+       x="-283.89302"
+       y="398.42737"
+       width="100.98031"
+       height="15.246584"
+       id="rect973" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="151.23667"
+       height="30.966462"
+       id="rect973-6" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="100.98031"
+       height="15.246584"
+       id="rect973-6-0" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="145.22079"
+       height="21.057817"
+       id="rect973-6-0-0" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="100.98031"
+       height="15.246584"
+       id="rect973-6-0-1" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="98.394904"
+       height="30.94592"
+       id="rect973-6-0-1-2" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="102.32692"
+       height="30.479531"
+       id="rect2193" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="100.98031"
+       height="15.246584"
+       id="rect5063" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="101.0492"
+       height="30.210059"
+       id="rect5063-9" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="100.98031"
+       height="15.246584"
+       id="rect5596" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="100.98031"
+       height="15.246584"
+       id="rect5602" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="101.11525"
+       height="56.9785"
+       id="rect5063-9-2" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="100.98031"
+       height="15.246584"
+       id="rect5063-8" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="100.98031"
+       height="15.246584"
+       id="rect5596-9" />
+    <rect
+       x="-283.89301"
+       y="398.42737"
+       width="100.98031"
+       height="15.246584"
+       id="rect5602-7" />
+  </defs>
+  <g
+     inkscape:label="Camada 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g1098"
+       inkscape:label="page">
+      <rect
+         style="fill:#ffe4b5;stroke:#171717;stroke-width:0.52916667;stroke-dasharray:none;stroke-opacity:1"
+         id="rect111"
+         width="203.27806"
+         height="282.02597"
+         x="3.3609695"
+         y="8.2649765" />
+      <text
+         xml:space="preserve"
+         transform="matrix(0.59298536,0,0,0.59298536,179.40293,-224.36356)"
+         id="text971"
+         style="white-space:pre;shape-inside:url(#rect973);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+           x="-283.89258"
+           y="409.34624"
+           id="tspan7842">PageZone</tspan></text>
+    </g>
+    <g
+       id="g1098-2"
+       transform="translate(4.3723164,17.958074)"
+       inkscape:label="HeaderZone">
+      <rect
+         style="fill:#fa8072;stroke:#171717;stroke-width:0.52916667;stroke-dasharray:none;stroke-opacity:1;fill-opacity:0.30000001"
+         id="rect111-9"
+         width="188.03546"
+         height="98.549103"
+         x="6.6099529"
+         y="6.7392635" />
+      <text
+         xml:space="preserve"
+         transform="matrix(0.59298536,0,0,0.59298536,179.29095,-225.56195)"
+         id="text971-1"
+         style="line-height:0;white-space:pre;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1;shape-inside:url(#rect973-6)"><tspan
+           x="-283.89258"
+           y="409.34624"
+           id="tspan7846"><tspan
+             style="line-height:1.25"
+             id="tspan7844">HeaderZone
+</tspan></tspan><tspan
+           x="-283.89258"
+           y="416.84624"
+           id="tspan7850"><tspan
+             style="font-size:8.32885px;line-height:0.1"
+             id="tspan7848">Stack AnyComponent</tspan></tspan></text>
+    </g>
+    <g
+       id="g1098-2-9"
+       transform="translate(4.3288817,121.77471)"
+       inkscape:label="EnclosureContent">
+      <rect
+         style="fill:#7fffd4;fill-opacity:0.3;stroke:#171717;stroke-width:0.52916667;stroke-dasharray:none;stroke-opacity:1"
+         id="rect111-9-3"
+         width="188.00452"
+         height="119.55788"
+         x="6.6254292"
+         y="7.2546353" />
+      <text
+         xml:space="preserve"
+         transform="matrix(0.59298536,0,0,0.59298536,179.40293,-224.36356)"
+         id="text971-1-6"
+         style="white-space:pre;shape-inside:url(#rect973-6-0);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+           x="-283.89258"
+           y="409.34624"
+           id="tspan7852">EnclosureContent</tspan></text>
+      <g
+         id="g1098-2-9-8"
+         transform="matrix(1.0000059,0,0,0.99297565,37.208455,23.723477)"
+         inkscape:label="ContentWrapper">
+        <rect
+           style="fill:#fdf5e6;fill-opacity:1;stroke:#171717;stroke-width:0.543043;stroke-dasharray:none;stroke-opacity:1"
+           id="rect111-9-3-7"
+           width="113.6843"
+           height="94.027222"
+           x="6.5767121"
+           y="3.1423435" />
+        <text
+           xml:space="preserve"
+           transform="matrix(0.59298536,0,0,0.59298536,179.65906,-229.23233)"
+           id="text971-1-6-9"
+           style="white-space:pre;shape-inside:url(#rect973-6-0-1);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+             x="-283.89258"
+             y="409.34624"
+             id="tspan7854">ContentWrapper</tspan></text>
+      </g>
+      <g
+         id="g1098-2-9-8-0"
+         transform="rotate(-90,66.641729,60.144667)"
+         inkscape:label="Navicon"
+         style="display:inline">
+        <rect
+           style="fill:#dda0dd;fill-opacity:0.7;stroke:#171717;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
+           id="rect111-9-3-7-2"
+           width="93.49852"
+           height="23.609182"
+           x="6.5100222"
+           y="6.6393328" />
+        <text
+           xml:space="preserve"
+           transform="matrix(0.59298536,0,0,0.59298536,179.40293,-224.36356)"
+           id="text971-1-6-9-3"
+           style="line-height:0;white-space:pre;shape-inside:url(#rect973-6-0-1-2);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+             x="-283.89258"
+             y="409.34624"
+             id="tspan7858"><tspan
+               style="line-height:1.25"
+               id="tspan7856">NavIcon
+</tspan></tspan><tspan
+             x="-283.89258"
+             y="417.25797"
+             id="tspan7862"><tspan
+               style="font-size:8.32885px;line-height:0.35"
+               id="tspan7860">View: Collapsed</tspan></tspan></text>
+        <g
+           id="g5061-3"
+           transform="matrix(0,1.0000059,-0.99297564,0,99.002696,2.0536972)"
+           inkscape:label="ButtonX-expandido"
+           style="display:inline">
+          <rect
+             style="fill:#b0c4de;fill-opacity:1;stroke:#171717;stroke-width:0.153214;stroke-dasharray:none;stroke-opacity:1"
+             id="rect5055-6"
+             width="20.016701"
+             height="42.510254"
+             x="6.3817787"
+             y="2.947262" />
+          <text
+             xml:space="preserve"
+             transform="matrix(0.59298536,0,0,0.59298536,177.13422,-229.45566)"
+             id="text5059-2-1"
+             style="line-height:0;white-space:pre;shape-inside:url(#rect5063-9-2);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+               x="-283.89258"
+               y="405.14624"
+               id="tspan7866"><tspan
+                 style="line-height:0.55"
+                 id="tspan7864">BtX
+</tspan></tspan><tspan
+               x="-283.89258"
+               y="415.94624"
+               id="tspan7872"><tspan
+                 style="line-height:0.55"
+                 id="tspan7868">MnX</tspan><tspan
+                 style="line-height:1.25"
+                 id="tspan7870">
+</tspan></tspan><tspan
+               x="-283.89258"
+               y="423.87149"
+               id="tspan7876"><tspan
+                 style="font-size:8.35824px;line-height:0.35"
+                 id="tspan7874">View:
+</tspan></tspan><tspan
+               x="-283.89258"
+               y="431.81182"
+               id="tspan7880"><tspan
+                 style="line-height:1.55"
+                 id="tspan7878">Coll.</tspan></tspan></text>
+          <rect
+             style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.531033;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.519108"
+             id="rect5363-2"
+             width="9.0646114"
+             height="9.2934456"
+             x="11.479343"
+             y="31.635113" />
+          <text
+             xml:space="preserve"
+             transform="matrix(0.59298535,0,0,0.54681911,180.69082,-183.57776)"
+             id="text5059-1"
+             style="font-size:7.4605px;white-space:pre;shape-inside:url(#rect5063-8);display:inline;fill:#000000;fill-opacity:0.768522;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+               x="-283.89258"
+               y="405.21586"
+               id="tspan7882">ICO</tspan></text>
+        </g>
+      </g>
+      <g
+         id="g2191"
+         transform="rotate(-90,117.73329,9.0288118)"
+         inkscape:label="Navicon"
+         style="display:inline">
+        <rect
+           style="fill:#dda0dd;fill-opacity:0.7;stroke:#171717;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
+           id="rect2185"
+           width="93.425423"
+           height="67.814636"
+           x="6.5465822"
+           y="11.438393" />
+        <text
+           xml:space="preserve"
+           transform="matrix(-0.59298536,0,0,-0.59298536,-117.51127,311.88157)"
+           id="text2189"
+           style="line-height:0;white-space:pre;shape-inside:url(#rect2193);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+             x="-283.89258"
+             y="409.34624"
+             id="tspan7886"><tspan
+               style="line-height:1.25"
+               id="tspan7884">NavIcon
+</tspan></tspan><tspan
+             x="-283.89258"
+             y="417.25797"
+             id="tspan7890"><tspan
+               style="font-size:8.32885px;line-height:0.35"
+               id="tspan7888">View: Expanded</tspan></tspan></text>
+        <g
+           id="g5061"
+           transform="matrix(0,1.0000059,-0.99297564,0,98.777879,8.6900379)"
+           inkscape:label="ButtonX-expandido">
+          <rect
+             style="fill:#b0c4de;fill-opacity:1;stroke:#171717;stroke-width:0.21897;stroke-dasharray:none;stroke-opacity:1"
+             id="rect5055"
+             width="60.471825"
+             height="28.741003"
+             x="6.4147987"
+             y="2.9803567" />
+          <text
+             xml:space="preserve"
+             transform="matrix(0.59298536,0,0,0.59298536,178.19254,-231.05439)"
+             id="text5059-2"
+             style="line-height:0;white-space:pre;shape-inside:url(#rect5063-9);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+               x="-283.89258"
+               y="409.34624"
+               id="tspan7894"><tspan
+                 style="line-height:1.25"
+                 id="tspan7892">ButtonX/MenuX
+</tspan></tspan><tspan
+               x="-283.89258"
+               y="417.27148"
+               id="tspan7898"><tspan
+                 style="font-size:8.35824px;line-height:0.35"
+                 id="tspan7896">View: Exp</tspan></tspan></text>
+          <rect
+             style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.531033;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.519108"
+             id="rect5363"
+             width="9.0646114"
+             height="9.2934456"
+             x="10.421017"
+             y="19.911087" />
+          <rect
+             style="display:inline;fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.531033;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.519108"
+             id="rect5363-5"
+             width="19.823994"
+             height="7.5676894"
+             x="23.034571"
+             y="20.773966" />
+          <rect
+             style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.531033;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.519108"
+             id="rect5392"
+             width="9.0646114"
+             height="9.2934456"
+             x="53.342594"
+             y="19.911087" />
+          <text
+             xml:space="preserve"
+             transform="matrix(0.59298535,0,0,0.54681911,179.6325,-195.30178)"
+             id="text5059"
+             style="font-size:7.4605px;white-space:pre;shape-inside:url(#rect5063);display:inline;fill:#000000;fill-opacity:0.768522;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+               x="-283.89258"
+               y="405.21586"
+               id="tspan7900">ICO</tspan></text>
+          <text
+             xml:space="preserve"
+             transform="matrix(0.59298535,0,0,0.54681911,193.00873,-195.83469)"
+             id="text5594"
+             style="font-size:8.35824px;white-space:pre;shape-inside:url(#rect5596);display:inline;fill:#000000;fill-opacity:0.768522;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+               x="-283.89258"
+               y="406.03269"
+               id="tspan7902">Label</tspan></text>
+          <text
+             xml:space="preserve"
+             transform="matrix(0.59298535,0,0,0.54681911,222.49482,-195.30178)"
+             id="text5600"
+             style="font-size:7.4605px;white-space:pre;shape-inside:url(#rect5602);display:inline;fill:#000000;fill-opacity:0.768522;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+               x="-283.89258"
+               y="405.21586"
+               id="tspan7904">ICO</tspan></text>
+        </g>
+      </g>
+    </g>
+    <g
+       id="g1098-2-9-6"
+       transform="translate(4.3288817,247.2073)"
+       inkscape:label="FooterZone">
+      <rect
+         style="fill:#2f4f4f;fill-opacity:0.3;stroke:#171717;stroke-width:0.52916667;stroke-dasharray:none;stroke-opacity:1"
+         id="rect111-9-3-2"
+         width="188.17082"
+         height="30.499775"
+         x="6.5422783"
+         y="6.6715889" />
+      <text
+         xml:space="preserve"
+         transform="matrix(0.59298536,0,0,0.59298536,179.40293,-224.36356)"
+         id="text971-1-6-6"
+         style="line-height:0;white-space:pre;shape-inside:url(#rect973-6-0-0);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan
+           x="-283.89258"
+           y="409.34624"
+           id="tspan7908"><tspan
+             style="line-height:1.25"
+             id="tspan7906">FooterZone
+</tspan></tspan><tspan
+           x="-283.89258"
+           y="416.84624"
+           id="tspan7912"><tspan
+             style="font-size:8.32885px;line-height:0.1"
+             id="tspan7910">Stack AnyComponent</tspan></tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:3.175px;fill:#7fffd4;fill-opacity:0.3;stroke:none;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
+         x="40.963024"
+         y="18.44392"
+         id="text1651"><tspan
+           sodipodi:role="line"
+           id="tspan1649"
+           style="stroke-width:0.529167"
+           x="40.963024"
+           y="18.44392"></tspan></text>
+    </g>
+  </g>
 </svg>
