@@ -1,104 +1,94 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg width="210mm" height="297mm" viewBox="0 0 210 297" version="1.1" id="svg5" sodipodi:docname="ui.svg" inkscape:version="1.2.2 (b0a8486541, 2022-12-01)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview id="namedview7" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:document-units="mm" showgrid="false" inkscape:zoom="0.66268444" inkscape:cx="170.51857" inkscape:cy="433.08698" inkscape:window-width="844" inkscape:window-height="694" inkscape:window-x="412" inkscape:window-y="2" inkscape:window-maximized="0" inkscape:current-layer="layer1" />
-  <defs id="defs2">
-    <rect x="-283.89302" y="398.42737" width="100.98031" height="15.246584" id="rect973" />
-    <rect x="-283.89301" y="398.42737" width="151.23667" height="30.966462" id="rect973-6" />
-    <rect x="-283.89301" y="398.42737" width="100.98031" height="15.246584" id="rect973-6-0" />
-    <rect x="-283.89301" y="398.42737" width="145.22079" height="21.057817" id="rect973-6-0-0" />
-    <rect x="-283.89301" y="398.42737" width="100.98031" height="15.246584" id="rect973-6-0-1" />
-    <rect x="-283.89301" y="398.42737" width="98.394904" height="30.94592" id="rect973-6-0-1-2" />
-    <rect x="-283.89301" y="398.42737" width="102.32692" height="30.479531" id="rect2193" />
-    <rect x="-283.89301" y="398.42737" width="100.98031" height="15.246584" id="rect5063" />
-    <rect x="-283.89301" y="398.42737" width="101.0492" height="30.210059" id="rect5063-9" />
-    <rect x="-283.89301" y="398.42737" width="100.98031" height="15.246584" id="rect5596" />
-    <rect x="-283.89301" y="398.42737" width="100.98031" height="15.246584" id="rect5602" />
-    <rect x="-283.89301" y="398.42737" width="101.11525" height="56.9785" id="rect5063-9-2" />
-    <rect x="-283.89301" y="398.42737" width="100.98031" height="15.246584" id="rect5063-8" />
-    <rect x="-283.89301" y="398.42737" width="100.98031" height="15.246584" id="rect5596-9" />
-    <rect x="-283.89301" y="398.42737" width="100.98031" height="15.246584" id="rect5602-7" />
-    <rect x="-283.89301" y="398.42737" width="281.36164" height="29.424078" id="rect973-6-7" />
-    <rect x="-283.89301" y="398.42737" width="151.23666" height="30.966461" id="rect973-6-7-0" />
-    <rect x="-283.89301" y="398.42737" width="101.11525" height="56.9785" id="rect5063-9-2-3" />
-    <rect x="-283.89301" y="398.42737" width="100.98031" height="15.246584" id="rect5063-8-2" />
-    <rect x="-283.89301" y="398.42737" width="101.11525" height="56.9785" id="rect5063-9-2-3-4" />
-    <rect x="-283.89301" y="398.42737" width="100.98031" height="15.246584" id="rect5063-8-2-7" />
-  </defs>
-  <g inkscape:label="Camada 1" inkscape:groupmode="layer" id="layer1">
-    <g id="g1098" inkscape:label="page">
-      <rect style="fill:#ffe4b5;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1" id="rect111" width="203.27806" height="292.86752" x="3.3609695" y="2.0662384" />
-      <text xml:space="preserve" transform="matrix(0.59298536,0,0,0.59298536,176.03693,-231.55184)" id="text971" style="white-space:pre;shape-inside:url(#rect973);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="409.34624" id="tspan2822">PageZone</tspan></text>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="210mm" height="297mm" inkscape:version="1.4 (86a8ad7, 2024-10-11)" sodipodi:docname="ui.svg" version="1.1" viewBox="0 0 210 297" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd">
+ <sodipodi:namedview bordercolor="#000000" borderopacity="0.25" inkscape:current-layer="svg5" inkscape:cx="396.42889" inkscape:cy="561.25984" inkscape:deskcolor="#d1d1d1" inkscape:document-units="mm" inkscape:pagecheckerboard="0" inkscape:pageopacity="0.0" inkscape:showpageshadow="2" inkscape:window-height="1009" inkscape:window-maximized="1" inkscape:window-width="1920" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:zoom="0.71891835" pagecolor="#ffffff"/>
+ <g>
+  <rect x="3.361" y="2.066" width="203.3" height="292.9" fill="#ffe4b5" stroke="#171717" stroke-width=".55"/>
+  <text transform="matrix(.593 0 0 .593 176 -231.6)" fill="black" font-family="'Noto Sans'" font-size="11.9px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;shape-inside:url(#rect973);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="409.25379">PageZone</tspan></text>
+ </g>
+ <g transform="translate(4.372 12.67)">
+  <rect x="6.623" y="4.211" width="188" height="108.5" fill="#fa8072" fill-opacity=".3" stroke="#171717" stroke-width=".5565"/>
+  <g transform="translate(6.18 21.62)">
+   <rect x="6.579" y="4.732" width="175.7" height="81.27" fill="#6495ed" fill-opacity=".6078" stroke="#171717" stroke-width=".5638"/>
+   <g transform="matrix(.9994 0 0 1.423 4.647 23.67)">
+    <g fill="#789" fill-opacity=".356" stroke="#171717" stroke-dasharray="1.45682, 1.45682" stroke-opacity=".7" stroke-width=".602">
+     <rect x="6.494" y=".1011" width="52.24" height="40.36"/>
+     <rect x="63.79" y=".1011" width="52.24" height="40.36"/>
+     <rect x="121" y=".1011" width="52.24" height="40.36"/>
     </g>
-    <g id="g1098-2" transform="translate(4.3723164,12.666407)" inkscape:label="HeaderZone">
-      <rect style="fill:#fa8072;fill-opacity:0.3;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1" id="rect111-9" width="188.01595" height="105.96692" x="6.6197157" y="6.7490263" />
-      <g id="g1098-2-8" transform="translate(6.1797949,21.617255)" inkscape:label="HeaderBar" style="display:inline">
-        <rect style="fill:#6495ed;fill-opacity:0.60784;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1" id="rect111-9-4" width="175.75183" height="77.332817" x="6.5719633" y="6.7012739" />
-        <g id="g1098-2-8-3" transform="matrix(0.99938867,0,0,1.4233848,4.6472302,22.612067)" inkscape:label="HeaderBar" style="display:inline">
-          <rect style="fill:#778899;fill-opacity:0.356007;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.33102, 1.33102;stroke-dashoffset:0;stroke-opacity:0.7" id="rect111-9-4-6" width="52.255703" height="33.681374" x="6.4626184" y="5.0043592" />
-          <rect style="display:inline;fill:#778899;fill-opacity:0.356007;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.33102, 1.33102;stroke-dashoffset:0;stroke-opacity:0.7" id="rect111-9-4-6-0" width="52.255703" height="33.681374" x="63.776703" y="5.0043592" />
-          <rect style="display:inline;fill:#778899;fill-opacity:0.356007;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.33102, 1.33102;stroke-dashoffset:0;stroke-opacity:0.7" id="rect111-9-4-6-0-6" width="52.255703" height="33.681374" x="120.99286" y="5.0043592" />
-          <g id="g5061-3-0" transform="matrix(1.0006176,0,0,0.69761575,4.5469435,4.9399361)" inkscape:label="ButtonX-expandido" style="display:inline" inkscape:transform-center-x="-28.451243" inkscape:transform-center-y="9.8635768">
-            <rect style="fill:#b0c4de;fill-opacity:1;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1" id="rect5055-6-6" width="20.016701" height="42.510254" x="6.3817787" y="2.947262" />
-            <text xml:space="preserve" transform="matrix(0.59298536,0,0,0.59298536,177.13422,-229.45566)" id="text5059-2-1-1" style="line-height:0;white-space:pre;shape-inside:url(#rect5063-9-2-3-4);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="405.14624" id="tspan2826"><tspan style="line-height:0.55" id="tspan2824">BtX
-</tspan></tspan><tspan x="-283.89258" y="415.94624" id="tspan2832"><tspan style="line-height:0.55" id="tspan2828">MnX</tspan><tspan style="line-height:1.25" id="tspan2830">
-</tspan></tspan><tspan x="-283.89258" y="423.70674" id="tspan2836"><tspan style="font-size:8px;line-height:0.35" id="tspan2834">View:
-</tspan></tspan><tspan x="-283.89258" y="431.30673" id="tspan2840"><tspan style="font-size:8px;line-height:1.55" id="tspan2838">Coll.</tspan></tspan></text>
-            <rect style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.7" id="rect5363-2-5" width="9.0646114" height="9.2934456" x="11.479343" y="31.635113" />
-            <text xml:space="preserve" transform="matrix(0.59298535,0,0,0.54681911,180.69082,-183.57776)" id="text5059-1-5" style="font-size:7.4605px;white-space:pre;shape-inside:url(#rect5063-8-2-7);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="405.21586" id="tspan2842">ICO</tspan></text>
-          </g>
-        </g>
-        <text xml:space="preserve" transform="matrix(0.59298536,0,0,0.59298536,179.29095,-225.56195)" id="text971-1-5" style="line-height:0;white-space:pre;shape-inside:url(#rect973-6-7);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="409.34624" id="tspan2846"><tspan style="line-height:1.25" id="tspan2844">HeaderBar
-</tspan></tspan><tspan x="-283.89258" y="416.84624" id="tspan2850"><tspan style="font-size:8px" id="tspan2848">
-</tspan></tspan><tspan x="-283.89258" y="417.98573" id="tspan2854"><tspan style="font-size:8px" id="tspan2852">AnyComponent, NavIcon, ButtonX or MenuX in any sub area</tspan></tspan></text>
-      </g>
-      <text xml:space="preserve" transform="matrix(0.59298536,0,0,0.59298536,179.29095,-225.56195)" id="text971-1" style="line-height:0;white-space:pre;shape-inside:url(#rect973-6);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="409.34624" id="tspan2858"><tspan style="line-height:1.25" id="tspan2856">HeaderZone
-</tspan></tspan><tspan x="-283.89258" y="416.84624" id="tspan2862"><tspan style="font-size:8px;line-height:0.1" id="tspan2860">Stack AnyComponent | HeaderBar</tspan></tspan></text>
+    <g transform="matrix(1.001 0 0 .6976 4.547 6.427)">
+     <g>
+      <rect x="6.382" y="2.947" width="20.02" height="42.51" fill="#b0c4de" stroke="#171717" stroke-width=".55"/>
+      <text transform="matrix(.593 0 0 .593 177.1 -229.5)" fill="black" font-family="'Noto Sans'" font-size="11.94px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect5063-9-2-3-4);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="405.11281"><tspan style="line-height:0.55">BtX
+</tspan></tspan><tspan x="-283.89258" y="415.85909"><tspan style="line-height:0.55">MnX</tspan><tspan style="line-height:1.25">
+</tspan></tspan></text>
+      <text transform="matrix(.593 0 0 .6218 177.6 -230)" fill="black" font-family="'Noto Sans'" font-size="8.358px" font-style="italic" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1;shape-inside:url(#rect67-8);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="404.98791">View:
+</tspan><tspan x="-283.89258" y="413.34616">Coll.</tspan></text>
+     </g>
+     <rect x="11.48" y="31.64" width="9.065" height="9.293" fill="#1e90ff" fill-opacity=".3403" stroke="#171717" stroke-dasharray="1.5931, 1.5931" stroke-opacity=".7" stroke-width=".55"/>
+     <text transform="matrix(.593 0 0 .5468 180.7 -183.6)" fill="black" font-family="'Noto Sans'" font-size="6.839px" font-weight="bold" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;shape-inside:url(#rect5063-8-2-7);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="404.65018">ICO</tspan></text>
     </g>
-    <g id="g1098-2-9" transform="translate(4.3288817,124.42056)" inkscape:label="EnclosureContent">
-      <rect style="fill:#7fffd4;fill-opacity:0.3;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1" id="rect111-9-3" width="188.00452" height="119.55788" x="6.6254292" y="7.7838016" />
-      <text xml:space="preserve" transform="matrix(0.59298536,0,0,0.59298536,179.40293,-224.36356)" id="text971-1-6" style="white-space:pre;shape-inside:url(#rect973-6-0);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="409.34624" id="tspan2864">EnclosureContent</tspan></text>
-      <g id="g1098-2-9-8" transform="matrix(1.0000059,0,0,0.99297565,37.208455,22.665143)" inkscape:label="ContentWrapper">
-        <rect style="fill:#fdf5e6;fill-opacity:1;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1" id="rect111-9-3-7" width="113.6843" height="94.027222" x="6.5767121" y="3.1423435" />
-        <text xml:space="preserve" transform="matrix(0.59298536,0,0,0.59298536,179.65906,-229.23233)" id="text971-1-6-9" style="white-space:pre;shape-inside:url(#rect973-6-0-1);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="409.34624" id="tspan2866">ContentWrapper</tspan></text>
-      </g>
-      <g id="g1098-2-9-8-0" transform="rotate(-90,66.112563,59.615501)" inkscape:label="Navicon" style="display:inline">
-        <rect style="fill:#dda0dd;fill-opacity:0.7;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1" id="rect111-9-3-7-2" width="93.49852" height="23.609182" x="6.5100222" y="6.6393328" />
-        <text xml:space="preserve" transform="matrix(0.59298536,0,0,0.59298536,179.40293,-224.36356)" id="text971-1-6-9-3" style="line-height:0;white-space:pre;shape-inside:url(#rect973-6-0-1-2);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="409.34624" id="tspan2870"><tspan style="line-height:1.25" id="tspan2868">NavIcon
-</tspan></tspan><tspan x="-283.89258" y="417.10674" id="tspan2874"><tspan style="font-size:8px;line-height:0.35" id="tspan2872">View: Collapsed</tspan></tspan></text>
-        <g id="g5061-3" transform="matrix(0,1.0000059,-0.99297564,0,99.002696,2.0536972)" inkscape:label="ButtonX-expandido" style="display:inline">
-          <rect style="fill:#b0c4de;fill-opacity:1;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1" id="rect5055-6" width="20.016701" height="42.510254" x="6.3817787" y="2.947262" />
-          <text xml:space="preserve" transform="matrix(0.59298536,0,0,0.59298536,177.13422,-229.45566)" id="text5059-2-1" style="line-height:0;white-space:pre;shape-inside:url(#rect5063-9-2);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="405.14624" id="tspan2878"><tspan style="line-height:0.55" id="tspan2876">BtX
-</tspan></tspan><tspan x="-283.89258" y="415.94624" id="tspan2884"><tspan style="line-height:0.55" id="tspan2880">MnX</tspan><tspan style="line-height:1.25" id="tspan2882">
-</tspan></tspan><tspan x="-283.89258" y="423.70674" id="tspan2888"><tspan style="font-size:8px;line-height:0.35" id="tspan2886">View:
-</tspan></tspan><tspan x="-283.89258" y="435.54623" id="tspan2892"><tspan style="line-height:1.55" id="tspan2890">Coll.</tspan></tspan></text>
-          <rect style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.7" id="rect5363-2" width="9.0646114" height="9.2934456" x="11.479343" y="31.635113" />
-          <text xml:space="preserve" transform="matrix(0.59298535,0,0,0.54681911,180.69082,-183.57776)" id="text5059-1" style="font-size:7.4605px;white-space:pre;shape-inside:url(#rect5063-8);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="405.21586" id="tspan2894">ICO</tspan></text>
-        </g>
-      </g>
-      <g id="g2191" transform="rotate(-90,117.20413,8.4996452)" inkscape:label="Navicon" style="display:inline">
-        <rect style="fill:#dda0dd;fill-opacity:0.7;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1" id="rect2185" width="93.425423" height="67.814636" x="6.5465822" y="11.438393" />
-        <text xml:space="preserve" transform="matrix(-0.59298536,0,0,-0.59298536,-117.51127,311.88157)" id="text2189" style="line-height:0;white-space:pre;shape-inside:url(#rect2193);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="409.34624" id="tspan2898"><tspan style="line-height:1.25" id="tspan2896">NavIcon
-</tspan></tspan><tspan x="-283.89258" y="417.10674" id="tspan2902"><tspan style="font-size:8px;line-height:0.35" id="tspan2900">View: Expanded</tspan></tspan></text>
-        <g id="g5061" transform="matrix(0,1.0000059,-0.99297564,0,98.777879,8.6900379)" inkscape:label="ButtonX-expandido">
-          <rect style="fill:#b0c4de;fill-opacity:1;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1" id="rect5055" width="60.471825" height="28.741003" x="6.4147987" y="2.9803567" />
-          <text xml:space="preserve" transform="matrix(0.59298536,0,0,0.59298536,178.19254,-231.05439)" id="text5059-2" style="line-height:0;white-space:pre;shape-inside:url(#rect5063-9);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="409.34624" id="tspan2906"><tspan style="line-height:1.25" id="tspan2904">ButtonX/MenuX
-</tspan></tspan><tspan x="-283.89258" y="417.10674" id="tspan2910"><tspan style="font-size:8px;line-height:0.35" id="tspan2908">View: Exp</tspan></tspan></text>
-          <rect style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.7" id="rect5363" width="9.0646114" height="9.2934456" x="10.421017" y="19.911087" />
-          <rect style="display:inline;fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.7" id="rect5363-5" width="19.823994" height="7.5676894" x="23.034571" y="20.773966" />
-          <rect style="fill:#1e90ff;fill-opacity:0.340298;stroke:#171717;stroke-width:0.55;stroke-dasharray:1.5931, 1.5931;stroke-dashoffset:0;stroke-opacity:0.7" id="rect5392" width="9.0646114" height="9.2934456" x="53.342594" y="19.911087" />
-          <text xml:space="preserve" transform="matrix(0.59298535,0,0,0.54681911,179.6325,-195.30178)" id="text5059" style="font-size:7.4605px;white-space:pre;shape-inside:url(#rect5063);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="405.21586" id="tspan2912">ICO</tspan></text>
-          <text xml:space="preserve" transform="matrix(0.59298535,0,0,0.54681911,193.00873,-195.83469)" id="text5594" style="font-size:8px;white-space:pre;shape-inside:url(#rect5596);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="405.70674" id="tspan2914">Label</tspan></text>
-          <text xml:space="preserve" transform="matrix(0.59298535,0,0,0.54681911,222.49482,-195.30178)" id="text5600" style="font-size:7.4605px;white-space:pre;shape-inside:url(#rect5602);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="405.21586" id="tspan2916">ICO</tspan></text>
-        </g>
-      </g>
+    <g fill="black" fill-opacity=".4853" font-family="'Noto Sans'" font-size="11.9px" stroke-width="2">
+     <text transform="matrix(.5933 0 0 .4166 178.6 -164.1)" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect973-6-7-1);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="407.08855"><tspan font-size="9.519px" font-weight="bold" style="line-height:1.25">LeftZone</tspan></tspan></text>
+     <text transform="matrix(.5933 0 0 .4166 236.9 -164.1)" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect1);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="407.08855"><tspan font-size="9.519px" font-weight="bold" style="line-height:1.25">MiddleZone</tspan></tspan></text>
+     <text transform="matrix(.5933 0 0 .4166 294.1 -164.1)" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect47);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="407.08855"><tspan font-size="9.519px" font-weight="bold" style="line-height:1.25">RightZone</tspan></tspan></text>
     </g>
-    <g id="g1098-2-9-6" transform="translate(4.3288817,251.44066)" inkscape:label="FooterZone">
-      <rect style="fill:#2f4f4f;fill-opacity:0.3;stroke:#171717;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1" id="rect111-9-3-2" width="188.17082" height="30.499775" x="6.5422783" y="6.6715889" />
-      <text xml:space="preserve" transform="matrix(0.59298536,0,0,0.59298536,179.40293,-224.36356)" id="text971-1-6-6" style="line-height:0;white-space:pre;shape-inside:url(#rect973-6-0-0);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"><tspan x="-283.89258" y="409.34624" id="tspan2920"><tspan style="line-height:1.25" id="tspan2918">FooterZone
-</tspan></tspan><tspan x="-283.89258" y="416.84624" id="tspan2924"><tspan style="font-size:8px;line-height:0.1" id="tspan2922">Stack AnyComponent</tspan></tspan></text>
-      <text xml:space="preserve" style="font-size:3.2px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.55;stroke-dasharray:none;stroke-opacity:1" x="40.963024" y="18.44392" id="text1651"><tspan sodipodi:role="line" id="tspan1649" style="stroke-width:0.55;fill:#000000;fill-opacity:1" x="40.963024" y="18.44392" /></text>
-    </g>
+   </g>
+   <text transform="matrix(.593 0 0 .593 179.8 -228.4)" fill="black" font-family="'Noto Sans'" font-size="11.9px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect973-6-7);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="409.25379"><tspan style="line-height:1.25">HeaderBar</tspan></tspan></text>
+   <text transform="matrix(.593 0 0 .593 179.8 -222)" fill="black" font-family="'Noto Sans'" font-size="11.9px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect69);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="406.00595"><tspan font-size="8.329px" font-style="italic" style="line-height:1.25">AnyComponent, NavIcon, ButtonX or MenuX in any sub area</tspan></tspan></text>
   </g>
+  <text transform="matrix(.593 0 0 .593 179.5 -228.4)" fill="black" font-family="'Noto Sans'" font-size="11.9px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect973-6);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="409.25379"><tspan style="line-height:1.25">HeaderZone</tspan></tspan></text>
+  <text transform="matrix(.593 0 0 .593 179.5 -221.5)" fill="black" font-family="'Noto Sans'" font-size="11.9px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect68);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="406.00595"><tspan font-size="8.329px" font-style="italic" style="line-height:1.25">Stack AnyComponent | HeaderBar</tspan></tspan></text>
+ </g>
+ <g transform="translate(4.329 124.4)">
+  <rect x="6.625" y="7.784" width="188" height="119.6" fill="#7fffd4" fill-opacity=".3" stroke="#171717" stroke-width=".55"/>
+  <text transform="matrix(.593 0 0 .593 179.4 -224.4)" fill="black" font-family="'Noto Sans'" font-size="11.9px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;shape-inside:url(#rect973-6-0);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="409.25379">EnclosureContent</tspan></text>
+  <g transform="matrix(1 0 0 .993 37.21 22.67)">
+   <rect x="6.577" y="3.142" width="113.7" height="94.03" fill="#fdf5e6" stroke="#171717" stroke-width=".55"/>
+   <text transform="matrix(.593 0 0 .593 179.7 -229.2)" fill="black" font-family="'Noto Sans'" font-size="11.94px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;shape-inside:url(#rect973-6-0-1);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="409.29192">ContentWrapper</tspan></text>
+  </g>
+  <g transform="rotate(-90 66.11 59.62)">
+   <rect x="6.51" y="6.639" width="93.5" height="23.61" fill="#dda0dd" fill-opacity=".7" stroke="#171717" stroke-width=".55"/>
+   <text transform="matrix(.593 0 0 .593 179.4 -224.4)" fill="black" font-family="'Noto Sans'" font-size="11.9px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect973-6-0-1-2);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="409.25379"><tspan style="line-height:1.25">NavIcon</tspan></tspan></text>
+   <g transform="matrix(0 1 -.993 0 99 2.054)">
+    <rect x="6.382" y="2.947" width="20.02" height="42.51" fill="#b0c4de" stroke="#171717" stroke-width=".55"/>
+    <text transform="matrix(.593 0 0 .593 177.1 -229.5)" fill="black" font-family="'Noto Sans'" font-size="11.94px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect5063-9-2);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="405.11281"><tspan style="line-height:0.55">BtX
+</tspan></tspan><tspan x="-283.89258" y="415.85909"><tspan style="line-height:0.55">MnX</tspan><tspan style="line-height:1.25">
+</tspan></tspan></text>
+    <rect x="11.48" y="31.64" width="9.065" height="9.293" fill="#1e90ff" fill-opacity=".3403" stroke="#171717" stroke-dasharray="1.5931, 1.5931" stroke-opacity=".7" stroke-width=".55"/>
+    <text transform="matrix(.593 0 0 .5468 180.7 -183.6)" fill="black" font-family="'Noto Sans'" font-size="6.839px" font-weight="bold" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;shape-inside:url(#rect5063-8);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="404.65018">ICO</tspan></text>
+    <text transform="matrix(.593 0 0 .6218 177.1 -230.2)" fill="black" font-family="'Noto Sans'" font-size="8.358px" font-style="italic" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1;shape-inside:url(#rect67);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="404.98791">View:
+</tspan><tspan x="-283.89258" y="413.34616">Coll.</tspan></text>
+   </g>
+   <text transform="matrix(.593 0 0 .593 179.4 -218)" fill="black" font-family="'Noto Sans'" font-size="8.329px" font-style="italic" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect71);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="406.00595"><tspan style="line-height:1.25">View: Collapsed</tspan></tspan></text>
+  </g>
+  <g transform="rotate(-90 117.2 8.5)">
+   <rect x="6.547" y="11.44" width="93.43" height="67.81" fill="#dda0dd" fill-opacity=".7" stroke="#171717" stroke-width=".55"/>
+   <text transform="matrix(-.593 0 0 -.593 -117.5 311.9)" fill="black" font-family="'Noto Sans'" font-size="11.9px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect2193);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="409.25379"><tspan style="line-height:1.25">NavIcon
+</tspan></tspan></text>
+   <g transform="matrix(0 1 -.993 0 98.78 8.69)">
+    <rect x="6.415" y="2.98" width="60.47" height="28.74" fill="#b0c4de" stroke="#171717" stroke-width=".55"/>
+    <text transform="matrix(.593 0 0 .593 178.2 -231.1)" fill="black" font-family="'Noto Sans'" font-size="11.94px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect5063-9);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="409.29192"><tspan style="line-height:1.25">ButtonX/MenuX
+</tspan></tspan></text>
+    <g fill="#1e90ff" fill-opacity=".3403" stroke="#171717" stroke-dasharray="1.5931, 1.5931" stroke-opacity=".7" stroke-width=".55">
+     <rect x="10.42" y="19.91" width="9.065" height="9.293"/>
+     <rect x="23.03" y="20.77" width="19.82" height="7.568"/>
+     <rect x="53.34" y="19.91" width="9.065" height="9.293"/>
+    </g>
+    <g fill="black" font-family="'Noto Sans'" stroke-width="2">
+     <g font-size="6.839px" font-weight="bold">
+      <text transform="matrix(.593 0 0 .5468 179.6 -195.3)" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;shape-inside:url(#rect5063);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="404.65018">ICO</tspan></text>
+      <text transform="matrix(.593 0 0 .5468 193 -195.3)" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;shape-inside:url(#rect5596);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="404.65018">Label</tspan></text>
+      <text transform="matrix(.593 0 0 .5468 222.5 -195.3)" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;shape-inside:url(#rect5602);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="404.65018">ICO</tspan></text>
+     </g>
+     <text transform="matrix(.593 0 0 .593 178.2 -221.5)" font-size="8.358px" font-style="italic" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect65);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="400.80879">View: Exp</tspan></text>
+    </g>
+   </g>
+   <text transform="matrix(-.593 0 0 -.593 -117.5 302.4)" fill="black" font-family="'Noto Sans'" font-size="8.329px" font-style="italic" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect61);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="400.80042">View: Expanded</tspan></text>
+  </g>
+ </g>
+ <g transform="translate(4.329 252)">
+  <rect x="6.542" y="6.672" width="188.2" height="30.5" fill="#2f4f4f" fill-opacity=".3" stroke="#171717" stroke-width=".55"/>
+  <text transform="matrix(.593 0 0 .593 179.4 -224.4)" fill="black" font-family="'Noto Sans'" font-size="11.9px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect973-6-0-0);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="409.25379"><tspan style="line-height:1.25">FooterZone</tspan></tspan></text>
+  <text transform="matrix(.593 0 0 .593 179.4 -218)" fill="black" font-family="'Noto Sans'" font-size="8.329px" stroke-width="2" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0;shape-inside:url(#rect70);white-space:pre" xml:space="preserve"><tspan x="-283.89258" y="406.00595"><tspan style="line-height:1.25">Stack AnyComponent</tspan></tspan></text>
+ </g>
 </svg>
