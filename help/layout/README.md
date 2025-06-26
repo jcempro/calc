@@ -88,19 +88,6 @@ O `PageZone` pode conter os seguintes subcomponentes:
 - //#3: empilhados horizontalmente - ocupam,juntos, toda a área horizontal
 ```
 
-## 🔹 Componentes Principais
-
-### `[0] PageZone`
-
-> Contêiner pai da interface.
-
-**Comporta:**
-
-- Até 1 `HeaderZone`
-- Até 2 `NavIcon` (horizontal ou vertical)
-- Até 1 `FootZone`
-- Até 1 `ContentWrapper` (que pode conter outro `PageZone` recursivamente)
-
 #### 🧩 Fluxograma de Composição
 
 ```mermaid
@@ -169,139 +156,27 @@ graph LR
     Hub --> B
 ```
 
-### `[1] HeaderZone`
-
-> Área de cabeçalho.
-
-- Lista empilhável verticalmente de `HeaderBar`.
-- Altura dinâmica, conforme conteúdo.
-
-### `HeaderBar`
-
-#### Estrutura interna:
-
-```
- [LeftItems*]? ([Title|MiddleContent]? [SearchComponent]?) ([SearchComponent]?[RightItems*])?
-```
-
-> Cabeçalho horizontal com 3 zonas:
-
-- **Left:** alinhado à esquerda.
-- **Middle:** ocupa o centro (conteúdo centralizado, à esquerda ou direita).
-- **Right:** alinhado à direita.
-
-**Funcionalidades:**
-
-- Suporta `NavIcon` (horizontal) em qualquer zona.
-- Suporta qualquer outro componente (`*`) exceto PageZone.
-- Pode ser "**sempre visível**", fixando no topo ao rolar, sem alterar o scroll.
-- Múltiplos `HeaderBar` fixados se empilham na ordem.
-- Overflow tratado via submenus, sem scroll horizontal.
-
-#### 📐 Distribuição Interna (Flat View)
-
-```
-[LeftZone] [MiddleZone] [RightZone]
-```
-
----
-
-### `[2] NavIcon`
-
-#### Estrutura interna:
-
-```
-[Input:radio]? [Container] → [Lista:ul] → ([ButtonX] | [MenuX])\*
-```
-
-> Barra de ferramentas (`ButtonX`), com modos:
-
-- **Vertical:** fixa ou flutuante, expansível/retrátil (aumenta largura).
-- **Horizontal:** não muda largura, mas ajusta o layout dos botões.
-
-#### 📐 Modos de largura no Horizontal
-
-- `100%` do espaço disponível.
-- Largura fixa (mas responsiva).
-- Largura mínima necessária.
-
-#### 📐 Overflow
-
-- Nunca usa scrollbar → cria submenus ou colapsa.
-
----
-
-### `[3] FootZone`
-
-> Área de rodapé.
-
-- Idêntica ao `ContentWrapper`.
-- Pode conter qualquer outro componente (`*`) exceto PageZone.
-
----
-
-### `[4] ContentWrapper`
-
-> Área de conteúdo principal.
-
-- Aceita qualquer componente (`*`), inclusive outro `PageZone` (nesting infinito).
-
----
-
-## 🔘 Componente Auxiliar
-
-### `ButtonX`
-
-> Botão genérico, responsivo e customizável.
-
-#### 📐 Estrutura Interna
-
-```
-[LeftIcon]? [Caption]? [RightIcon]?
-```
-
-- `RightIcon` só aparece se `Caption` estiver presente.
-
-#### 📐 Alinhamento
-
-- `LeftIcon` + `Caption` → esquerda (padrão) ou centralizado (opcional).
-- Apenas `LeftIcon` → centralizado.
-- `RightIcon` → sempre à direita.
-
-#### 📐 Modos de layout
-
-- **Inline:** ocupa o espaço necessário.
-- **Full:** todos os irmãos com mesma largura (fixa ou baseada no maior).
-
-**Compatível com expansão de `NavIcon`.**
-
----
-
-## MenuX
-
-> Extende Button
-
-#### 📐 Estrutura Interna
-
-```
-[input:radio] [ButtonX] [NavIcon]
-```
-
----
-
-## 🔧 Animações e Estados
-
-- Totalmente CSS/SCSS/DaisyUI.
-- Transições suaves e rápidas.
-- Estados controlados via CSS puro (`input`, `:checked`, `:has`, `data-*`, `:focus`,...).
-- Sem uso de JS para estilos/animações/efeitos (salvo quando impossível por CSS).
-
----
-
 ## 🔍 Overflow
 
 - `HeaderBar` e `NavIcon` **não usam scroll**.
 - Overflow tratado com submenus ou agrupamentos de forma automática.
+
+---
+
+## Desenvolvimento
+
+### Estilos
+
+- Totalmente CSS/SCSS/DaisyUI.
+- Transições suaves e rápidas.
+- Estados controlados via CSS puro (`input`, `:checked`, `:has`, `data-*`, `:focus`,...).
+
+### Prioridades
+
+- Acessibilidade (aria-label quando aplicável)
+- Performance (zero JS para estado/animações/transições)
+- Usa helper `resolveClassName()` para tratamento de classes
+- Componentes removem duplicidade e conflitos de estilos (DaisyUI ou classes)
 
 ## Icones
 
@@ -309,19 +184,23 @@ graph LR
 - Uso de @fortawesome/react-fontawesome;
 - Se ícone fornecido como string: interprete para lidar corretamente, mas emita logger.warn.
 
----
+### Boas práticas
 
-## ✔️ Regras Gerais
+- Mensagens de log/warn/error via `Logger`
+- Manutenção git-friendly (evitar breaking changes)
+- Comentários objetivos para mudanças complexas
+- Manter a documentação de topo do código com ajustes mínimos e pontuais quando necessários
+- Comentários de uma única linha são preferíveis, exceto quando para jsDoc
+- Todos os componentes permitem sobrescrever estilos (DaisyUI ou classes)
+- Layout otimizado para modularidade, performance e clareza de estados
 
-- Todos os componentes permitem sobrescrever estilos (DaisyUI ou classes).
-- `ContentWrapper` e `FootZone` aceitam qualquer componente (`*`).
-- Layout otimizado para modularidade, performance e clareza de estados.
-- Os componentes devem remover duplicidade e conflitos de estilos (DaisyUI ou classes);
-- Projeto base:
-  - DaisyUI;
-  - tailwind-merge;
-  - tailwind-variants;
-  - clsx;
-  - tsx;
-  - PeacJS
-  - vite
+### Projeto base
+
+- DaisyUI
+- `tailwind-merge`
+- `tailwind-variants`
+- `clsx`
+- `.tsx`
+- `PeacJS`
+- `vite`
+- `TypeScript`
