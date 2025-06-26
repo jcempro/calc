@@ -1,6 +1,3 @@
-[submodule "vendor/jcemTS"]
-	path = vendor/jcemTS
-	url = https://github.com/JeanCarloEM/jcemTS.git
 [submodule "modules/jcemUI"]
 	path = modules/jcemUI
 	url = https://github.com/JeanCarloEM/jcemUI.git

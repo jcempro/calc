@@ -32,6 +32,7 @@
 
 		"baseUrl": ".",
 		"paths": {
+			"@mod/*": ["modules/*"],
 			"@ext/*": ["src/scripts/components/*"],
 			"@/*": ["*"],
 			"@tsx/*": ["src/scripts/tsx/*"],
@@ -41,6 +42,7 @@
 		}
 	},
 	"include": [
+		"modules",
 		"src/scripts/ts/types/env.d.ts",
 		"src",
 		"scripts",

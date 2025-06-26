@@ -1,15 +1,11 @@
 import { render } from 'preact';
-import { HeaderSectionTop } from './main/HeaderSectionTop';
-import { SectionWrapper } from './main/SectionWrapper';
-import { Footer } from './main/Footer';
-import { PageZone } from '../components/PageZone/PageZone';
 import '../../assets/css/tailwind.css';
 import '../../__generated__/fontawesome';
-import { FooterZone } from '@ext/FooterZone/FooterZone';
-import { HeaderBar } from '@ext/HeaderBar/HeaderBar';
-import { HeaderZone } from '@ext/HeaderZone/HeaderZone';
-import { Button, Menu, NavIcon } from '@ext/NavIcon/NavIcon';
-import { ContentWrapper } from '@ext/ContentWrapper/ContentWrapper';
+import { ContentWrapper } from '@mod/jcemUI/src/scripts/components/ContentWrapper/ContentWrapper';
+import { FooterZone } from '@mod/jcemUI/src/scripts/components/FooterZone/FooterZone';
+import { HeaderBar } from '@mod/jcemUI/src/scripts/components/HeaderBar/HeaderBar';
+import { HeaderZone } from '@mod/jcemUI/src/scripts/components/HeaderZone/HeaderZone';
+import { PageZone } from '@mod/jcemUI/src/scripts/components/PageZone/PageZone';
 
 export default function Master() {
 	return (
@@ -19,7 +15,7 @@ export default function Master() {
 			compact
 			left={{
 				itens: [
-					{ label: 'Home', icon: 'house', kind: 'button' },
+					{ label: 'Casa', icon: 'house', kind: 'button' },
 					{
 						kind: 'menu',
 						label: 'Mais',
