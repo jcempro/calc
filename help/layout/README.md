@@ -104,17 +104,69 @@ O `PageZone` pode conter os seguintes subcomponentes:
 #### 🧩 Fluxograma de Composição
 
 ```mermaid
-graph TD
-    A[PageZone] --> B[HeaderZone]
-    A --> C[NavIcon]
-    A --> D[ContentWrapper]
-    A --> E[FootZone]
-    B --> F[HeaderBar]
-    F --> G[Left Zone]
-    F --> H[Middle Zone]
-    F --> I[Right Zone]
-    C --> J[ButtonX]
-    D --> A
+graph LR
+    %% Nó raiz
+    P([PageZone])
+
+    %% Subgrupos
+    subgraph HeaderZone
+        H[HeaderZone]
+        T[HeaderBar]
+        L[Left Zone]
+        M[Middle Zone]
+        R[Right Zone]
+    end
+
+    subgraph EnclosureContent
+        E[EnclosureContent]
+        N[Navicon]
+        C[ContentWrapper]
+    end
+
+    A[AnyContent]
+
+    subgraph Actions
+        B[ButtonX]
+        X[MenuX]
+    end
+
+    F[FootZone]
+
+    %% Hubs invisíveis
+    Hub[" "]
+    Hub2[" "]
+
+    %% Ligações principais
+    P --> H
+    P --> E
+    P --> F
+
+    %% Header detalhado
+    H --> T
+    T --> L
+    T --> M
+    T --> R
+
+    %% EnclosureContent detalhado
+    E --> N
+    E --> C
+    C --> A
+    C -.-> P
+
+    N --> Hub2
+    Hub2 --> B
+    Hub2 --> X
+
+    %% Footer
+    F --> A
+
+    %% Convergência única (L, M, R → Hub → A, X, B)
+    L --> Hub
+    M --> Hub
+    R --> Hub
+    Hub --> A
+    Hub --> X
+    Hub --> B
 ```
 
 ### `[1] HeaderZone`
