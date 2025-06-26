@@ -15,24 +15,77 @@ O `PageZone` pode conter os seguintes subcomponentes:
 
 ### 📜 Layout em texto
 
+- Layout geral:
+
 ```
 [PageZone]
- ├── [HeaderZone] (opcional)
- │     ├── [HeaderBar]
- │     │     ├── [LeftZone]
- │     │     ├── [MiddleZone]
- │     │     ├── [RightZone]
- │     └── ...
- ├── [NavIcon] (opcional; esquerda ou direita, até 2)
- │     ├── [ButonX]
- │     └── ...
- ├── [ContentWrapper]
- │     ├── [PageZone] (opcional, máximo 1; permite PageZone nesting)
- │     ├── [*]
- │     └── ...
- └── [FootZone] (opcional)
-       ├── [*]
-       └── ...
+├── (HeaderZone)  // Pelo menos um destes ↓ deve existir (AnyComponent* ou HeaderBar*)
+│     ├── (AnyComponent*) // stack
+│     └── (HeaderBar*)  //^2
+│           ├── [LeftZone] //^3
+│           │     ├── (breadcrumbs*) //^2
+│           │     ├── (AnyComponents*) //^2
+│           │     └── (ButtonX+/MenuX+)  //^1
+│           ├── [MiddleZone] //^3
+│           │     ├── (breadcrumbs*) //^2
+│           │     ├── (AnyComponents*) //^2
+│           │     └── (ButtonX+/MenuX+)  //^1
+│           └── [RightZone] //^3
+│                 ├── (breadcrumbs*) //^2
+│                 ├── (AnyComponents*) //^2
+│                 └── (ButtonX+/MenuX+)  //^1
+├── EnclosureContent
+│   ├── (NavIcon)  // left
+│   │     └── [ButtonX+]
+│   ├── ContentWrapper   [obrigatório]
+│   │    └── (PageZone) ^ [AnyComponent+]  // XOR
+│   └── (NavIcon) // right
+│         └── [ButtonX+]
+└── (FooterZone)
+      └── [AnyComponent+]  //#2
+```
+
+#### Em designer:
+
+```
++----------------------------------+
+| [PageZone]                       |
+| ╔══════════════════════════════╗ |
+| ║ [HeaderZone]                 ║ |
+| ║ • [AnyComponent*] (V)        ║ |
+| ║ • [HeaderBar*]:              ║ |
+| ║   > [LftZ][MidZ][RgtZ]       ║ |
+| ║   >> [ButonX*]/[MenuX*]...   ║ |
+| ╚══════════════════════════════╝ |
+| ╔══════════════════════════════╗ |
+| ║ [EnclosureContent]           ║ |
+| ║┌─────┐ +────────────+ ┌─────┐║ |
+| ║│[NAV]│ |[ContentWr] │ │[NAV]│║ |
+| ║│ •BX │ | •(PageZ)^  │ │ •BX │║ |
+| ║│ •BX │ | •[AnyComp+]│ │ •BX │║ |
+| ║└─────┘ +────────────+ └─────┘║ |
+| ╚══════════════════════════════╝ |
+| ╔══════════════════════════════╗ |
+| ║ [FooterZone]                 ║ |
+| ║ • [AnyComponent+] (V)        ║ |
+| ╚══════════════════════════════╝ |
++----------------------------------+
+```
+
+#### Legenda:
+
+```
+- (A): componente não obrigatório
+- [A]: exatamente 1 elemento do tipo A
+- [A+]: 1+ elementos (obrigatório)
+- [A*]: 0+ elementos (opcional)
+- [A/B] ou [A] / [B]: OR (pode ter A, B ou ambos)
+- [A^B] ou [A] ^ [B]: XOR (apenas A ou apenas B)
+- [AnyComponent]: qualquer componente válido
+- [breadcrumbs]: readcrumb navigation, que é um elemento de interface do usuário em sites e aplicativos.
+- //#1: ButtonX/MenuX não podem aparecer sequencialmente fora de NavIcon
+- //#2: Componentes empilhados verticalmente
+- //#3: empilhados horizontalmente - ocupam,juntos, toda a área horizontal
 ```
 
 ## 🔹 Componentes Principais
